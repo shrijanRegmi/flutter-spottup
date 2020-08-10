@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:motel/views/screens/home/home_tabs/explore_tab.dart';
+import 'package:motel/views/screens/home/home_tabs/profile_tab.dart';
 import 'package:motel/views/screens/home/home_tabs/trip_tab.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,7 +14,7 @@ class _HomeScreenState extends State<HomeScreen>
   final _tabs = [
     ExploreTab(),
     TripTab(),
-    ExploreTab(),
+    ProfileTab(),
   ];
 
   @override

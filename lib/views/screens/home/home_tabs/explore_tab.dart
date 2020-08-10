@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:motel/views/screens/home/search_screen.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 import 'package:motel/views/widgets/explore_widgets/best_deals.dart';
 import 'package:motel/views/widgets/explore_widgets/popular_destination.dart';
@@ -80,31 +81,42 @@ class _ExploreTabState extends State<ExploreTab> {
   Widget _searchBuilder() {
     return Padding(
       padding: const EdgeInsets.only(top: 40.0, left: 10.0, right: 10.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              offset: Offset(3.0, 3.0),
-              blurRadius: 10.0,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => SearchScreen(),
             ),
-          ],
-          borderRadius: BorderRadius.circular(100.0),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: TextFormField(
-            style: TextStyle(
-              fontSize: 14.0,
-            ),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: 'Where are you going?',
-              contentPadding: const EdgeInsets.only(top: 15.0),
-              prefixIcon: Icon(
-                Icons.search,
-                color: Color(0xff45ad90),
+          );
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                offset: Offset(3.0, 3.0),
+                blurRadius: 10.0,
+              ),
+            ],
+            borderRadius: BorderRadius.circular(100.0),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: TextFormField(
+              enabled: false,
+              style: TextStyle(
+                fontSize: 14.0,
+              ),
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: 'Where are you going?',
+                contentPadding: const EdgeInsets.only(top: 15.0),
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: Color(0xff45ad90),
+                ),
               ),
             ),
           ),
