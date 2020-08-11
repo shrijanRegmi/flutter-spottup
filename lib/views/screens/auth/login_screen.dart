@@ -9,7 +9,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return VmProvider<AuthVm>(
       vm: AuthVm(),
-      builder: (context, vm) {
+      builder: (context, vm, appUser) {
         return Scaffold(
           key: vm.scaffoldKey,
           backgroundColor: Color(0xffEEEEEE),
