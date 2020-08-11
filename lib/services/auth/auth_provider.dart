@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:motel/models/firebase/user_model.dart';
+import 'package:motel/services/firestore/user_provider.dart';
 
 class AuthProvider {
   final _auth = FirebaseAuth.instance;
@@ -13,7 +14,9 @@ class AuthProvider {
       final _result = await _auth.createUserWithEmailAndPassword(
           email: appUser.email, password: password);
 
-      // await UserProvider().sendUserToFirestore(appUser, _result.user.uid);
+      appUser.uid = _result.user.uid;
+
+      await UserProvider().sendUserToFirestore(appUser, _result.user.uid);
 
       _userFromFirebase(_result.user);
       print(

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:motel/viewmodels/auth_vm.dart';
+import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/screens/auth/login_screen.dart';
 import 'package:motel/views/widgets/auth_widgets/auth_field.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
@@ -6,63 +8,69 @@ import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 class CreateAccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xffEEEEEE),
-      body: SafeArea(
-        child: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            color: Colors.transparent,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  _appbarBuilder(context),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        _signUpTextBuilder(),
-                        SizedBox(
-                          height: 30.0,
+    return VmProvider<AuthVm>(
+      vm: AuthVm(),
+      builder: (context, vm) {
+        return Scaffold(
+          key: vm.scaffoldKey,
+          backgroundColor: Color(0xffEEEEEE),
+          body: SafeArea(
+            child: GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: Container(
+                height: MediaQuery.of(context).size.height,
+                color: Colors.transparent,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      _appbarBuilder(context),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            _signUpTextBuilder(),
+                            SizedBox(
+                              height: 30.0,
+                            ),
+                            _googleSignInBuilder(),
+                            SizedBox(
+                              height: 20.0,
+                            ),
+                            _emailSignUpText(),
+                            SizedBox(
+                              height: 20.0,
+                            ),
+                            _authContainerBuilder(vm),
+                            SizedBox(
+                              height: 20.0,
+                            ),
+                            _singUpBtnBuilder(vm.signUpWithEmailAndPassword),
+                            SizedBox(
+                              height: 20.0,
+                            ),
+                            _policyTextBuilder(),
+                            SizedBox(
+                              height: 20.0,
+                            ),
+                            _loginTextSection(context),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                          ],
                         ),
-                        _googleSignInBuilder(),
-                        SizedBox(
-                          height: 20.0,
-                        ),
-                        _emailSignUpText(),
-                        SizedBox(
-                          height: 20.0,
-                        ),
-                        _authContainerBuilder(),
-                        SizedBox(
-                          height: 20.0,
-                        ),
-                        _singUpBtnBuilder(),
-                        SizedBox(
-                          height: 20.0,
-                        ),
-                        _policyTextBuilder(),
-                        SizedBox(
-                          height: 20.0,
-                        ),
-                        _loginTextSection(context),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                      ],
-                    ),
-                  )
-                ],
+                      )
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -108,7 +116,7 @@ class CreateAccountScreen extends StatelessWidget {
     );
   }
 
-  Widget _authContainerBuilder() {
+  Widget _authContainerBuilder(AuthVm vm) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20.0),
       child: Column(
@@ -116,6 +124,7 @@ class CreateAccountScreen extends StatelessWidget {
           AuthField(
             hintText: 'First Name',
             requireWordCapitalization: true,
+            controller: vm.firstNameController,
           ),
           SizedBox(
             height: 20.0,
@@ -123,6 +132,7 @@ class CreateAccountScreen extends StatelessWidget {
           AuthField(
             hintText: 'Last Name',
             requireWordCapitalization: true,
+            controller: vm.lastNameController,
           ),
           SizedBox(
             height: 20.0,
@@ -130,6 +140,7 @@ class CreateAccountScreen extends StatelessWidget {
           AuthField(
             hintText: 'Phone Number',
             type: TextInputType.phone,
+            controller: vm.phoneController,
           ),
           SizedBox(
             height: 20.0,
@@ -137,6 +148,7 @@ class CreateAccountScreen extends StatelessWidget {
           AuthField(
             hintText: 'Your Email',
             type: TextInputType.emailAddress,
+            controller: vm.emailController,
           ),
           SizedBox(
             height: 20.0,
@@ -144,17 +156,18 @@ class CreateAccountScreen extends StatelessWidget {
           AuthField(
             hintText: 'Password',
             isPassword: true,
+            controller: vm.passController,
           ),
         ],
       ),
     );
   }
 
-  Widget _singUpBtnBuilder() {
+  Widget _singUpBtnBuilder(Function signUpUser) {
     return RoundedBtn(
       title: 'Sign Up',
       padding: 0.0,
-      onPressed: () {},
+      onPressed: signUpUser,
     );
   }
 
