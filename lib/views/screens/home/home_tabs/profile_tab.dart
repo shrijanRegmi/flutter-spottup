@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/services/auth/auth_provider.dart';
+import 'package:motel/viewmodels/profile_vm.dart';
+import 'package:motel/viewmodels/vm_provider.dart';
 
 class ProfileTab extends StatefulWidget {
   @override
@@ -15,36 +17,41 @@ class _ProfileTabState extends State<ProfileTab> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 20.0,
+    return VmProvider<ProfileVm>(
+      vm: ProfileVm(),
+      builder: (context, vm, appUser) {
+        return SafeArea(
+          child: Container(
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  _appbarBuilder(context),
+                  _userImgBuilder(context, vm),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  _nameBuilder(appUser),
+                  SizedBox(
+                    height: 40.0,
+                  ),
+                  _editProfileSection(context, appUser),
+                ],
               ),
-              _appbarBuilder(context),
-              _userImgBuilder(context),
-              SizedBox(
-                height: 20.0,
-              ),
-              _nameBuilder(),
-              SizedBox(
-                height: 40.0,
-              ),
-              _editProfileSection(context),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
-  Widget _nameBuilder() {
+  Widget _nameBuilder(AppUser appUser) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Text(
-        'Amanda Rowling',
+        '${appUser.firstName} ${appUser.lastName}',
         style: TextStyle(
           fontWeight: FontWeight.w600,
           fontSize: 22.0,
@@ -65,7 +72,7 @@ class _ProfileTabState extends State<ProfileTab> {
     );
   }
 
-  Widget _userImgBuilder(BuildContext context) {
+  Widget _userImgBuilder(BuildContext context, ProfileVm vm) {
     final _width = MediaQuery.of(context).size.width * 0.50;
 
     return Row(
@@ -73,7 +80,7 @@ class _ProfileTabState extends State<ProfileTab> {
       children: <Widget>[
         Stack(
           children: <Widget>[
-            _imgFile != null
+            vm.imgFile != null
                 ? Container(
                     width: _width,
                     height: _width,
@@ -91,7 +98,7 @@ class _ProfileTabState extends State<ProfileTab> {
                       ],
                       image: DecorationImage(
                         image: FileImage(
-                          _imgFile,
+                          vm.imgFile,
                         ),
                         fit: BoxFit.cover,
                       ),
@@ -134,15 +141,7 @@ class _ProfileTabState extends State<ProfileTab> {
                   ),
                   backgroundColor: Color(0xff45ad90),
                   onPressed: () async {
-                    final _pickedFile = await ImagePicker()
-                        .getImage(source: ImageSource.gallery);
-                    setState(() {
-                      if (_pickedFile != null) {
-                        _imgFile = File(_pickedFile.path);
-                      } else {
-                        _imgFile = null;
-                      }
-                    });
+                    vm.selectImage();
                   },
                 ),
               ),
@@ -153,7 +152,7 @@ class _ProfileTabState extends State<ProfileTab> {
     );
   }
 
-  Widget _editProfileSection(BuildContext context) {
+  Widget _editProfileSection(BuildContext context, AppUser appUser) {
     return ListView(
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
@@ -161,25 +160,25 @@ class _ProfileTabState extends State<ProfileTab> {
         _editProfileItem(
           context,
           'Email',
-          'ilyyhs9@gmail.com',
+          appUser.email,
           TextInputType.emailAddress,
         ),
         _editProfileItem(
           context,
           'Phone',
-          '9082727277',
+          appUser.phone.toString(),
           TextInputType.phone,
         ),
         _editProfileItem(
           context,
           'Date of birth',
-          '20th Aug, 1990',
+          appUser.dob == 0 ? 'N/A' : appUser.dob.toString(),
           TextInputType.datetime,
         ),
         _editProfileItem(
           context,
           'Address',
-          'Golfutar, Kathmandu',
+          appUser.address,
           TextInputType.text,
         ),
       ],
