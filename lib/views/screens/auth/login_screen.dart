@@ -1,63 +1,68 @@
 import 'package:flutter/material.dart';
-import 'package:motel/services/auth/auth_provider.dart';
+import 'package:motel/viewmodels/auth_vm.dart';
+import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/widgets/auth_widgets/auth_field.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 
 class LoginScreen extends StatelessWidget {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xffEEEEEE),
-      body: SafeArea(
-        child: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: Container(
-            color: Colors.transparent,
-            height: MediaQuery.of(context).size.height,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  _appbarBuilder(context),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        _loginTextBuilder(),
-                        SizedBox(
-                          height: 30.0,
+    return VmProvider<AuthVm>(
+      vm: AuthVm(),
+      builder: (context, vm) {
+        return Scaffold(
+          key: vm.scaffoldKey,
+          backgroundColor: Color(0xffEEEEEE),
+          body: SafeArea(
+            child: GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: Container(
+                color: Colors.transparent,
+                height: MediaQuery.of(context).size.height,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      _appbarBuilder(context),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            _loginTextBuilder(),
+                            SizedBox(
+                              height: 30.0,
+                            ),
+                            _googleSignInBuilder(),
+                            SizedBox(
+                              height: 20.0,
+                            ),
+                            _emailLoginText(),
+                            SizedBox(
+                              height: 20.0,
+                            ),
+                            _authContainerBuilder(
+                                vm.emailController, vm.passController),
+                            SizedBox(
+                              height: 40.0,
+                            ),
+                            _loginBtnBuilder(vm.loginWithEmailAndPassword),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                          ],
                         ),
-                        _googleSignInBuilder(),
-                        SizedBox(
-                          height: 20.0,
-                        ),
-                        _emailLoginText(),
-                        SizedBox(
-                          height: 20.0,
-                        ),
-                        _authContainerBuilder(),
-                        SizedBox(
-                          height: 40.0,
-                        ),
-                        _loginBtnBuilder(context),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                      ],
-                    ),
-                  )
-                ],
+                      )
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -103,7 +108,8 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _authContainerBuilder() {
+  Widget _authContainerBuilder(final TextEditingController _emailController,
+      final TextEditingController _passController) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20.0),
       child: Column(
@@ -126,15 +132,11 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _loginBtnBuilder(BuildContext context) {
+  Widget _loginBtnBuilder(final Function loginUser) {
     return RoundedBtn(
       title: 'Login',
       padding: 0.0,
-      onPressed: () {
-        AuthProvider().loginWithEmailAndPassword(
-            email: _emailController.text.trim(),
-            password: _passController.text.trim());
-      },
+      onPressed: loginUser,
     );
   }
 }

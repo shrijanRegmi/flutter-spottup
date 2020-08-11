@@ -13,7 +13,7 @@ class UserProvider {
       final _userRef = _ref.collection('users').document(uid);
 
       print('Success: Sending user data to firestore');
-      return _userRef.setData(appUser.toJson());
+      return await _userRef.setData(appUser.toJson());
     } catch (e) {
       print(e);
       print('Error!!!: Sending user data to firestore');

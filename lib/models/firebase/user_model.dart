@@ -1,7 +1,7 @@
 class AppUser {
   final String firstName;
   final String lastName;
-  final String uid;
+  String uid;
   final String email;
   final String photoUrl;
   final int phone;
@@ -47,7 +47,6 @@ class AppUser {
       'first_name': firstName,
       'last_name' : lastName,
       'email' : email,
-      'photo_url' : photoUrl,
       'phone' : phone,
     };
   }
