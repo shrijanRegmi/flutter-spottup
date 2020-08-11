@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:motel/views/screens/home/home_screen.dart';
+import 'package:motel/services/auth/auth_provider.dart';
 import 'package:motel/views/widgets/auth_widgets/auth_field.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 
 class LoginScreen extends StatelessWidget {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,6 +111,7 @@ class LoginScreen extends StatelessWidget {
           AuthField(
             hintText: 'Your Email',
             type: TextInputType.emailAddress,
+            controller: _emailController,
           ),
           SizedBox(
             height: 20.0,
@@ -115,6 +119,7 @@ class LoginScreen extends StatelessWidget {
           AuthField(
             hintText: 'Password',
             isPassword: true,
+            controller: _passController,
           ),
         ],
       ),
@@ -126,12 +131,9 @@ class LoginScreen extends StatelessWidget {
       title: 'Login',
       padding: 0.0,
       onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => HomeScreen(),
-          ),
-        );
+        AuthProvider().loginWithEmailAndPassword(
+            email: _emailController.text.trim(),
+            password: _passController.text.trim());
       },
     );
   }

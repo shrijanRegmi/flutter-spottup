@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "924444965033",
+    "firebase_url": "https://motel-868fa.firebaseio.com",
+    "project_id": "motel-868fa",
+    "storage_bucket": "motel-868fa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:924444965033:android:c240224b0821f93f9b11b8",
+        "android_client_info": {
+          "package_name": "com.example.motel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "924444965033-o68o415qc8h0pqrh3bcu0tr6dclku6fi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8tPYAnlHwYjTni04orZtl45kRx8EjYIA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "924444965033-o68o415qc8h0pqrh3bcu0tr6dclku6fi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

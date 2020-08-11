@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:motel/services/auth/auth_provider.dart';
 
 class ProfileTab extends StatefulWidget {
   @override
@@ -22,6 +23,7 @@ class _ProfileTabState extends State<ProfileTab> {
               SizedBox(
                 height: 20.0,
               ),
+              _appbarBuilder(context),
               _userImgBuilder(context),
               SizedBox(
                 height: 20.0,
@@ -48,6 +50,18 @@ class _ProfileTabState extends State<ProfileTab> {
           fontSize: 22.0,
         ),
       ),
+    );
+  }
+
+  Widget _appbarBuilder(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        IconButton(
+          icon: Icon(Icons.exit_to_app),
+          onPressed: () => AuthProvider().logOut(),
+        ),
+      ],
     );
   }
 
