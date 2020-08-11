@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:motel/views/widgets/common_widgets/left_right_text.dart';
 import 'package:motel/views/widgets/search_widgets/hotel_types_list.dart';
 import 'package:motel/views/widgets/search_widgets/last_searches_list.dart';
 

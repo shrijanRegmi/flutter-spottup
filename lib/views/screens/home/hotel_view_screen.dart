@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:motel/views/widgets/hotel_view_widgets/expanded_hotel_view_screen.dart';
