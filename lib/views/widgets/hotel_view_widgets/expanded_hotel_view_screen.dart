@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 import 'package:motel/views/widgets/hotel_view_widgets/hotel_reviews_list.dart';
 
 import 'hotel_photos_list.dart';
@@ -9,40 +10,54 @@ class ExpandedHotelViewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _topSection(context),
-            SizedBox(
-              height: 20.0,
-            ),
-            _hotelDetailBuilder(),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-              child: Divider(),
-            ),
-            _summaryBuilder(),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-              child: Divider(),
-            ),
-            HotelPhotosList(),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-              child: Divider(),
-            ),
-            HotelReviewsList(),
-            SizedBox(
-              height: 50.0,
-            ),
-          ],
+    return Scaffold(
+      body: Container(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              _topSection(context),
+              SizedBox(
+                height: 20.0,
+              ),
+              _hotelDetailBuilder(),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0, vertical: 10.0),
+                child: Divider(),
+              ),
+              _summaryBuilder(),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0, vertical: 10.0),
+                child: Divider(),
+              ),
+              HotelPhotosList(),
+              SizedBox(
+                height: 10.0,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0, vertical: 10.0),
+                child: Divider(),
+              ),
+              HotelReviewsList(),
+              SizedBox(
+                height: 50.0,
+              ),
+            ],
+          ),
         ),
       ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: RoundedBtn(
+          title: 'Book now',
+          padding: 0.0,
+          onPressed: () {},
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 

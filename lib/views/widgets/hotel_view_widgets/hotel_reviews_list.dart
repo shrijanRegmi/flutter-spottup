@@ -8,9 +8,6 @@ class HotelReviewsList extends StatelessWidget {
     return Column(
       children: <Widget>[
         LeftRightText(leftText: 'Reviews'),
-        SizedBox(
-          height: 20.0,
-        ),
         _reviewsList(context),
       ],
     );

@@ -38,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen>
   Widget _tabBarView() {
     return Expanded(
       child: TabBarView(
+        physics: NeverScrollableScrollPhysics(),
         controller: _tabController,
         children: _tabs,
       ),
