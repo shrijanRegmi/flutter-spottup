@@ -1,12 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 import 'package:motel/views/widgets/hotel_view_widgets/hotel_reviews_list.dart';
 
 import 'hotel_photos_list.dart';
 
-class ExpandedHotelViewScreen extends StatelessWidget {
+class ExpandedHotelViewScreen extends StatefulWidget {
   final PageController pageController;
   ExpandedHotelViewScreen({this.pageController});
+
+  @override
+  _ExpandedHotelViewScreenState createState() =>
+      _ExpandedHotelViewScreenState();
+}
+
+class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
+  bool _isKeyboardVisible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    KeyboardVisibility.onChange.listen((visibility) {
+      setState(() {
+        _isKeyboardVisible = visibility;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,14 +68,16 @@ class ExpandedHotelViewScreen extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: RoundedBtn(
-          title: 'Book now',
-          padding: 0.0,
-          onPressed: () {},
-        ),
-      ),
+      floatingActionButton: !_isKeyboardVisible
+          ? Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: RoundedBtn(
+                title: 'Book now',
+                padding: 0.0,
+                onPressed: () {},
+              ),
+            )
+          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
@@ -95,7 +116,7 @@ class ExpandedHotelViewScreen extends StatelessWidget {
                 height: _size,
                 child: FloatingActionButton(
                   onPressed: () {
-                    pageController.animateTo(-1,
+                    widget.pageController.animateTo(-1,
                         duration: Duration(milliseconds: 1000),
                         curve: Curves.ease);
                   },

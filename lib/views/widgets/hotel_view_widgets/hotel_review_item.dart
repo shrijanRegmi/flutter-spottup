@@ -1,28 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:motel/views/widgets/common_widgets/star_ratings.dart';
 
-class HotelReviewItem extends StatelessWidget {
+class HotelReviewItem extends StatefulWidget {
+  @override
+  _HotelReviewItemState createState() => _HotelReviewItemState();
+}
+
+class _HotelReviewItemState extends State<HotelReviewItem> {
+  bool _isReplying = false;
+  FocusNode _focusNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          _userDetailBuilder(),
-          SizedBox(
-            height: 10.0,
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Container(
+        color: Colors.transparent,
+        child: Padding(
+          padding: const EdgeInsets.only(
+            bottom: 20.0,
+            left: 20.0,
+            right: 20.0,
           ),
-          _reviewTextBuilder(),
-          SizedBox(
-            height: 10.0,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              _userDetailBuilder(),
+              SizedBox(
+                height: 10.0,
+              ),
+              _reviewTextBuilder(),
+              SizedBox(
+                height: 10.0,
+              ),
+              _replyBtnBuilder(),
+              Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: Divider(),
+              ),
+            ],
           ),
-          _replyBtnBuilder(),
-          Padding(
-            padding: const EdgeInsets.only(top: 10.0),
-            child: Divider(),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -97,33 +117,71 @@ class HotelReviewItem extends StatelessWidget {
   }
 
   Widget _replyBtnBuilder() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: <Widget>[
-        GestureDetector(
-          onTap: () {},
-          child: Row(
+    return !_isReplying
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              Text(
-                'Reply',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12.0,
-                  color: Color(0xff45ad90),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _isReplying = true;
+                    _focusNode.requestFocus();
+                  });
+                },
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      'Reply',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12.0,
+                        color: Color(0xff45ad90),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 5.0,
+                    ),
+                    Icon(
+                      Icons.arrow_forward,
+                      color: Color(0xff45ad90),
+                      size: 14.0,
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(
-                width: 5.0,
-              ),
-              Icon(
-                Icons.arrow_forward,
-                color: Color(0xff45ad90),
-                size: 14.0,
-              ),
             ],
-          ),
-        ),
-      ],
-    );
+          )
+        : Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: TextFormField(
+                      style: TextStyle(
+                        fontSize: 14.0,
+                      ),
+                      minLines: 1,
+                      maxLines: 4,
+                      focusNode: _focusNode,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Reply here...',
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.send),
+                          color: Color(0xff45ad90),
+                          onPressed: () {},
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
   }
 }

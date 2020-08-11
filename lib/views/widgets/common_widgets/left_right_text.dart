@@ -27,7 +27,7 @@ class LeftRightText extends StatelessWidget {
             ),
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: onPressIcon,
             child: Row(
               children: <Widget>[
                 Text(

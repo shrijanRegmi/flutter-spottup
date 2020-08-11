@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:motel/views/screens/home/view_all_screen.dart';
 import 'package:motel/views/widgets/common_widgets/left_right_text.dart';
 import 'package:motel/views/widgets/hotel_view_widgets/hotel_photos_item.dart';
 
@@ -7,7 +8,20 @@ class HotelPhotosList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        LeftRightText(leftText: 'Photos'),
+        LeftRightText(
+          leftText: 'Photos',
+          onPressIcon: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => ViewAllScreen(
+                  title: 'Photos - Grand Royal Hotel',
+                  isGrid: true,
+                ),
+              ),
+            );
+          },
+        ),
         SizedBox(
           height: 20.0,
         ),
