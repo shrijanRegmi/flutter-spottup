@@ -3,8 +3,12 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
+import 'package:motel/models/firebase/user_model.dart';
+import 'package:motel/viewmodels/hotel_view_vm.dart';
+import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 import 'package:motel/views/widgets/common_widgets/star_ratings.dart';
+import 'package:provider/provider.dart';
 
 class ShortenedHotelViewScreen extends StatelessWidget {
   final PageController pageController;
@@ -13,24 +17,34 @@ class ShortenedHotelViewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: CachedNetworkImageProvider(hotel.dp),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          _btnSection(context),
-          _bottomSection(context),
-        ],
-      ),
+    final _appUser = Provider.of<AppUser>(context);
+    return VmProvider<HotelViewVm>(
+      vm: HotelViewVm(),
+      onInit: (vm) {
+        bool _isFav = _appUser.favourite.contains(hotel.id);
+        vm.updateFavourite(_isFav);
+      },
+      builder: (context, vm, appUser) {
+        return Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: CachedNetworkImageProvider(hotel.dp),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              _btnSection(context, vm, appUser),
+              _bottomSection(context),
+            ],
+          ),
+        );
+      },
     );
   }
 
-  Widget _btnSection(BuildContext context) {
+  Widget _btnSection(BuildContext context, HotelViewVm vm, AppUser appUser) {
     return Column(
       children: <Widget>[
         SizedBox(
@@ -52,10 +66,13 @@ class ShortenedHotelViewScreen extends StatelessWidget {
                 heroTag: 'backBtn',
               ),
               FloatingActionButton(
-                onPressed: () {},
+                onPressed: () {
+                  vm.updateFavourite(!vm.isFavourite);
+                  vm.sendFavourite(hotel.id, appUser);
+                },
                 child: Center(
                   child: Icon(
-                    Icons.favorite_border,
+                    vm.isFavourite ? Icons.favorite : Icons.favorite_border,
                     color: Color(0xff45ad90),
                   ),
                 ),

@@ -7,9 +7,9 @@ class AppUser {
   final int phone;
   final int dob;
   final String address;
-  final List<String> upcoming;
-  final List<String> finished;
-  final List<String> favourite;
+  final List<dynamic> upcoming;
+  final List<dynamic> finished;
+  final List<dynamic> favourite;
 
   AppUser({
     this.uid,

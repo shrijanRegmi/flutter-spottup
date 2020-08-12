@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/viewmodels/trip_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
+import 'package:motel/views/screens/home/trip_tabs/favourite_tab.dart';
+import 'package:motel/views/screens/home/trip_tabs/finished_tab.dart';
 import 'package:motel/views/screens/home/trip_tabs/upcoming_tab.dart';
 
 class TripTab extends StatefulWidget {
@@ -100,8 +102,8 @@ class _TripTabState extends State<TripTab> with SingleTickerProviderStateMixin {
   List<Widget> _getTabs(AppUser appUser) {
     return [
       UpcomingTab(appUser.upcoming),
-      UpcomingTab(appUser.upcoming),
-      UpcomingTab(appUser.upcoming),
+      FinishedTab(appUser.finished),
+      FavouriteTab(appUser.favourite),
     ];
   }
 }

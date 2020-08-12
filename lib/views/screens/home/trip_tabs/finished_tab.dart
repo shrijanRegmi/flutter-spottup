@@ -3,18 +3,18 @@ import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/services/firestore/hotel_provider.dart';
 import 'package:motel/views/widgets/explore_widgets/best_deals_item.dart';
 
-class UpcomingTab extends StatelessWidget {
-  final List<dynamic> upcomingBookings;
-  UpcomingTab(this.upcomingBookings);
+class FinishedTab extends StatelessWidget {
+  final List<dynamic> finishedBookings;
+  FinishedTab(this.finishedBookings);
 
   @override
   Widget build(BuildContext context) {
-    return upcomingBookings.length == 0
+    return finishedBookings.length == 0
         ? _emptyBuilder()
         : ListView.builder(
-            itemCount: upcomingBookings.length,
+            itemCount: finishedBookings.length,
             itemBuilder: (context, index) {
-              return _itemBuilder(upcomingBookings[index]);
+              return _itemBuilder(finishedBookings[index]);
             },
           );
   }
@@ -26,21 +26,8 @@ class UpcomingTab extends StatelessWidget {
         if (hotelSnap.hasData) {
           return Padding(
             padding: const EdgeInsets.only(bottom: 20.0),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  '01 Oct - 07 Oct, 1 Room - 2 Adult',
-                  style: TextStyle(
-                    fontSize: 12.0,
-                  ),
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
-                BestDealItem(
-                  bestDeal: hotelSnap.data,
-                ),
-              ],
+            child: BestDealItem(
+              bestDeal: hotelSnap.data,
             ),
           );
         }
@@ -56,7 +43,7 @@ class UpcomingTab extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: Text(
-              "You don't have any upcoming bookings",
+              "You haven't completed any bookings",
               style: TextStyle(
                 fontStyle: FontStyle.italic,
               ),

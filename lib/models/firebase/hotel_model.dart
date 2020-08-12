@@ -31,10 +31,10 @@ class Hotel {
     this.type,
   });
 
-  static Hotel fromJson(final Map<String, dynamic> data) {
+  static Hotel fromJson(final Map<String, dynamic> data, final String id) {
     if (data['type'] == 0) {
       return Hotel(
-        id: data['id'] ?? '',
+        id: id ?? '',
         name: data['name'] ?? '',
         dp: data['dp'],
         city: data['city'] ?? '',
@@ -50,7 +50,7 @@ class Hotel {
       );
     } else if (data['type'] == 1) {
       return Hotel(
-        id: data['id'] ?? '',
+        id: id ?? '',
         name: data['name'] ?? '',
         dp: data['dp'],
         city: data['city'] ?? '',
@@ -66,7 +66,7 @@ class Hotel {
       );
     } else if (data['type'] == 2) {
       return Hotel(
-        id: data['id'] ?? '',
+        id: id ?? '',
         name: data['name'] ?? '',
         dp: data['dp'],
         city: data['city'] ?? '',
@@ -82,7 +82,7 @@ class Hotel {
       );
     } else if (data['type'] == 3) {
       return Hotel(
-        id: data['id'] ?? '',
+        id: id ?? '',
         name: data['name'] ?? '',
         dp: data['dp'],
         city: data['city'] ?? '',
@@ -98,7 +98,7 @@ class Hotel {
       );
     }
     return Hotel(
-      id: data['id'] ?? '',
+      id: id ?? '',
       name: data['name'] ?? '',
       dp: data['dp'],
       city: data['city'] ?? '',

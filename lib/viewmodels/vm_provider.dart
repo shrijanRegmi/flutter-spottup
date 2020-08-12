@@ -8,11 +8,20 @@ class VmProvider<T extends ChangeNotifier> extends StatefulWidget {
 
   final T vm;
   final Widget Function(BuildContext context, T vm, AppUser appUser) builder;
+  final Function(T vm) onInit;
 
-  VmProvider({@required this.vm, @required this.builder});
+  VmProvider({@required this.vm, @required this.builder, this.onInit});
 }
 
 class _VmProviderState<T extends ChangeNotifier> extends State<VmProvider<T>> {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.onInit != null) {
+      widget.onInit(widget.vm);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final _appUser = Provider.of<AppUser>(context);
