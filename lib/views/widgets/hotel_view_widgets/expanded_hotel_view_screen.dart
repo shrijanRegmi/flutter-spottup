@@ -160,53 +160,55 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                widget.hotel.name,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 22.0,
-                ),
-              ),
-              Text(
-                '${widget.hotel.city}, ${widget.hotel.country}',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black26,
-                ),
-              ),
-              SizedBox(
-                height: 5.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.location_on,
-                            color: Color(0xff45ad90),
-                            size: 18.0,
-                          ),
-                          Text(
-                            '4 Km from city',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black26,
-                              fontSize: 12.0,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  widget.hotel.name,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 22.0,
                   ),
-                ],
-              ),
-            ],
+                ),
+                Text(
+                  '${widget.hotel.city}, ${widget.hotel.country}',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black26,
+                  ),
+                ),
+                SizedBox(
+                  height: 5.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Icon(
+                              Icons.location_on,
+                              color: Color(0xff45ad90),
+                              size: 18.0,
+                            ),
+                            Text(
+                              '4 Km from city',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black26,
+                                fontSize: 12.0,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
