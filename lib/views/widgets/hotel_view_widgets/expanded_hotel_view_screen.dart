@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 import 'package:motel/views/widgets/hotel_view_widgets/hotel_reviews_list.dart';
 
@@ -7,7 +9,8 @@ import 'hotel_photos_list.dart';
 
 class ExpandedHotelViewScreen extends StatefulWidget {
   final PageController pageController;
-  ExpandedHotelViewScreen({this.pageController});
+  final Hotel hotel;
+  ExpandedHotelViewScreen({this.pageController, this.hotel});
 
   @override
   _ExpandedHotelViewScreenState createState() =>
@@ -51,16 +54,17 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
                     horizontal: 20.0, vertical: 10.0),
                 child: Divider(),
               ),
-              HotelPhotosList(),
+              if (widget.hotel.photos.isNotEmpty) HotelPhotosList(),
               SizedBox(
                 height: 10.0,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0, vertical: 10.0),
-                child: Divider(),
-              ),
-              HotelReviewsList(),
+              if (widget.hotel.photos.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 20.0, vertical: 10.0),
+                  child: Divider(),
+                ),
+              if (widget.hotel.reviews.isNotEmpty) HotelReviewsList(),
               SizedBox(
                 height: 50.0,
               ),
@@ -89,7 +93,7 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
           height: 200.0,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/images/welcome_img.jpg'),
+              image: CachedNetworkImageProvider(widget.hotel.dp),
               fit: BoxFit.cover,
             ),
           ),
@@ -160,14 +164,14 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                'Grand Royal Hotel',
+                widget.hotel.name,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 22.0,
                 ),
               ),
               Text(
-                'Wembley, London',
+                '${widget.hotel.city}, ${widget.hotel.country}',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   color: Colors.black26,
@@ -208,7 +212,7 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Text(
-                '\$120',
+                '\$${widget.hotel.price}',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 22.0,
@@ -245,7 +249,7 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
             height: 10.0,
           ),
           Text(
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.',
+            widget.hotel.summary,
             style: TextStyle(
               color: Colors.black38,
             ),

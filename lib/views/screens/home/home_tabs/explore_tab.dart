@@ -1,10 +1,13 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:motel/views/screens/home/search_screen.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 import 'package:motel/views/widgets/explore_widgets/best_deals.dart';
 import 'package:motel/views/widgets/explore_widgets/popular_destination.dart';
+import 'package:motel/viewmodels/vm_provider.dart';
+import 'package:motel/viewmodels/explore_vm.dart';
 
 class ExploreTab extends StatefulWidget {
   @override
@@ -44,30 +47,34 @@ class _ExploreTabState extends State<ExploreTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _topSection(context),
-            SizedBox(
-              height: 40.0,
+    return VmProvider<ExploreVm>(
+        vm: ExploreVm(context: context),
+        builder: (context, vm, appUser) {
+          return Container(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  _topSection(context, vm),
+                  SizedBox(
+                    height: 40.0,
+                  ),
+                  PopularDestinations(vm.popularDestinations),
+                  SizedBox(
+                    height: 40.0,
+                  ),
+                  BestDeals(vm.hotelsList),
+                ],
+              ),
             ),
-            PopularDestinations(),
-            SizedBox(
-              height: 40.0,
-            ),
-            BestDeals(),
-          ],
-        ),
-      ),
-    );
+          );
+        });
   }
 
-  Widget _topSection(BuildContext context) {
+  Widget _topSection(BuildContext context, ExploreVm vm) {
     return Stack(
       children: <Widget>[
-        _popularDestination(context),
+        _popularDestination(context, vm),
         _searchBuilder(),
         Positioned(
           bottom: 10.0,
@@ -125,34 +132,21 @@ class _ExploreTabState extends State<ExploreTab> {
     );
   }
 
-  Widget _popularDestination(BuildContext context) {
+  Widget _popularDestination(BuildContext context, ExploreVm vm) {
     return Container(
       height: 400.0,
-      child: PageView(
+      child: PageView.builder(
         controller: _controller,
-        children: <Widget>[
-          _popularDestinationItem(
+        itemCount: vm.topThree.length,
+        itemBuilder: (context, index) {
+          return _popularDestinationItem(
             context,
-            'assets/images/cape_town.jpg',
-            'Cape Town',
-            'Extraordinary five-star\noutdoor activities',
+            vm.topThree[index].dp,
+            vm.topThree[index].name,
+            vm.topThree[index].details,
             () {},
-          ),
-          _popularDestinationItem(
-            context,
-            'assets/images/cape_town.jpg',
-            'London',
-            'Extraordinary five-star\noutdoor activities',
-            () {},
-          ),
-          _popularDestinationItem(
-            context,
-            'assets/images/cape_town.jpg',
-            'Paris',
-            'Extraordinary five-star\noutdoor activities',
-            () {},
-          ),
-        ],
+          );
+        },
         onPageChanged: (index) {
           setState(() {
             _index = index;
@@ -175,7 +169,7 @@ class _ExploreTabState extends State<ExploreTab> {
           height: 400.0,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage(_img),
+              image: CachedNetworkImageProvider(_img),
               fit: BoxFit.cover,
             ),
           ),

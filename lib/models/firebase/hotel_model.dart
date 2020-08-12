@@ -1,22 +1,24 @@
 import 'package:motel/enums/hotel_types.dart';
 
 class Hotel {
-  final int id;
+  final String id;
   final String name;
+  final String dp;
   final String city;
   final String country;
   final double stars;
   final int price;
   final String summary;
-  final List<String> photos;
-  final List<String> reviews;
-  final List<String> rooms;
+  final List<dynamic> photos;
+  final List<dynamic> reviews;
+  final List<dynamic> rooms;
   final int persons;
   final HotelType type;
 
   Hotel({
     this.id,
     this.name,
+    this.dp,
     this.city,
     this.country,
     this.stars,
@@ -34,6 +36,7 @@ class Hotel {
       return Hotel(
         id: data['id'] ?? '',
         name: data['name'] ?? '',
+        dp: data['dp'],
         city: data['city'] ?? '',
         country: data['country'] ?? '',
         stars: data['stars'] ?? 3.0,
@@ -49,6 +52,7 @@ class Hotel {
       return Hotel(
         id: data['id'] ?? '',
         name: data['name'] ?? '',
+        dp: data['dp'],
         city: data['city'] ?? '',
         country: data['country'] ?? '',
         stars: data['stars'] ?? 3.0,
@@ -64,6 +68,7 @@ class Hotel {
       return Hotel(
         id: data['id'] ?? '',
         name: data['name'] ?? '',
+        dp: data['dp'],
         city: data['city'] ?? '',
         country: data['country'] ?? '',
         stars: data['stars'] ?? 3.0,
@@ -79,6 +84,7 @@ class Hotel {
       return Hotel(
         id: data['id'] ?? '',
         name: data['name'] ?? '',
+        dp: data['dp'],
         city: data['city'] ?? '',
         country: data['country'] ?? '',
         stars: data['stars'] ?? 3.0,
@@ -94,6 +100,7 @@ class Hotel {
     return Hotel(
       id: data['id'] ?? '',
       name: data['name'] ?? '',
+      dp: data['dp'],
       city: data['city'] ?? '',
       country: data['country'] ?? '',
       stars: data['stars'] ?? 3.0,

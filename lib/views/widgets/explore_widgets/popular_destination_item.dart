@@ -1,9 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:motel/models/firebase/popular_destination_model.dart';
 
 class PopularDestinationItem extends StatelessWidget {
-  final String title;
-  final String imgPath;
-  PopularDestinationItem({this.title, this.imgPath});
+  final PopularDestination popularDestination;
+  PopularDestinationItem(this.popularDestination);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class PopularDestinationItem extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
               image: DecorationImage(
-                image: AssetImage('assets/images/welcome_img.jpg'),
+                image: CachedNetworkImageProvider(popularDestination.dp),
                 fit: BoxFit.cover,
               ),
               gradient: LinearGradient(
@@ -47,7 +48,7 @@ class PopularDestinationItem extends StatelessWidget {
               child: Align(
                 alignment: Alignment.topLeft,
                 child: Text(
-                  'Paris',
+                  popularDestination.name,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 14.0,

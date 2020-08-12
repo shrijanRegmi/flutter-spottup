@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:motel/views/widgets/explore_widgets/best_deals_item.dart';
 
 class UpcomingTab extends StatelessWidget {
+  final List<dynamic> upcomingBookings;
+  UpcomingTab(this.upcomingBookings);
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: 5,
+      itemCount: upcomingBookings.length,
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.only(bottom: 20.0),

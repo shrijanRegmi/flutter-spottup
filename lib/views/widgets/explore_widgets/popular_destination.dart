@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:motel/models/firebase/popular_destination_model.dart';
 import 'package:motel/views/widgets/explore_widgets/popular_destination_item.dart';
 
 class PopularDestinations extends StatelessWidget {
+  final List<PopularDestination> popularDestination;
+  PopularDestinations(this.popularDestination);
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -35,15 +39,15 @@ class PopularDestinations extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: 10,
+        itemCount: popularDestination.length,
         itemBuilder: (context, index) {
           if (index == 0) {
             return Padding(
               padding: const EdgeInsets.only(left: 20.0),
-              child: PopularDestinationItem(),
+              child: PopularDestinationItem(popularDestination[index]),
             );
           }
-          return PopularDestinationItem();
+          return PopularDestinationItem(popularDestination[index]);
         },
       ),
     );
