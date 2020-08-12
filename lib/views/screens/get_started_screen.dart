@@ -77,7 +77,7 @@ class GetStartedScreen extends StatelessWidget {
             },
           ),
           SizedBox(
-            height: 20.0,
+            height: 10.0,
           ),
           RoundedBtn(
             title: 'Create Account',
