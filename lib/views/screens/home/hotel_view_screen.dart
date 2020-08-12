@@ -1,11 +1,13 @@
-
 import 'package:flutter/material.dart';
+import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/views/widgets/hotel_view_widgets/expanded_hotel_view_screen.dart';
 import 'package:motel/views/widgets/hotel_view_widgets/shortened_hotel_view_screen.dart';
 
 class HotelViewScreen extends StatefulWidget {
   @override
   _HotelViewScreenState createState() => _HotelViewScreenState();
+  final Hotel hotel;
+  HotelViewScreen({this.hotel});
 }
 
 class _HotelViewScreenState extends State<HotelViewScreen> {
@@ -25,8 +27,10 @@ class _HotelViewScreenState extends State<HotelViewScreen> {
         physics: NeverScrollableScrollPhysics(),
         controller: _pageController,
         children: <Widget>[
-          ShortenedHotelViewScreen(pageController: _pageController),
-          ExpandedHotelViewScreen(pageController: _pageController),
+          ShortenedHotelViewScreen(
+              pageController: _pageController, hotel: widget.hotel),
+          ExpandedHotelViewScreen(
+              pageController: _pageController, hotel: widget.hotel),
         ],
       ),
     );

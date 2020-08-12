@@ -7,14 +7,7 @@ import 'package:motel/services/auth/auth_provider.dart';
 import 'package:motel/viewmodels/profile_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 
-class ProfileTab extends StatefulWidget {
-  @override
-  _ProfileTabState createState() => _ProfileTabState();
-}
-
-class _ProfileTabState extends State<ProfileTab> {
-  File _imgFile;
-
+class ProfileTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return VmProvider<ProfileVm>(

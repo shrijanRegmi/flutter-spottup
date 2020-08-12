@@ -1,8 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:motel/views/screens/home/hotel_view_screen.dart';
 import 'package:motel/views/widgets/common_widgets/star_ratings.dart';
+import 'package:motel/models/firebase/hotel_model.dart';
 
 class BestDealItem extends StatelessWidget {
+  final Hotel bestDeal;
+  BestDealItem({this.bestDeal});
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -10,7 +15,7 @@ class BestDealItem extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => HotelViewScreen(),
+            builder: (_) => HotelViewScreen(hotel: bestDeal),
           ),
         );
       },
@@ -43,15 +48,21 @@ class BestDealItem extends StatelessWidget {
 
   Widget _imgBuilder() {
     return Expanded(
-      child: ClipRRect(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(10.0),
-          bottomLeft: Radius.circular(10.0),
-        ),
-        child: Image.asset(
-          'assets/images/welcome_img.jpg',
-          fit: BoxFit.cover,
-        ),
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10.0),
+                bottomLeft: Radius.circular(10.0),
+              ),
+              child: CachedNetworkImage(
+                imageUrl: bestDeal.dp,
+                fit: BoxFit.fitHeight,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -69,14 +80,14 @@ class BestDealItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'Grand Royal Hotel',
+                  bestDeal.name,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 14.0,
                   ),
                 ),
                 Text(
-                  'Wembly London',
+                  '${bestDeal.city}, ${bestDeal.country}',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     color: Colors.black26,
@@ -111,7 +122,7 @@ class BestDealItem extends StatelessWidget {
                       height: 5.0,
                     ),
                     StarRatings(
-                      ratings: 3,
+                      ratings: bestDeal.stars,
                     ),
                   ],
                 ),
@@ -119,7 +130,7 @@ class BestDealItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
                     Text(
-                      '\$120',
+                      '\$${bestDeal.price}',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 20.0,

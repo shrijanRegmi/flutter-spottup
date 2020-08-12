@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:motel/models/firebase/user_model.dart';
+import 'package:motel/viewmodels/trip_vm.dart';
+import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/screens/home/trip_tabs/upcoming_tab.dart';
 
 class TripTab extends StatefulWidget {
@@ -8,11 +11,6 @@ class TripTab extends StatefulWidget {
 
 class _TripTabState extends State<TripTab> with SingleTickerProviderStateMixin {
   TabController _tripTabController;
-  final _tabs = [
-    UpcomingTab(),
-    UpcomingTab(),
-    UpcomingTab(),
-  ];
 
   @override
   void initState() {
@@ -22,18 +20,23 @@ class _TripTabState extends State<TripTab> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(
-            height: 40.0,
+    return VmProvider<TripVm>(
+      vm: TripVm(),
+      builder: (context, vm, appUser) {
+        return Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+                height: 40.0,
+              ),
+              _titleBuilder(),
+              _tabBarBuilder(context),
+              _tabBarViewBuilder(appUser),
+            ],
           ),
-          _titleBuilder(),
-          _tabBarBuilder(context),
-          _tabBarViewBuilder(),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -85,12 +88,20 @@ class _TripTabState extends State<TripTab> with SingleTickerProviderStateMixin {
     );
   }
 
-  Widget _tabBarViewBuilder() {
+  Widget _tabBarViewBuilder(AppUser appUser) {
     return Expanded(
       child: TabBarView(
         controller: _tripTabController,
-        children: _tabs,
+        children: _getTabs(appUser),
       ),
     );
+  }
+
+  List<Widget> _getTabs(AppUser appUser) {
+    return [
+      UpcomingTab(appUser.upcoming),
+      UpcomingTab(appUser.upcoming),
+      UpcomingTab(appUser.upcoming),
+    ];
   }
 }

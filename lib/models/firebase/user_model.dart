@@ -35,9 +35,9 @@ class AppUser {
       phone: data['phone'] ?? 0,
       dob: data['dob'] ?? 0,
       address: data['address'] ?? 'N/A',
-      upcoming: data['upcoming'],
-      finished: data['finished'],
-      favourite: data['favourite'],
+      upcoming: data['upcoming'] ?? [],
+      finished: data['finished'] ?? [],
+      favourite: data['favourite'] ?? [],
     );
   }
 

@@ -1,19 +1,22 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 import 'package:motel/views/widgets/common_widgets/star_ratings.dart';
 
 class ShortenedHotelViewScreen extends StatelessWidget {
   final PageController pageController;
-  ShortenedHotelViewScreen({this.pageController});
+  final Hotel hotel;
+  ShortenedHotelViewScreen({this.pageController, this.hotel});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/welcome_img.jpg'),
+          image: CachedNetworkImageProvider(hotel.dp),
           fit: BoxFit.cover,
         ),
       ),
@@ -94,14 +97,14 @@ class ShortenedHotelViewScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    'Grand Royal Hotel',
+                    hotel.name,
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 20.0,
                     ),
                   ),
                   Text(
-                    'Wembly London',
+                    '${hotel.city}, ${hotel.country}',
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       color: Colors.black26,
@@ -136,7 +139,7 @@ class ShortenedHotelViewScreen extends StatelessWidget {
                         height: 5.0,
                       ),
                       StarRatings(
-                        ratings: 4,
+                        ratings: hotel.stars,
                       ),
                     ],
                   ),
@@ -144,7 +147,7 @@ class ShortenedHotelViewScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
                       Text(
-                        '\$120',
+                        '\$${hotel.price}',
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 20.0,
