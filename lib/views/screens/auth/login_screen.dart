@@ -41,7 +41,7 @@ class LoginScreen extends StatelessWidget {
                                   SizedBox(
                                     height: 30.0,
                                   ),
-                                  _googleSignInBuilder(),
+                                  _googleSignInBuilder(vm.googleSignUp),
                                   SizedBox(
                                     height: 20.0,
                                   ),
@@ -90,12 +90,12 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _googleSignInBuilder() {
+  Widget _googleSignInBuilder(final Function googleSignUp) {
     return RoundedBtn(
       title: 'Google',
       color: Color(0xfffde4343),
       padding: 0.0,
-      onPressed: () {},
+      onPressed: () => googleSignUp(isLogin: true),
     );
   }
 

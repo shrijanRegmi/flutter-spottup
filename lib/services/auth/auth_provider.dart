@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/services/firestore/user_provider.dart';
 
 class AuthProvider {
   final _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   // create account with email and password
   Future signUpWithEmailAndPassword({
@@ -48,9 +51,52 @@ class AuthProvider {
     }
   }
 
+  // sign up with google
+  Future signUpWithGoogle({
+    final bool isLogin = false,
+    final bool isSignUp = false,
+  }) async {
+    try {
+      final _account = await _googleSignIn.signIn();
+      final _tokens = await _account.authentication;
+      final _cred = GoogleAuthProvider.getCredential(
+          idToken: _tokens.idToken, accessToken: _tokens.accessToken);
+      final _result = await _auth.signInWithCredential(_cred);
+
+      final _user = _result.user;
+
+      final _appUser = AppUser(
+        firstName: _user.displayName.split(' ')[0],
+        lastName: _user.displayName.split(' ')[1],
+        email: _user.email,
+        uid: _result.user.uid,
+      );
+
+      final _ref = Firestore.instance;
+
+      final _userSnap =
+          await _ref.collection('users').document(_user.uid).get();
+
+      if (_userSnap.data == null && isSignUp) {
+        await UserProvider().sendUserToFirestore(_appUser, _result.user.uid);
+        _userFromFirebase(_user);
+        print('Success: Signing up user with name ${_user.displayName}');
+      } else if (isLogin) {
+        _userFromFirebase(_user);
+        print('Success: Logging in user with name ${_user.displayName}');
+      }
+      return _user;
+    } catch (e) {
+      print(e);
+      print('Error!!!: Signing up with google');
+      return null;
+    }
+  }
+
   // log out user
   Future logOut() async {
     print('Success: Logging out user');
+    await _googleSignIn?.signOut();
     return await _auth.signOut();
   }
 

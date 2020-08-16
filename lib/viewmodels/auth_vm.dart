@@ -25,8 +25,10 @@ class AuthVm extends ChangeNotifier {
     final _email = _emailController.text.trim();
     final _pass = _passController.text.trim();
 
+    var _result;
+
     if (_email != '' && _pass != '') {
-      return await AuthProvider().loginWithEmailAndPassword(
+      _result = await AuthProvider().loginWithEmailAndPassword(
         email: _email,
         password: _pass,
       );
@@ -37,10 +39,12 @@ class AuthVm extends ChangeNotifier {
         ),
       ));
     }
-    _updateProgressBar(false);
+    if (_result == null) {
+      _updateProgressBar(false);
+    }
   }
 
-  // login with email and password
+  // sign up with email and password
   Future signUpWithEmailAndPassword() async {
     _updateProgressBar(true);
 
@@ -49,6 +53,8 @@ class AuthVm extends ChangeNotifier {
     final _firstName = _firstNameController.text.trim();
     final _lastName = _lastNameController.text.trim();
     final _phone = _phoneController.text.trim();
+
+    var _result;
 
     if (_email != '' &&
         _pass != '' &&
@@ -62,7 +68,7 @@ class AuthVm extends ChangeNotifier {
         email: _email,
       );
 
-      return await AuthProvider().signUpWithEmailAndPassword(
+      _result = await AuthProvider().signUpWithEmailAndPassword(
         appUser: _appUser,
         password: _pass,
       );
@@ -73,7 +79,25 @@ class AuthVm extends ChangeNotifier {
         ),
       ));
     }
-    _updateProgressBar(false);
+    if (_result == null) {
+      _updateProgressBar(false);
+    }
+  }
+
+  // sign up with google
+  Future googleSignUp({
+    final bool isLogin = false,
+    final bool isSignUp = false,
+  }) async {
+    _updateProgressBar(true);
+
+    final _result = await AuthProvider()
+        .signUpWithGoogle(isLogin: isLogin, isSignUp: isSignUp);
+
+    if (_result == null) {
+      _updateProgressBar(false);
+    }
+    return _result;
   }
 
   // update progress bar

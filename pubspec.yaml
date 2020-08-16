@@ -37,6 +37,7 @@ dependencies:
   cached_network_image: ^2.2.0+1
   uuid: ^2.2.0
   lottie: ^0.5.1
+  google_sign_in: ^4.5.1
 
 dev_dependencies:
   flutter_test:
