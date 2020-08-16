@@ -16,7 +16,9 @@ class HotelReviewsList extends StatelessWidget {
               MaterialPageRoute(
                 builder: (_) => ViewAllScreen(
                   title: 'Reviews',
-                  listItem: HotelReviewItem(),
+                  listItem: (List list, int index) {
+                    return HotelReviewItem();
+                  },
                 ),
               ),
             );

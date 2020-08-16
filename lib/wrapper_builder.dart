@@ -23,6 +23,9 @@ class WrapperBuilder extends StatelessWidget {
           StreamProvider<List<Hotel>>.value(
             value: HotelProvider().hotelsList,
           ),
+          StreamProvider<List<Hotel>>.value(
+            value: HotelProvider().limitedBestDeals,
+          ),
           StreamProvider<List<TopThree>>.value(
             value: HotelProvider().topThree,
           ),

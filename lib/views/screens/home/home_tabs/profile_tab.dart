@@ -13,7 +13,7 @@ class ProfileTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return VmProvider<ProfileVm>(
-      vm: ProfileVm(),
+      vm: ProfileVm(context: context),
       builder: (context, vm, appUser) {
         return SafeArea(
           child: vm.isUpdatingData
@@ -205,9 +205,10 @@ class ProfileTab extends StatelessWidget {
           'Date of birth',
           appUser.dob == 0 ? 'N/A' : appUser.dob.toString(),
           TextInputType.datetime,
-          vm.dobController,
+          null,
           vm.updateData,
           appUser,
+          openDatePicker: () => vm.openDatePicker(appUser),
         ),
         _editProfileItem(
           context,
@@ -223,18 +224,22 @@ class ProfileTab extends StatelessWidget {
   }
 
   Widget _editProfileItem(
-    BuildContext context,
-    final String title,
-    final String value,
-    final TextInputType type,
-    final TextEditingController controller,
-    final Function sendData,
-    final AppUser appUser,
-  ) {
+      BuildContext context,
+      final String title,
+      final String value,
+      final TextInputType type,
+      final TextEditingController controller,
+      final Function sendData,
+      final AppUser appUser,
+      {final Function openDatePicker}) {
     return GestureDetector(
       onTap: () {
         if (title != 'Email') {
-          _showEditDialog(context, title, type, controller, sendData, appUser);
+          if (openDatePicker != null) {
+            return openDatePicker();
+          }
+          return _showEditDialog(
+              context, title, type, controller, sendData, appUser);
         }
       },
       child: Container(

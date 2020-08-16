@@ -5,8 +5,8 @@ import 'package:motel/models/firebase/top_three_model.dart';
 
 class HotelProvider {
   final String hotelId;
-  HotelProvider({this.hotelId});
-
+  final int limit;
+  HotelProvider({this.hotelId, this.limit = 5});
 
   final _ref = Firestore.instance;
   // hotels list from firestore
@@ -41,6 +41,25 @@ class HotelProvider {
     return _ref.collection('hotels').snapshots().map(_hotelsFromFirestore);
   }
 
+  // stream of all best deals list
+  Stream<List<Hotel>> get allBestDeals {
+    return _ref
+        .collection('hotels')
+        .where('is_best_deal', isEqualTo: true)
+        .snapshots()
+        .map(_hotelsFromFirestore);
+  }
+
+  // stream of limited best deals list
+  Stream<List<Hotel>> get limitedBestDeals {
+    return _ref
+        .collection('hotels')
+        .limit(limit)
+        .where('is_best_deal', isEqualTo: true)
+        .snapshots()
+        .map(_hotelsFromFirestore);
+  }
+
   // stream of top three
   Stream<List<TopThree>> get topThree {
     return _ref.collection('top_three').snapshots().map(_topThreeFromFirestore);
@@ -53,10 +72,13 @@ class HotelProvider {
         .snapshots()
         .map(_popularDestinationsFromFirestore);
   }
-  
 
   // stream of favourite hotels
   Stream<Hotel> get hotelFromId {
-    return _ref.collection('hotels').document(hotelId).snapshots().map(_hotelFromFirebase);
+    return _ref
+        .collection('hotels')
+        .document(hotelId)
+        .snapshots()
+        .map(_hotelFromFirebase);
   }
 }

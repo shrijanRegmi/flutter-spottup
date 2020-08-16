@@ -7,17 +7,20 @@ import 'package:motel/services/firestore/user_provider.dart';
 import 'package:motel/services/storage/user_storage_service.dart';
 
 class ProfileVm extends ChangeNotifier {
+  final BuildContext context;
+  ProfileVm({@required this.context});
+
   File _imgFile;
   TextEditingController _phoneController = TextEditingController();
-  TextEditingController _dobController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
   bool _isUpdatingData = false;
+  DateTime _dob;
 
   File get imgFile => _imgFile;
   TextEditingController get phoneController => _phoneController;
-  TextEditingController get dobController => _dobController;
   TextEditingController get addressController => _addressController;
   bool get isUpdatingData => _isUpdatingData;
+  DateTime get dob => _dob;
 
   // update user profile image
   Future selectImage(final AppUser appUser) async {
@@ -53,10 +56,27 @@ class ProfileVm extends ChangeNotifier {
     notifyListeners();
     _phoneController.clear();
     _addressController.clear();
-    _dobController.clear();
     final _result = await UserProvider(uid: appUser.uid).updateUserData(data);
     _isUpdatingData = false;
     notifyListeners();
     return _result;
+  }
+
+  // open date picker
+  Future openDatePicker(final AppUser appUser) async {
+    final _pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _dob ?? DateTime.now(),
+      firstDate: DateTime(1800, 1, 1),
+      lastDate: DateTime.now(),
+    );
+    if (_pickedDate != null) {
+      _dob = _pickedDate;
+      final _data = {
+        'dob': _dob.millisecondsSinceEpoch,
+      };
+      updateData(_data, appUser);
+    }
+    notifyListeners();
   }
 }

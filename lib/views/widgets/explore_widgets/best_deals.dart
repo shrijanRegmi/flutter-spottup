@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:motel/services/firestore/hotel_provider.dart';
 import 'package:motel/views/screens/home/view_all_screen.dart';
 import 'package:motel/views/widgets/common_widgets/left_right_text.dart';
 import 'package:motel/views/widgets/explore_widgets/best_deals_item.dart';
@@ -20,9 +21,11 @@ class BestDeals extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (_) => ViewAllScreen(
-                  title: 'Best deals',
-                  listItem: BestDealItem(),
-                ),
+                    title: 'Best deals',
+                    stream: HotelProvider().allBestDeals,
+                    listItem: (List list, int index) {
+                      return BestDealItem(bestDeal: list[index]);
+                    }),
               ),
             );
           },
