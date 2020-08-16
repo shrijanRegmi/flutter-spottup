@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:motel/models/firebase/hotel_model.dart';
 
 class ViewAllScreen extends StatelessWidget {
   final String title;
-  final Widget listItem;
+  final Widget Function(List list, int index) listItem;
   final bool isGrid;
-  ViewAllScreen({this.title, this.listItem, this.isGrid = false});
+  final Stream stream;
+  ViewAllScreen({this.title, this.listItem, this.isGrid = false, this.stream});
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +55,21 @@ class ViewAllScreen extends StatelessWidget {
   }
 
   Widget _listBuilder() {
-    return ListView.builder(
-      itemCount: 10,
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
-        return listItem;
+    return StreamBuilder(
+      stream: stream,
+      builder: (context, snap) {
+        if (snap.hasData) {
+          final _list = snap.data;
+          return ListView.builder(
+            itemCount: _list.length,
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return listItem(_list, index);
+            },
+          );
+        }
+        return Center(child: CircularProgressIndicator());
       },
     );
   }

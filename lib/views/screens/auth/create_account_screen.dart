@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:motel/viewmodels/auth_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/screens/auth/login_screen.dart';
@@ -19,54 +20,60 @@ class CreateAccountScreen extends StatelessWidget {
               onTap: () {
                 FocusScope.of(context).unfocus();
               },
-              child: Container(
-                height: MediaQuery.of(context).size.height,
-                color: Colors.transparent,
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      _appbarBuilder(context),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: vm.showingProgressBar
+                  ? Center(
+                      child: Lottie.asset('assets/lottie/loading.json'),
+                    )
+                  : Container(
+                      height: MediaQuery.of(context).size.height,
+                      color: Colors.transparent,
+                      child: SingleChildScrollView(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            _signUpTextBuilder(),
-                            SizedBox(
-                              height: 30.0,
-                            ),
-                            _googleSignInBuilder(),
-                            SizedBox(
-                              height: 20.0,
-                            ),
-                            _emailSignUpText(),
-                            SizedBox(
-                              height: 20.0,
-                            ),
-                            _authContainerBuilder(vm),
-                            SizedBox(
-                              height: 20.0,
-                            ),
-                            _singUpBtnBuilder(vm.signUpWithEmailAndPassword),
-                            SizedBox(
-                              height: 20.0,
-                            ),
-                            _policyTextBuilder(),
-                            SizedBox(
-                              height: 20.0,
-                            ),
-                            _loginTextSection(context),
-                            SizedBox(
-                              height: 10.0,
-                            ),
+                            _appbarBuilder(context),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  _signUpTextBuilder(),
+                                  SizedBox(
+                                    height: 30.0,
+                                  ),
+                                  _googleSignInBuilder(),
+                                  SizedBox(
+                                    height: 20.0,
+                                  ),
+                                  _emailSignUpText(),
+                                  SizedBox(
+                                    height: 20.0,
+                                  ),
+                                  _authContainerBuilder(vm),
+                                  SizedBox(
+                                    height: 20.0,
+                                  ),
+                                  _singUpBtnBuilder(
+                                      vm.signUpWithEmailAndPassword),
+                                  SizedBox(
+                                    height: 20.0,
+                                  ),
+                                  _policyTextBuilder(),
+                                  SizedBox(
+                                    height: 20.0,
+                                  ),
+                                  _loginTextSection(context),
+                                  SizedBox(
+                                    height: 10.0,
+                                  ),
+                                ],
+                              ),
+                            )
                           ],
                         ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
+                      ),
+                    ),
             ),
           ),
         );

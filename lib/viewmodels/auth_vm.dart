@@ -9,6 +9,7 @@ class AuthVm extends ChangeNotifier {
   TextEditingController _lastNameController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  bool _showingProgressBar = false;
 
   TextEditingController get emailController => _emailController;
   TextEditingController get passController => _passController;
@@ -16,9 +17,11 @@ class AuthVm extends ChangeNotifier {
   TextEditingController get lastNameController => _lastNameController;
   TextEditingController get phoneController => _phoneController;
   GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
+  bool get showingProgressBar => _showingProgressBar;
 
   // login with email and password
   Future loginWithEmailAndPassword() async {
+    _updateProgressBar(true);
     final _email = _emailController.text.trim();
     final _pass = _passController.text.trim();
 
@@ -34,10 +37,13 @@ class AuthVm extends ChangeNotifier {
         ),
       ));
     }
+    _updateProgressBar(false);
   }
 
   // login with email and password
   Future signUpWithEmailAndPassword() async {
+    _updateProgressBar(true);
+
     final _email = _emailController.text.trim();
     final _pass = _passController.text.trim();
     final _firstName = _firstNameController.text.trim();
@@ -67,5 +73,12 @@ class AuthVm extends ChangeNotifier {
         ),
       ));
     }
+    _updateProgressBar(false);
+  }
+
+  // update progress bar
+  _updateProgressBar(final bool newVal) {
+    _showingProgressBar = newVal;
+    notifyListeners();
   }
 }
