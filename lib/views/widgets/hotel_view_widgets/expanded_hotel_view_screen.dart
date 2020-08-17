@@ -38,7 +38,7 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
   Widget build(BuildContext context) {
     final _appUser = Provider.of<AppUser>(context);
     return VmProvider<HotelViewVm>(
-      vm: HotelViewVm(),
+      vm: HotelViewVm(context: context),
       onInit: (vm) {
         bool _isFav = _appUser.favourite.contains(widget.hotel.id);
         vm.updateFavourite(_isFav);
