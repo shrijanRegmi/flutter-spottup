@@ -7,13 +7,14 @@ class Hotel {
   final String city;
   final String country;
   final double stars;
-  final int price;
+  final double price;
   final String summary;
   final List<dynamic> photos;
   final List<dynamic> reviews;
   final List<dynamic> rooms;
   final int persons;
   final HotelType type;
+  final int commission;
 
   Hotel({
     this.id,
@@ -29,6 +30,7 @@ class Hotel {
     this.rooms,
     this.persons,
     this.type,
+    this.commission,
   });
 
   static Hotel fromJson(final Map<String, dynamic> data, final String id) {
@@ -40,13 +42,14 @@ class Hotel {
         city: data['city'] ?? '',
         country: data['country'] ?? '',
         stars: data['stars'] ?? 3.0,
-        price: data['price'] ?? 0,
+        price: data['price'].toDouble().toDouble() ?? 0.0,
         summary: data['summary'] ?? '',
         photos: data['photos'] ?? [],
         reviews: data['reviews'] ?? [],
         rooms: data['rooms'] ?? [],
         persons: data['persons'] ?? 0,
         type: HotelType.hotel,
+        commission: data['commission'] ?? 0,
       );
     } else if (data['type'] == 1) {
       return Hotel(
@@ -56,13 +59,14 @@ class Hotel {
         city: data['city'] ?? '',
         country: data['country'] ?? '',
         stars: data['stars'] ?? 3.0,
-        price: data['price'] ?? 0,
+        price: (data['price'] ?? 0.0).toDouble(),
         summary: data['summary'] ?? '',
         photos: data['photos'] ?? [],
         reviews: data['reviews'] ?? [],
         rooms: data['rooms'] ?? [],
         persons: data['persons'] ?? 0,
         type: HotelType.backpack,
+        commission: data['commission'] ?? 0,
       );
     } else if (data['type'] == 2) {
       return Hotel(
@@ -72,13 +76,14 @@ class Hotel {
         city: data['city'] ?? '',
         country: data['country'] ?? '',
         stars: data['stars'] ?? 3.0,
-        price: data['price'] ?? 0,
+        price: (data['price'] ?? 0.0).toDouble(),
         summary: data['summary'] ?? '',
         photos: data['photos'] ?? [],
         reviews: data['reviews'] ?? [],
         rooms: data['rooms'] ?? [],
         persons: data['persons'] ?? 0,
         type: HotelType.resorts,
+        commission: data['commission'] ?? 0,
       );
     } else if (data['type'] == 3) {
       return Hotel(
@@ -88,13 +93,14 @@ class Hotel {
         city: data['city'] ?? '',
         country: data['country'] ?? '',
         stars: data['stars'] ?? 3.0,
-        price: data['price'] ?? 0,
+        price: (data['price'] ?? 0.0).toDouble(),
         summary: data['summary'] ?? '',
         photos: data['photos'] ?? [],
         reviews: data['reviews'] ?? [],
         rooms: data['rooms'] ?? [],
         persons: data['persons'] ?? 0,
         type: HotelType.villa,
+        commission: data['commission'] ?? 0,
       );
     }
     return Hotel(
@@ -104,13 +110,14 @@ class Hotel {
       city: data['city'] ?? '',
       country: data['country'] ?? '',
       stars: data['stars'] ?? 3.0,
-      price: data['price'] ?? 0,
+      price: (data['price'] ?? 0.0).toDouble(),
       summary: data['summary'] ?? '',
       photos: data['photos'] ?? [],
       reviews: data['reviews'] ?? [],
       rooms: data['rooms'] ?? [],
       persons: data['persons'] ?? 0,
       type: HotelType.hotel,
+      commission: data['commission'] ?? 0,
     );
   }
 }

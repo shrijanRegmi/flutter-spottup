@@ -19,7 +19,7 @@ class ShortenedHotelViewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final _appUser = Provider.of<AppUser>(context);
     return VmProvider<HotelViewVm>(
-      vm: HotelViewVm(),
+      vm: HotelViewVm(context: context),
       onInit: (vm) {
         bool _isFav = _appUser.favourite.contains(hotel.id);
         vm.updateFavourite(_isFav);
@@ -36,7 +36,7 @@ class ShortenedHotelViewScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               _btnSection(context, vm, appUser),
-              _bottomSection(context),
+              _bottomSection(context, vm),
             ],
           ),
         );
@@ -86,10 +86,10 @@ class ShortenedHotelViewScreen extends StatelessWidget {
     );
   }
 
-  Widget _bottomSection(BuildContext context) {
+  Widget _bottomSection(BuildContext context, HotelViewVm vm) {
     return Column(
       children: <Widget>[
-        _detailSection(),
+        _detailSection(vm),
         _moreBtn(context),
         SizedBox(
           height: 30.0,
@@ -98,7 +98,7 @@ class ShortenedHotelViewScreen extends StatelessWidget {
     );
   }
 
-  Widget _detailSection() {
+  Widget _detailSection(HotelViewVm vm) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Container(
@@ -188,7 +188,7 @@ class ShortenedHotelViewScreen extends StatelessWidget {
               RoundedBtn(
                 title: 'Book now',
                 padding: 0.0,
-                onPressed: () {},
+                onPressed: () => vm.gotoBookScreen(hotel),
               ),
             ],
           ),
