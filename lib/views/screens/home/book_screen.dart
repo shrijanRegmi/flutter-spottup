@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:motel/helpers/date_helper.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/viewmodels/booking_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
@@ -42,14 +43,6 @@ class _BookScreenState extends State<BookScreen> {
                     Divider(),
                     SizedBox(
                       height: 10.0,
-                    ),
-                    _totalPriceBuilder(),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Divider(),
-                    SizedBox(
-                      height: 20.0,
                     ),
                     _bookNowTextBuilder(),
                     SizedBox(
@@ -113,13 +106,6 @@ class _BookScreenState extends State<BookScreen> {
           ),
         );
       },
-    );
-  }
-
-  Widget _appbarBuilder(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.arrow_back),
-      onPressed: () => Navigator.pop(context),
     );
   }
 
@@ -267,68 +253,6 @@ class _BookScreenState extends State<BookScreen> {
     );
   }
 
-  Widget _totalPriceBuilder() {
-    final _price = widget.hotel.price;
-    final _commission = widget.hotel.commission;
-    final _commissionPrice = _commission / 100 * _price;
-    final _totalPrice = _price + _commissionPrice;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'Total',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 22.0,
-                ),
-              ),
-              Text(
-                '$_commission% commission',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black26,
-                  fontSize: 12.0,
-                ),
-              ),
-            ],
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              Text(
-                '\$$_price + \$${_commissionPrice.toStringAsFixed(2)}',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16.0,
-                ),
-              ),
-              Text(
-                '= \$${_totalPrice.toStringAsFixed(2)}',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16.0,
-                ),
-              ),
-              Text(
-                '/per night',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black26,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _grandTotalPriceBuilder(BookVm vm) {
     final _price = widget.hotel.price;
     final _commission = widget.hotel.commission;
@@ -434,7 +358,8 @@ class _BookScreenState extends State<BookScreen> {
                   : GestureDetector(
                       onTap: vm.showCheckInDialog,
                       child: Text(
-                        '${vm.checkInDate}',
+                        DateHelper().getFormattedDate(
+                            vm.checkInDate.millisecondsSinceEpoch),
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -469,7 +394,8 @@ class _BookScreenState extends State<BookScreen> {
                   : GestureDetector(
                       onTap: vm.showCheckOutDialog,
                       child: Text(
-                        '${vm.checkOutDate}',
+                        DateHelper().getFormattedDate(
+                            vm.checkOutDate.millisecondsSinceEpoch),
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -523,8 +449,9 @@ class _BookScreenState extends State<BookScreen> {
           ),
           TextFormField(
             decoration: InputDecoration(
-              hintText: 'Confirm your email',
+              hintText: 'Confirm your name',
             ),
+            textCapitalization: TextCapitalization.words,
             controller: vm.emailController,
             onChanged: (val) {
               setState(() {});
@@ -537,6 +464,7 @@ class _BookScreenState extends State<BookScreen> {
             decoration: InputDecoration(
               hintText: 'Confirm your phone',
             ),
+            keyboardType: TextInputType.phone,
             controller: vm.phoneController,
             onChanged: (val) {
               setState(() {});

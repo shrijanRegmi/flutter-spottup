@@ -17,46 +17,62 @@ class ProceedBookingScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Container(
             height: MediaQuery.of(context).size.height - kToolbarHeight,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 20.0,
-                      ),
-                      _topSectionBuilder(),
-                      SizedBox(
-                        height: 20.0,
-                      ),
-                      _hotelDetailBuilder(),
-                      SizedBox(
-                        height: 40.0,
-                      ),
-                    ],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _appbarBuilder(context),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                _topSectionBuilder(),
+                                SizedBox(
+                                  height: 20.0,
+                                ),
+                                _hotelDetailBuilder(),
+                                SizedBox(
+                                  height: 20.0,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Column(
+                          children: <Widget>[
+                            _totalPriceBuilder(),
+                            SizedBox(
+                              height: 20.0,
+                            ),
+                            RoundedBtn(
+                              title: 'Confirm Booking',
+                              onPressed: () {},
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                  Column(
-                    children: <Widget>[
-                      _totalPriceBuilder(),
-                      SizedBox(
-                        height: 20.0,
-                      ),
-                      RoundedBtn(
-                        title: 'Confirm Booking',
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _appbarBuilder(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () => Navigator.pop(context),
     );
   }
 
