@@ -77,11 +77,11 @@ class AuthProvider {
       final _userSnap =
           await _ref.collection('users').document(_user.uid).get();
 
-      if (_userSnap.data == null && isSignUp) {
+      if (_userSnap.data == null) {
         await UserProvider().sendUserToFirestore(_appUser, _result.user.uid);
         _userFromFirebase(_user);
         print('Success: Signing up user with name ${_user.displayName}');
-      } else if (isLogin) {
+      } else {
         _userFromFirebase(_user);
         print('Success: Logging in user with name ${_user.displayName}');
       }
