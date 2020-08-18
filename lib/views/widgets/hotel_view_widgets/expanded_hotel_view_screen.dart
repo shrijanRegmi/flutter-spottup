@@ -7,6 +7,7 @@ import 'package:motel/viewmodels/hotel_view_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 import 'package:motel/views/widgets/hotel_view_widgets/hotel_reviews_list.dart';
+import 'package:motel/views/widgets/hotel_view_widgets/hotel_rooms_list.dart';
 import 'package:provider/provider.dart';
 
 import 'hotel_photos_list.dart';
@@ -66,7 +67,9 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
                         horizontal: 20.0, vertical: 10.0),
                     child: Divider(),
                   ),
-                  if (widget.hotel.photos.isNotEmpty) HotelPhotosList(),
+                  HotelRoomsList(widget.hotel.id),
+                  if (widget.hotel.photos.isNotEmpty)
+                    HotelPhotosList(widget.hotel.photos),
                   SizedBox(
                     height: 10.0,
                   ),
@@ -90,7 +93,7 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
                   child: RoundedBtn(
                     title: 'Book now',
                     padding: 0.0,
-                    onPressed: () {},
+                    onPressed: () => vm.showRoomDialog(widget.hotel),
                   ),
                 )
               : null,

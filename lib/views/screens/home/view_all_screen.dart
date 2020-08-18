@@ -6,7 +6,8 @@ class ViewAllScreen extends StatelessWidget {
   final Widget Function(List list, int index) listItem;
   final bool isGrid;
   final Stream stream;
-  ViewAllScreen({this.title, this.listItem, this.isGrid = false, this.stream});
+  final List list;
+  ViewAllScreen({this.title, this.listItem, this.isGrid = false, this.stream, this.list});
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +79,7 @@ class ViewAllScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: GridView.builder(
-        itemCount: 10,
+        itemCount: list.length,
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -87,28 +88,8 @@ class ViewAllScreen extends StatelessWidget {
           mainAxisSpacing: 20.0,
         ),
         itemBuilder: (context, index) {
-          return _gridItem();
+          return listItem([], index);
         },
-      ),
-    );
-  }
-
-  Widget _gridItem() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        image: DecorationImage(
-          image: AssetImage('assets/images/welcome_img.jpg'),
-          fit: BoxFit.cover,
-        ),
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.black,
-            Colors.transparent,
-          ],
-        ),
       ),
     );
   }

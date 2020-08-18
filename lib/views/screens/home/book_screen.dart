@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:motel/helpers/date_helper.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
+import 'package:motel/models/firebase/room_model.dart';
 import 'package:motel/viewmodels/booking_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/screens/home/proceed_booking_screen.dart';
@@ -11,7 +12,8 @@ class BookScreen extends StatefulWidget {
   @override
   _BookScreenState createState() => _BookScreenState();
   final Hotel hotel;
-  BookScreen(this.hotel);
+  final Room room;
+  BookScreen(this.hotel, this.room);
 }
 
 class _BookScreenState extends State<BookScreen> {
@@ -131,7 +133,9 @@ class _BookScreenState extends State<BookScreen> {
           height: 200.0,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: CachedNetworkImageProvider(widget.hotel.dp),
+              image: CachedNetworkImageProvider(
+                widget.room != null ? widget.room.dp : widget.hotel.dp,
+              ),
               fit: BoxFit.cover,
             ),
           ),
@@ -185,6 +189,14 @@ class _BookScreenState extends State<BookScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                if (widget.room != null)
+                  Text(
+                    '${widget.room.name} Room -',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 22.0,
+                    ),
+                  ),
                 Text(
                   widget.hotel.name,
                   style: TextStyle(
@@ -235,7 +247,9 @@ class _BookScreenState extends State<BookScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Text(
-                '\$${widget.hotel.price}',
+                widget.room != null
+                    ? '\$${widget.room.price}'
+                    : '\$${widget.hotel.price}',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 22.0,
@@ -256,10 +270,8 @@ class _BookScreenState extends State<BookScreen> {
   }
 
   Widget _grandTotalPriceBuilder(BookVm vm) {
-    final _price = widget.hotel.price;
-    final _commission = widget.hotel.commission;
-    final _commissionPrice = _commission / 100 * _price;
-    final _totalPrice = _price + _commissionPrice;
+    final _price = widget.room != null ? widget.room.price : widget.hotel.price;
+    final _totalPrice = _price;
 
     int _days;
     if (vm.checkInDate != null && vm.checkOutDate != null) {

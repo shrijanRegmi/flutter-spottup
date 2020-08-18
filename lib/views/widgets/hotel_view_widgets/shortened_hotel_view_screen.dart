@@ -188,7 +188,7 @@ class ShortenedHotelViewScreen extends StatelessWidget {
               RoundedBtn(
                 title: 'Book now',
                 padding: 0.0,
-                onPressed: () => vm.gotoBookScreen(hotel),
+                onPressed: () => vm.showRoomDialog(hotel),
               ),
             ],
           ),

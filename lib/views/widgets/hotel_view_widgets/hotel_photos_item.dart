@@ -1,6 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class HotelPhotosItem extends StatelessWidget {
+  final String photo;
+  HotelPhotosItem(this.photo);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -10,17 +14,10 @@ class HotelPhotosItem extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),
           image: DecorationImage(
-            image: AssetImage('assets/images/welcome_img.jpg'),
+            image: CachedNetworkImageProvider(photo),
             fit: BoxFit.cover,
           ),
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.black,
-              Colors.transparent,
-            ],
-          ),
+          color: Colors.green[100],
         ),
       ),
     );
