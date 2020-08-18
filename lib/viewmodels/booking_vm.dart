@@ -17,6 +17,7 @@ class BookVm extends ChangeNotifier {
   bool _isBookingAvailable = false;
   bool _isEmailPhoneConfirmed = false;
   ScrollController _scrollController = ScrollController();
+  bool _isProcessing = false;
 
   DateTime get checkInDate => _checkInDate;
   DateTime get checkOutDate => _checkOutDate;
@@ -25,6 +26,7 @@ class BookVm extends ChangeNotifier {
   bool get isBookingAvailable => _isBookingAvailable;
   bool get isEmailPhoneConfirmed => _isEmailPhoneConfirmed;
   ScrollController get scrollController => _scrollController;
+  bool get isProcessing => _isProcessing;
 
   // show checkin dialog
   Future showCheckInDialog() async {
@@ -150,14 +152,23 @@ class BookVm extends ChangeNotifier {
 
   // send email
   sendEmail(final email) async {
+    _isProcessing = true;
+    notifyListeners();
     try {
       final _result =
           await send(email, gmail('ilyyhs9@gmail.com', 'ilmfasf52'));
       print('Success: Sending email');
+      _isProcessing = false;
+      notifyListeners();
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Navigator.pop(context);
       return _result;
     } catch (e) {
       print(e);
       print('Error!!!: Sending email');
+      _isProcessing = false;
+      notifyListeners();
       return null;
     }
   }
