@@ -15,6 +15,8 @@ class Hotel {
   final int persons;
   final HotelType type;
   final int commission;
+  final int availableCheckIn;
+  final int availableCheckOut;
 
   Hotel({
     this.id,
@@ -31,6 +33,8 @@ class Hotel {
     this.persons,
     this.type,
     this.commission,
+    this.availableCheckIn,
+    this.availableCheckOut,
   });
 
   static Hotel fromJson(final Map<String, dynamic> data, final String id) {
@@ -50,6 +54,8 @@ class Hotel {
         persons: data['persons'] ?? 0,
         type: HotelType.hotel,
         commission: data['commission'] ?? 0,
+        availableCheckIn: data['available_check_in'],
+        availableCheckOut: data['available_check_out'],
       );
     } else if (data['type'] == 1) {
       return Hotel(
@@ -67,6 +73,8 @@ class Hotel {
         persons: data['persons'] ?? 0,
         type: HotelType.backpack,
         commission: data['commission'] ?? 0,
+        availableCheckIn: data['available_check_in'],
+        availableCheckOut: data['available_check_out'],
       );
     } else if (data['type'] == 2) {
       return Hotel(
@@ -84,6 +92,8 @@ class Hotel {
         persons: data['persons'] ?? 0,
         type: HotelType.resorts,
         commission: data['commission'] ?? 0,
+        availableCheckIn: data['available_check_in'],
+        availableCheckOut: data['available_check_out'],
       );
     } else if (data['type'] == 3) {
       return Hotel(
@@ -101,6 +111,8 @@ class Hotel {
         persons: data['persons'] ?? 0,
         type: HotelType.villa,
         commission: data['commission'] ?? 0,
+        availableCheckIn: data['available_check_in'],
+        availableCheckOut: data['available_check_out'],
       );
     }
     return Hotel(
@@ -118,6 +130,8 @@ class Hotel {
       persons: data['persons'] ?? 0,
       type: HotelType.hotel,
       commission: data['commission'] ?? 0,
+      availableCheckIn: data['available_check_in'],
+      availableCheckOut: data['available_check_out'],
     );
   }
 }

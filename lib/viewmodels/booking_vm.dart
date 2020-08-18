@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server/gmail.dart';
+import 'package:motel/helpers/date_helper.dart';
+import 'package:motel/models/firebase/hotel_model.dart';
+import 'package:motel/models/firebase/user_model.dart';
+import 'package:provider/provider.dart';
 
 class BookVm extends ChangeNotifier {
   final BuildContext context;
@@ -22,6 +28,7 @@ class BookVm extends ChangeNotifier {
 
   // show checkin dialog
   Future showCheckInDialog() async {
+    _isBookingAvailable = false;
     final _pickedDate = await showDatePicker(
       context: context,
       initialDate: _checkInDate ?? DateTime.now(),
@@ -36,6 +43,7 @@ class BookVm extends ChangeNotifier {
 
   // show checkin dialog
   Future showCheckOutDialog() async {
+    _isBookingAvailable = false;
     final _pickedDate = await showDatePicker(
       context: context,
       initialDate: _checkOutDate ?? DateTime.now(),
@@ -49,8 +57,42 @@ class BookVm extends ChangeNotifier {
   }
 
   // check availability of booking
-  checkAvailability() {
-    _isBookingAvailable = true;
+  checkAvailability(final Hotel hotel) {
+    if (hotel.availableCheckIn != null && hotel.availableCheckOut != null) {
+      if (_checkInDate.isAfter(
+              DateTime.fromMillisecondsSinceEpoch(hotel.availableCheckIn)) &&
+          _checkOutDate.isBefore(
+              DateTime.fromMillisecondsSinceEpoch(hotel.availableCheckOut))) {
+        _isBookingAvailable = true;
+      } else {
+        final _checkIn =
+            DateHelper().getFormattedDate(hotel.availableCheckIn) ?? '';
+        final _checkOut =
+            DateHelper().getFormattedDate(hotel.availableCheckOut) ?? '';
+        _noBookingDialog(_checkIn, _checkOut);
+      }
+    } else if (hotel.availableCheckIn == null &&
+        hotel.availableCheckOut == null) {
+      _isBookingAvailable = true;
+    } else if (hotel.availableCheckIn != null &&
+        _checkInDate.isAfter(
+            DateTime.fromMillisecondsSinceEpoch(hotel.availableCheckIn))) {
+      _isBookingAvailable = true;
+    } else if (hotel.availableCheckOut != null &&
+        _checkOutDate.isBefore(
+            DateTime.fromMillisecondsSinceEpoch(hotel.availableCheckOut))) {
+      _isBookingAvailable = true;
+    } else {
+      final _checkIn = hotel.availableCheckIn != null
+          ? DateHelper().getFormattedDate(hotel.availableCheckIn)
+          : DateHelper()
+              .getFormattedDate(DateTime.now().millisecondsSinceEpoch);
+      final _checkOut = hotel.availableCheckOut != null
+          ? DateHelper().getFormattedDate(hotel.availableCheckOut)
+          : '';
+      _noBookingDialog(_checkIn, _checkOut);
+    }
+
     if (_isEmailPhoneConfirmed) {
       _scrollController.animateTo(
         MediaQuery.of(context).size.height,
@@ -63,7 +105,33 @@ class BookVm extends ChangeNotifier {
 
   // check email phone
   checkEmailPhone() {
-    _isEmailPhoneConfirmed = true;
+    FocusScope.of(context).unfocus();
+    if (!_isEmailPhoneConfirmed) {
+      final _appUser = Provider.of<AppUser>(context, listen: false);
+      final _fullName = '${_appUser.firstName} ${_appUser.lastName}';
+
+      if (_emailController.text.trim() == _fullName &&
+          _phoneController.text.trim() == _appUser.phone.toString()) {
+        _isEmailPhoneConfirmed = true;
+      } else if (_emailController.text.trim() != _fullName &&
+          _phoneController.text.trim() != _appUser.phone.toString()) {
+        confirmationDialog(
+          "Your name and phone doesn't match your profile",
+          "Your name '${_appUser.firstName} ${_appUser.lastName}' from your profile does not match '${_emailController.text.trim()}'.\n\nYour phone '${_appUser.phone}' from your profile does not match '${_phoneController.text.trim()}'.",
+        );
+      } else if (_emailController.text.trim() != _fullName) {
+        confirmationDialog(
+          "Your name doesn't match your profile",
+          "Your name '${_appUser.firstName} ${_appUser.lastName}' from your profile does not match '${_emailController.text.trim()}'.",
+        );
+      } else if (_phoneController.text.trim() != _appUser.phone.toString()) {
+        confirmationDialog(
+          "Your phone doesn't match your profile",
+          "Your phone '${_appUser.phone}' from your profile does not match '${_phoneController.text.trim()}'.",
+        );
+      }
+    }
+
     if (_isBookingAvailable) {
       _scrollController.animateTo(
         MediaQuery.of(context).size.height,
@@ -72,5 +140,125 @@ class BookVm extends ChangeNotifier {
       );
     }
     notifyListeners();
+  }
+
+  // update name phone confirmation
+  updateConfirmation() {
+    _isEmailPhoneConfirmed = false;
+    notifyListeners();
+  }
+
+  // send email
+  sendEmail(final email) async {
+    try {
+      final _result =
+          await send(email, gmail('ilyyhs9@gmail.com', 'ilmfasf52'));
+      print('Success: Sending email');
+      return _result;
+    } catch (e) {
+      print(e);
+      print('Error!!!: Sending email');
+      return null;
+    }
+  }
+
+  // confirmation failed dialog
+  confirmationDialog(final String title, final String content) async {
+    return await showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => AlertDialog(
+        title: Text(
+          '$title',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        content: Text('$content'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10.0, bottom: 10.0),
+            child: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Text(
+                  'Cancle',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 10.0, bottom: 10.0),
+            child: InkWell(
+              onTap: () {
+                _isEmailPhoneConfirmed = true;
+                if (_isBookingAvailable) {
+                  _scrollController.animateTo(
+                    MediaQuery.of(context).size.height,
+                    duration: Duration(milliseconds: 1000),
+                    curve: Curves.ease,
+                  );
+                }
+                notifyListeners();
+                Navigator.pop(context);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Text(
+                  'Confirm Anyway',
+                  style: TextStyle(
+                    color: Color(0xff45ad90),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // dialog when booking is not available
+  _noBookingDialog(String checkIn, String checkOut) async {
+    return await showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => AlertDialog(
+        title: Text(
+          'Booking not available !',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        content: Text(
+          checkOut != ''
+              ? 'The booking of this hotel is only available from $checkIn - $checkOut'
+              : 'The booking of this hotel is only available from $checkIn',
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10.0, bottom: 10.0),
+            child: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Text(
+                  'Ok',
+                  style: TextStyle(
+                    color: Color(0xff45ad90),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

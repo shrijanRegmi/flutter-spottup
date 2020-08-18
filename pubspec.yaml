@@ -38,6 +38,7 @@ dependencies:
   uuid: ^2.2.0
   lottie: ^0.5.1
   google_sign_in: ^4.5.1
+  mailer: ^3.0.4
 
 dev_dependencies:
   flutter_test:
