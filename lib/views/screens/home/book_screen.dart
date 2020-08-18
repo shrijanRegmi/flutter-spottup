@@ -90,6 +90,8 @@ class _BookScreenState extends State<BookScreen> {
                                 checkIn: vm.checkInDate.millisecondsSinceEpoch,
                                 checkOut:
                                     vm.checkOutDate.millisecondsSinceEpoch,
+                                name: vm.emailController.text.trim(),
+                                phone: vm.phoneController.text.trim(),
                               ),
                             ),
                           );
@@ -422,7 +424,7 @@ class _BookScreenState extends State<BookScreen> {
                 disabledColor: Colors.grey.withOpacity(0.3),
                 onPressed: vm.checkInDate == null || vm.checkOutDate == null
                     ? null
-                    : vm.checkAvailability,
+                    : () => vm.checkAvailability(widget.hotel),
               ),
             ],
           )
@@ -455,6 +457,7 @@ class _BookScreenState extends State<BookScreen> {
             controller: vm.emailController,
             onChanged: (val) {
               setState(() {});
+              vm.updateConfirmation();
             },
           ),
           SizedBox(
@@ -468,6 +471,7 @@ class _BookScreenState extends State<BookScreen> {
             controller: vm.phoneController,
             onChanged: (val) {
               setState(() {});
+              vm.updateConfirmation();
             },
           ),
           SizedBox(

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mailer/mailer.dart';
 import 'package:motel/helpers/date_helper.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
+import 'package:motel/viewmodels/booking_vm.dart';
+import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 
 class ProceedBookingScreen extends StatelessWidget {
@@ -8,64 +11,95 @@ class ProceedBookingScreen extends StatelessWidget {
   final int days;
   final int checkIn;
   final int checkOut;
-  ProceedBookingScreen({this.hotel, this.days, this.checkIn, this.checkOut});
+  final String name;
+  final String phone;
+  ProceedBookingScreen({
+    this.hotel,
+    this.days,
+    this.checkIn,
+    this.checkOut,
+    this.name,
+    this.phone,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height - kToolbarHeight,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _appbarBuilder(context),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Expanded(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+    return VmProvider<BookVm>(
+      vm: BookVm(context: context),
+      builder: (context, vm, appUser) {
+        return Scaffold(
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Container(
+                height: MediaQuery.of(context).size.height - kToolbarHeight,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _appbarBuilder(context),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Expanded(
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    _topSectionBuilder(),
+                                    SizedBox(
+                                      height: 20.0,
+                                    ),
+                                    _hotelDetailBuilder(),
+                                    SizedBox(
+                                      height: 20.0,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Column(
                               children: <Widget>[
-                                _topSectionBuilder(),
+                                _totalPriceBuilder(),
                                 SizedBox(
                                   height: 20.0,
                                 ),
-                                _hotelDetailBuilder(),
-                                SizedBox(
-                                  height: 20.0,
+                                RoundedBtn(
+                                  title: 'Confirm Booking',
+                                  onPressed: () {
+                                    final _checkInDate = DateHelper().getFormattedDate(checkIn);
+                                    final _checkOutDate = DateHelper().getFormattedDate(checkOut);
+                                    final _date = DateHelper().getFormattedDate(DateTime.now().millisecondsSinceEpoch);
+                                    final _total = hotel.price * days;
+
+                                    final _message = Message()
+                                      ..from = Address('ilyyhs9@gmail.com',
+                                          'Hotel Booking')
+                                      ..recipients
+                                          .add('shrijanregmi9@gmail.com')
+                                      ..subject = '${hotel.name}'
+                                      ..text =
+                                          'This is the plain text.\nThis is line 2 of the text part.'
+                                      ..html =
+                                          '<h1>${appUser.firstName} ${appUser.lastName}</h1><p>${appUser.email}</p><p>$phone</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Hotel Name:</h3><p>Ordinary Room: ${hotel.name}, ${hotel.city}, ${hotel.country}</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Hotel Id:</h3><p>${hotel.id}</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Check In - Check Out</h3><p>$_checkInDate - $_checkOutDate</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Issue Date:</h3><p>$_date</p><div style="height: 20px;" ></div><div style="display: flex; align-items: flex-end;" ><h3>Total: </h3><div style="margin-left: 20px;"><h2 style="margin: 0px;" >\$$_total</h2><p style="margin: 0px;">for $days night</p></div></div>';
+                                    vm.sendEmail(_message);
+                                  },
                                 ),
                               ],
                             ),
-                          ),
-                        ),
-                        Column(
-                          children: <Widget>[
-                            _totalPriceBuilder(),
-                            SizedBox(
-                              height: 20.0,
-                            ),
-                            RoundedBtn(
-                              title: 'Confirm Booking',
-                              onPressed: () {},
-                            ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -92,7 +126,7 @@ class ProceedBookingScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          'Shrijan Regmi',
+          '$name',
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 22.0,
@@ -102,7 +136,7 @@ class ProceedBookingScreen extends StatelessWidget {
           'ilyyhs9@gmail.com',
         ),
         Text(
-          '98387387888',
+          '$phone',
         ),
       ],
     );
