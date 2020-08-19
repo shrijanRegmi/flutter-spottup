@@ -1,65 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:motel/views/screens/home/search_result_screen.dart';
-import 'package:motel/views/widgets/search_widgets/hotel_types_list.dart';
-import 'package:motel/views/widgets/search_widgets/last_searches_list.dart';
+import 'package:motel/views/widgets/search_widgets/search_result_list.dart';
 
-class SearchScreen extends StatelessWidget {
+class SearchResultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            color: Colors.transparent,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  _appbarBuilder(context),
-                  _searchTextBuilder(),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  _searchBuilder(context),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  HotelTypesList(),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  LastSearchesList(),
-                ],
-              ),
-            ),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Text(
+          'Search Result',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
           ),
         ),
       ),
-    );
-  }
-
-  Widget _appbarBuilder(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.close),
-      onPressed: () => Navigator.pop(context),
-    );
-  }
-
-  Widget _searchTextBuilder() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Text(
-        'Search',
-        style: TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 22.0,
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Container(
+          color: Colors.transparent,
+          height: MediaQuery.of(context).size.height,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 20.0,
+                ),
+                _searchBuilder(context),
+                SearchResultList(),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -86,7 +64,6 @@ class SearchScreen extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: TextFormField(
-                  autofocus: true,
                   style: TextStyle(
                     fontSize: 14.0,
                   ),
