@@ -18,6 +18,7 @@ class BookVm extends ChangeNotifier {
   bool _isEmailPhoneConfirmed = false;
   ScrollController _scrollController = ScrollController();
   bool _isProcessing = false;
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   DateTime get checkInDate => _checkInDate;
   DateTime get checkOutDate => _checkOutDate;
@@ -27,6 +28,7 @@ class BookVm extends ChangeNotifier {
   bool get isEmailPhoneConfirmed => _isEmailPhoneConfirmed;
   ScrollController get scrollController => _scrollController;
   bool get isProcessing => _isProcessing;
+  GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
 
   // show checkin dialog
   Future showCheckInDialog() async {
@@ -169,6 +171,11 @@ class BookVm extends ChangeNotifier {
       print('Error!!!: Sending email');
       _isProcessing = false;
       notifyListeners();
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text(
+          'Unexpected error occured ! Please try booking again !',
+        ),
+      ));
       return null;
     }
   }

@@ -3,12 +3,14 @@ import 'package:lottie/lottie.dart';
 import 'package:mailer/mailer.dart';
 import 'package:motel/helpers/date_helper.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
+import 'package:motel/models/firebase/room_model.dart';
 import 'package:motel/viewmodels/booking_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 
 class ProceedBookingScreen extends StatelessWidget {
   final Hotel hotel;
+  final Room room;
   final int days;
   final int checkIn;
   final int checkOut;
@@ -16,6 +18,7 @@ class ProceedBookingScreen extends StatelessWidget {
   final String phone;
   ProceedBookingScreen({
     this.hotel,
+    this.room,
     this.days,
     this.checkIn,
     this.checkOut,
@@ -29,6 +32,7 @@ class ProceedBookingScreen extends StatelessWidget {
       vm: BookVm(context: context),
       builder: (context, vm, appUser) {
         return Scaffold(
+          key: vm.scaffoldKey,
           body: SafeArea(
             child: vm.isProcessing
                 ? Center(
@@ -85,7 +89,9 @@ class ProceedBookingScreen extends StatelessWidget {
                                           final _date = DateHelper()
                                               .getFormattedDate(DateTime.now()
                                                   .millisecondsSinceEpoch);
-                                          final _total = hotel.price * days;
+                                          final _total = room != null
+                                              ? room.price * days
+                                              : hotel.price * days;
 
                                           final _message = Message()
                                             ..from = Address(
@@ -97,7 +103,7 @@ class ProceedBookingScreen extends StatelessWidget {
                                             ..text =
                                                 'This is the plain text.\nThis is line 2 of the text part.'
                                             ..html =
-                                                '<h1>${appUser.firstName} ${appUser.lastName}</h1><p>${appUser.email}</p><p>$phone</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Hotel Name:</h3><p>Ordinary Room: ${hotel.name}, ${hotel.city}, ${hotel.country}</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Hotel Id:</h3><p>${hotel.id}</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Check In - Check Out</h3><p>$_checkInDate - $_checkOutDate</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Issue Date:</h3><p>$_date</p><div style="height: 20px;" ></div><div style="display: flex; align-items: flex-end;" ><h3>Total: </h3><div style="margin-left: 20px;"><h2 style="margin: 0px;" >\$$_total</h2><p style="margin: 0px;">for $days night</p></div></div>';
+                                                '<h1>$name</h1><p>${appUser.email}</p><p>$phone</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Hotel Name:</h3><p>${room != null ? room.name : "Ordinary Room"} : ${hotel.name}, ${hotel.city}, ${hotel.country}</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Hotel Id:</h3><p>${hotel.id}</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Check In - Check Out</h3><p>$_checkInDate - $_checkOutDate</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Issue Date:</h3><p>$_date</p><div style="height: 20px;" ></div><div style="display: flex; align-items: flex-end;" ><h3>Total: </h3><div style="margin-left: 20px;"><h2 style="margin: 0px;" >\$$_total</h2><p style="margin: 0px;">for $days night</p></div></div>';
                                           vm.sendEmail(_message);
                                         },
                                       ),
@@ -187,7 +193,9 @@ class ProceedBookingScreen extends StatelessWidget {
             fontSize: 16.0,
           ),
         ),
-        Text(hotel.name),
+        Text(
+          room != null ? '${room.name} - ${hotel.name}' : hotel.name,
+        ),
         SizedBox(
           height: 20.0,
         ),
@@ -215,7 +223,7 @@ class ProceedBookingScreen extends StatelessWidget {
   }
 
   Widget _totalPriceBuilder() {
-    final _price = hotel.price;
+    final _price = room != null ? room.price : hotel.price;
     final _total = _price * days;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
