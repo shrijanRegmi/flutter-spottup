@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:motel/views/widgets/common_widgets/star_ratings.dart';
+import 'package:motel/models/firebase/hotel_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:motel/views/screens/home/hotel_view_screen.dart';
 
 class SearchResultListItem extends StatelessWidget {
+  final Hotel hotel;
+  SearchResultListItem(this.hotel);
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return GestureDetector(
+      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => HotelViewScreen(hotel: hotel))),
+      child: Padding(
       padding: const EdgeInsets.all(20.0),
       child: Container(
         height: 250.0,
@@ -29,8 +37,8 @@ class SearchResultListItem extends StatelessWidget {
                       BorderRadius.vertical(top: Radius.circular(10.0)),
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: AssetImage(
-                      'assets/images/welcome_img.jpg',
+                    image: CachedNetworkImageProvider(
+                      hotel.dp,
                     ),
                   ),
                 ),
@@ -45,14 +53,21 @@ class SearchResultListItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Grand Royal Hotel',
+                          hotel.name,
                           style: TextStyle(
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
-                          'London, UK',
+                          '${hotel.city}, ${hotel.country}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black26,
+                          ),
+                        ),
+                        Text(
+                          hotel.rooms != 1 ? '${hotel.rooms} Rooms - ${hotel.persons} Adults' : '${hotel.rooms} Room - ${hotel.persons} Adults',
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             color: Colors.black26,
@@ -61,7 +76,7 @@ class SearchResultListItem extends StatelessWidget {
                         Container(
                           width: 120.0,
                           child: StarRatings(
-                            ratings: 3.0,
+                            ratings: hotel.stars,
                           ),
                         ),
                       ],
@@ -71,7 +86,7 @@ class SearchResultListItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
                       Text(
-                        '\$120',
+                        '\$${hotel.price}',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16.0,
@@ -92,6 +107,7 @@ class SearchResultListItem extends StatelessWidget {
           ],
         ),
       ),
+    ),
     );
   }
 }

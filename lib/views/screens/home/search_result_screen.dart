@@ -1,49 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:motel/viewmodels/search_vm.dart';
+import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/widgets/search_widgets/search_result_list.dart';
 
 class SearchResultScreen extends StatelessWidget {
+  final String city;
+  SearchResultScreen(this.city);
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(
-          'Search Result',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          ),
-        ),
-      ),
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Container(
-          color: Colors.transparent,
-          height: MediaQuery.of(context).size.height,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 20.0,
-                ),
-                _searchBuilder(context),
-                SearchResultList(),
-              ],
+    return VmProvider<SearchVm>(
+      vm: SearchVm(context: context),
+      onInit: (vm) {
+        vm.searchResultController.text = city;
+      },
+      builder: (context, vm, appUser) {
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            title: Text(
+              'Search Result',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.black,
+              ),
             ),
           ),
-        ),
-      ),
+          body: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Container(
+              color: Colors.transparent,
+              height: MediaQuery.of(context).size.height,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    _searchBuilder(context, vm),
+                    SearchResultList(vm.searchResultController.text.trim()),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
-  Widget _searchBuilder(BuildContext context) {
+  Widget _searchBuilder(BuildContext context, SearchVm vm) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Row(
@@ -67,6 +80,8 @@ class SearchResultScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 14.0,
                   ),
+                  textCapitalization: TextCapitalization.words,
+                  controller: vm.searchResultController,
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: 'Where are you going?',
@@ -87,14 +102,7 @@ class SearchResultScreen extends StatelessWidget {
             width: 45.0,
             height: 45.0,
             child: FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => SearchResultScreen(),
-                  ),
-                );
-              },
+              onPressed: null,
               backgroundColor: Color(0xff45ad90),
               child: Icon(
                 Icons.search,

@@ -220,22 +220,14 @@ class _BookScreenState extends State<BookScreen> {
                   children: <Widget>[
                     Column(
                       children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Icon(
-                              Icons.location_on,
-                              color: Color(0xff45ad90),
-                              size: 18.0,
-                            ),
-                            Text(
-                              '4 Km from city',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black26,
-                                fontSize: 12.0,
-                              ),
-                            ),
-                          ],
+                        Text(
+                          widget.hotel.rooms != 1
+                              ? '${widget.hotel.rooms} Rooms - ${widget.hotel.persons} Adults'
+                              : '${widget.hotel.rooms} Room - ${widget.hotel.persons} Adults',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black26,
+                          ),
                         ),
                       ],
                     ),

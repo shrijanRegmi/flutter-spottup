@@ -32,6 +32,9 @@ class HotelRoomItem extends StatelessWidget {
           ),
           Text(
             room.name,
+            style: TextStyle(
+              fontSize: smallImg ? 12.0 : 14.0,
+            ),
           ),
           Text(
             '\$${room.price}',

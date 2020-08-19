@@ -7,7 +7,8 @@ import 'package:motel/models/firebase/top_three_model.dart';
 class HotelProvider {
   final String hotelId;
   final int limit;
-  HotelProvider({this.hotelId, this.limit = 5});
+  final String city;
+  HotelProvider({this.hotelId, this.limit = 5, this.city});
 
   final _ref = Firestore.instance;
   // hotels list from firestore
@@ -96,7 +97,18 @@ class HotelProvider {
         .collection('hotels')
         .document(hotelId)
         .collection('rooms')
+        .orderBy('price')
         .snapshots()
         .map(_roomFromFirebase);
+  }
+
+  // stream of searched hotel
+  Stream<List<Hotel>> get searchedHotels {
+    return _ref
+        .collection('hotels')
+        .limit(50)
+        .where('city', isEqualTo: city)
+        .snapshots()
+        .map(_hotelsFromFirestore);
   }
 }

@@ -135,23 +135,14 @@ class ShortenedHotelViewScreen extends StatelessWidget {
                 children: <Widget>[
                   Column(
                     children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.location_on,
-                            color: Color(0xff45ad90),
-                            size: 18.0,
+                      Text(
+                          hotel.rooms != 1 ? '${hotel.rooms} Rooms - ${hotel.persons} Adults' : '${hotel.rooms} Room - ${hotel.persons} Adults',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12.0,
+                            color: Colors.black26,
                           ),
-                          Text(
-                            '4 Km from city',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black26,
-                              fontSize: 12.0,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
                       SizedBox(
                         height: 5.0,
                       ),

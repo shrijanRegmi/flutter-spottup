@@ -11,7 +11,7 @@ class Hotel {
   final String summary;
   final List<dynamic> photos;
   final List<dynamic> reviews;
-  final List<dynamic> rooms;
+  final int rooms;
   final int persons;
   final HotelType type;
   final int commission;
@@ -50,7 +50,7 @@ class Hotel {
         summary: data['summary'] ?? '',
         photos: data['photos'] ?? [],
         reviews: data['reviews'] ?? [],
-        rooms: data['rooms'] ?? [],
+        rooms: data['rooms'] ?? 1,
         persons: data['persons'] ?? 0,
         type: HotelType.hotel,
         commission: data['commission'] ?? 0,
@@ -69,7 +69,7 @@ class Hotel {
         summary: data['summary'] ?? '',
         photos: data['photos'] ?? [],
         reviews: data['reviews'] ?? [],
-        rooms: data['rooms'] ?? [],
+        rooms: data['rooms'] ?? 1,
         persons: data['persons'] ?? 0,
         type: HotelType.backpack,
         commission: data['commission'] ?? 0,
@@ -88,7 +88,7 @@ class Hotel {
         summary: data['summary'] ?? '',
         photos: data['photos'] ?? [],
         reviews: data['reviews'] ?? [],
-        rooms: data['rooms'] ?? [],
+        rooms: data['rooms'] ?? 1,
         persons: data['persons'] ?? 0,
         type: HotelType.resorts,
         commission: data['commission'] ?? 0,
@@ -107,7 +107,7 @@ class Hotel {
         summary: data['summary'] ?? '',
         photos: data['photos'] ?? [],
         reviews: data['reviews'] ?? [],
-        rooms: data['rooms'] ?? [],
+        rooms: data['rooms'] ?? 1,
         persons: data['persons'] ?? 0,
         type: HotelType.villa,
         commission: data['commission'] ?? 0,
@@ -126,7 +126,7 @@ class Hotel {
       summary: data['summary'] ?? '',
       photos: data['photos'] ?? [],
       reviews: data['reviews'] ?? [],
-      rooms: data['rooms'] ?? [],
+      rooms: data['rooms'] ?? 1,
       persons: data['persons'] ?? 0,
       type: HotelType.hotel,
       commission: data['commission'] ?? 0,
