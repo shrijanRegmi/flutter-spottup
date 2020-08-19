@@ -103,7 +103,7 @@ class ProceedBookingScreen extends StatelessWidget {
                                             ..text =
                                                 'This is the plain text.\nThis is line 2 of the text part.'
                                             ..html =
-                                                '<h1>$name</h1><p>${appUser.email}</p><p>$phone</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Hotel Name:</h3><p>${room != null ? room.name : "Ordinary Room"} : ${hotel.name}, ${hotel.city}, ${hotel.country}</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Hotel Id:</h3><p>${hotel.id}</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Check In - Check Out</h3><p>$_checkInDate - $_checkOutDate</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Issue Date:</h3><p>$_date</p><div style="height: 20px;" ></div><div style="display: flex; align-items: flex-end;" ><h3>Total: </h3><div style="margin-left: 20px;"><h2 style="margin: 0px;" >\$$_total</h2><p style="margin: 0px;">for $days night</p></div></div>';
+                                                '<h1>$name</h1><p>${appUser.email}</p><p>$phone</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Hotel Name:</h3><p>${room != null ? room.name : "Ordinary Room"} : ${hotel.name}, ${hotel.city}, ${hotel.country}</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Hotel Id:</h3><p>${hotel.id}</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Check In - Check Out</h3><p>$_checkInDate - $_checkOutDate</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Issue Date:</h3><p>$_date</p><div style="height: 20px;" ></div><div style="display: flex; align-items: flex-end;" ><h3>Total: </h3><div style="margin-left: 20px;"><h2 style="margin: 0px;" >Rs $_total</h2><p style="margin: 0px;">for $days night</p></div></div>';
                                           vm.sendEmail(_message);
                                         },
                                       ),
@@ -240,7 +240,7 @@ class ProceedBookingScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
             Text(
-              '\$$_total',
+              'Rs $_total',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 16.0,

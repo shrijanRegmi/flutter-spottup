@@ -77,7 +77,7 @@ class LastSearchesItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         Text(
-                          '\$345',
+                          'Rs 345',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
