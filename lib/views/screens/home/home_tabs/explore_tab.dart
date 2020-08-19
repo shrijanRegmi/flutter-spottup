@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:motel/views/screens/home/search_result_screen.dart';
 import 'package:motel/views/screens/home/search_screen.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 import 'package:motel/views/widgets/explore_widgets/best_deals.dart';
@@ -144,7 +145,12 @@ class _ExploreTabState extends State<ExploreTab> {
             vm.topThree[index].dp,
             vm.topThree[index].name,
             vm.topThree[index].details,
-            () {},
+            () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) =>
+                    SearchResultScreen(vm.topThree[index].name),
+              ),
+            ),
           );
         },
         onPageChanged: (index) {

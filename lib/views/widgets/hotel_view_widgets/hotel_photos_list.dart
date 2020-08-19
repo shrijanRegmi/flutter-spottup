@@ -13,8 +13,8 @@ class HotelPhotosList extends StatelessWidget {
       children: <Widget>[
         LeftRightText(
           leftText: 'Photos',
-          rightText: '',
-          requiredIcon: false,
+          rightText: photos.length <= 5 ? '' : 'View all',
+          requiredIcon: photos.length <= 5 ? false : true,
           onPressIcon: photos.length <= 5
               ? null
               : () {
