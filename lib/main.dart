@@ -18,7 +18,7 @@ class MotelApp extends StatelessWidget {
         builder: (BuildContext context, AppUser appUser) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            title: 'Motel',
+            title: 'Sppotup',
             theme: ThemeData(
               fontFamily: 'Nunito',
             ),
