@@ -86,7 +86,7 @@ class SearchResultListItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
                       Text(
-                        '\$${hotel.price}',
+                        'Rs ${hotel.price}',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16.0,

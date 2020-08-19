@@ -182,78 +182,86 @@ class _BookScreenState extends State<BookScreen> {
   Widget _hotelDetailBuilder() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.end,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                if (widget.room != null)
-                  Text(
-                    '${widget.room.name} Room -',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 22.0,
+          if (widget.room != null)
+            Text(
+              '${widget.room.name} Room -',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 22.0,
+              ),
+            ),
+          Text(
+            widget.hotel.name,
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 22.0,
+            ),
+          ),
+          SizedBox(
+            height: 10.0,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${widget.hotel.city}, ${widget.hotel.country}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black26,
+                      ),
                     ),
-                  ),
-                Text(
-                  widget.hotel.name,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 22.0,
-                  ),
-                ),
-                Text(
-                  '${widget.hotel.city}, ${widget.hotel.country}',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black26,
-                  ),
-                ),
-                SizedBox(
-                  height: 5.0,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Column(
+                    SizedBox(
+                      height: 5.0,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text(
-                          widget.hotel.rooms != 1
-                              ? '${widget.hotel.rooms} Rooms - ${widget.hotel.persons} Adults'
-                              : '${widget.hotel.rooms} Room - ${widget.hotel.persons} Adults',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black26,
-                          ),
+                        Column(
+                          children: <Widget>[
+                            Text(
+                              widget.hotel.rooms != 1
+                                  ? '${widget.hotel.rooms} Rooms - ${widget.hotel.persons} Adults'
+                                  : '${widget.hotel.rooms} Room - ${widget.hotel.persons} Adults',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black26,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              Text(
-                widget.room != null
-                    ? '\$${widget.room.price}'
-                    : '\$${widget.hotel.price}',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 22.0,
-                ),
               ),
-              Text(
-                '/per night',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black26,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Text(
+                    widget.room != null
+                        ? 'Rs ${widget.room.price}'
+                        : 'Rs ${widget.hotel.price}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 22.0,
+                    ),
+                  ),
+                  Text(
+                    '/per night',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black26,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -295,14 +303,14 @@ class _BookScreenState extends State<BookScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Text(
-                '\$$_totalPrice x $_days',
+                'Rs $_totalPrice x $_days',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 16.0,
                 ),
               ),
               Text(
-                '= \$$_grandTotalPrice',
+                '= Rs $_grandTotalPrice',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 16.0,

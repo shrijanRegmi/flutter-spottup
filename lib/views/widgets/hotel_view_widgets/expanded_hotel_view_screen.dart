@@ -226,7 +226,7 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Text(
-                '\$${widget.hotel.price}',
+                'Rs ${widget.hotel.price}',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 22.0,
