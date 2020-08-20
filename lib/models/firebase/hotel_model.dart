@@ -7,7 +7,7 @@ class Hotel {
   final String city;
   final String country;
   final double stars;
-  final double price;
+  final int price;
   final String summary;
   final List<dynamic> photos;
   final List<dynamic> reviews;
@@ -46,7 +46,7 @@ class Hotel {
         city: data['city'] ?? '',
         country: data['country'] ?? '',
         stars: (data['stars'] ?? 3.0).toDouble(),
-        price: (data['price'] ?? 0.0).toDouble(),
+        price: data['price'] ?? 0,
         summary: data['summary'] ?? '',
         photos: data['photos'] ?? [],
         reviews: data['reviews'] ?? [],
@@ -65,7 +65,7 @@ class Hotel {
         city: data['city'] ?? '',
         country: data['country'] ?? '',
         stars: (data['stars'] ?? 3.0).toDouble(),
-        price: (data['price'] ?? 0.0).toDouble(),
+        price: data['price'] ?? 0,
         summary: data['summary'] ?? '',
         photos: data['photos'] ?? [],
         reviews: data['reviews'] ?? [],
@@ -84,7 +84,7 @@ class Hotel {
         city: data['city'] ?? '',
         country: data['country'] ?? '',
         stars: (data['stars'] ?? 3.0).toDouble(),
-        price: (data['price'] ?? 0.0).toDouble(),
+        price: data['price'] ?? 0,
         summary: data['summary'] ?? '',
         photos: data['photos'] ?? [],
         reviews: data['reviews'] ?? [],
@@ -103,7 +103,7 @@ class Hotel {
         city: data['city'] ?? '',
         country: data['country'] ?? '',
         stars: (data['stars'] ?? 3.0).toDouble(),
-        price: (data['price'] ?? 0.0).toDouble(),
+        price: data['price'] ?? 0,
         summary: data['summary'] ?? '',
         photos: data['photos'] ?? [],
         reviews: data['reviews'] ?? [],
@@ -122,7 +122,7 @@ class Hotel {
       city: data['city'] ?? '',
       country: data['country'] ?? '',
       stars: (data['stars'] ?? 3.0).toDouble(),
-      price: (data['price'] ?? 0.0).toDouble(),
+      price: data['price'] ?? 0,
       summary: data['summary'] ?? '',
       photos: data['photos'] ?? [],
       reviews: data['reviews'] ?? [],

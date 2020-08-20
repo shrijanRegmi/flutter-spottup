@@ -4,6 +4,7 @@ import 'package:mailer/mailer.dart';
 import 'package:motel/helpers/date_helper.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/room_model.dart';
+import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/viewmodels/booking_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
@@ -61,7 +62,7 @@ class ProceedBookingScreen extends StatelessWidget {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: <Widget>[
-                                          _topSectionBuilder(),
+                                          _topSectionBuilder(appUser),
                                           SizedBox(
                                             height: 20.0,
                                           ),
@@ -130,18 +131,18 @@ class ProceedBookingScreen extends StatelessWidget {
     );
   }
 
-  Widget _topSectionBuilder() {
+  Widget _topSectionBuilder(final AppUser appUser) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        _userDetailBuilder(),
+        _userDetailBuilder(appUser),
         _issuedDateBuilder(),
       ],
     );
   }
 
-  Widget _userDetailBuilder() {
+  Widget _userDetailBuilder(final AppUser appUser) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -153,7 +154,7 @@ class ProceedBookingScreen extends StatelessWidget {
           ),
         ),
         Text(
-          'ilyyhs9@gmail.com',
+          appUser.email,
         ),
         Text(
           '$phone',
