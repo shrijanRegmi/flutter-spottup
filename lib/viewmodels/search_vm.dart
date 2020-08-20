@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:motel/services/firestore/hotel_provider.dart';
 import 'package:motel/views/screens/home/search_result_screen.dart';
 
 class SearchVm extends ChangeNotifier {
@@ -7,7 +8,6 @@ class SearchVm extends ChangeNotifier {
 
   TextEditingController _searchController = TextEditingController();
   TextEditingController _searchResultController = TextEditingController();
-
 
   TextEditingController get searchController => _searchController;
   TextEditingController get searchResultController => _searchResultController;
@@ -18,7 +18,11 @@ class SearchVm extends ChangeNotifier {
     if (_city != '') {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => SearchResultScreen(_city),
+          builder: (context) => SearchResultScreen(
+              HotelProvider(
+                searchKey: _city.substring(0, 1).toUpperCase(),
+              ).searchedHotelsFromKey,
+              _city),
         ),
       );
     }

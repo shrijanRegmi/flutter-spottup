@@ -4,17 +4,30 @@ import 'package:motel/views/widgets/search_widgets/search_result_list_item.dart'
 import 'package:motel/services/firestore/hotel_provider.dart';
 
 class SearchResultList extends StatelessWidget {
-  final String city;
-  SearchResultList(this.city);
+  final Stream stream;
+  final String value;
+  SearchResultList(this.stream, this.value);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Hotel>>(
-      stream: HotelProvider(city: city).searchedHotels,
+      stream: stream,
       builder: (BuildContext context, AsyncSnapshot<List<Hotel>> snapshot) {
         if (snapshot.hasData) {
           final _hotels = snapshot.data;
-          final _count = _hotels.length;
+
+          List<Hotel> _searchedHotel = _hotels.where((hotel) {
+            final _splittedHotel = hotel.name.toLowerCase().split(' ');
+            final _splittedValue = value.toLowerCase().split(' ');
+
+            for (var item in _splittedValue) {
+              return _splittedHotel.contains(item);
+            }
+            return false;
+          }).toList();
+
+          final _result = _searchedHotel.isEmpty ? _hotels : _searchedHotel;
+          final _count = _result.length;
 
           return Column(
             children: [
@@ -24,10 +37,10 @@ class SearchResultList extends StatelessWidget {
               _countAndFilterBuilder(_count),
               _count == 0
                   ? Padding(
-                      padding: const EdgeInsets.only(top: 50.0),
-                      child: Text('No hotels found in "$city"'),
+                      padding: const EdgeInsets.only(top: 50.0, bottom: 50.0),
+                      child: Text('No result for "$value"'),
                     )
-                  : _resultListBuilder(_hotels),
+                  : _resultListBuilder(_result),
             ],
           );
         } else if (snapshot.hasError) {

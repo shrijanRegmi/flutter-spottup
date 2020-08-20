@@ -8,7 +8,8 @@ class HotelProvider {
   final String hotelId;
   final int limit;
   final String city;
-  HotelProvider({this.hotelId, this.limit = 5, this.city});
+  final String searchKey;
+  HotelProvider({this.hotelId, this.limit = 5, this.city, this.searchKey});
 
   final _ref = Firestore.instance;
   // hotels list from firestore
@@ -103,11 +104,21 @@ class HotelProvider {
   }
 
   // stream of searched hotel
-  Stream<List<Hotel>> get searchedHotels {
+  Stream<List<Hotel>> get searchedHotelsFromCity {
     return _ref
         .collection('hotels')
         .limit(50)
         .where('city', isEqualTo: city)
+        .snapshots()
+        .map(_hotelsFromFirestore);
+  }
+
+  // stream of hotel from search key
+  Stream<List<Hotel>> get searchedHotelsFromKey {
+    return _ref
+        .collection('hotels')
+        .limit(50)
+        .where('search_key', isEqualTo: searchKey)
         .snapshots()
         .map(_hotelsFromFirestore);
   }

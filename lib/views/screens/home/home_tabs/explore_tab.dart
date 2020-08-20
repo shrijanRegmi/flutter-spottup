@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:motel/services/firestore/hotel_provider.dart';
 import 'package:motel/views/screens/home/search_result_screen.dart';
 import 'package:motel/views/screens/home/search_screen.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
@@ -147,8 +148,11 @@ class _ExploreTabState extends State<ExploreTab> {
             vm.topThree[index].details,
             () => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) =>
-                    SearchResultScreen(vm.topThree[index].name),
+                builder: (context) => SearchResultScreen(
+                    HotelProvider(
+                      city: vm.topThree[index].name,
+                    ).searchedHotelsFromCity,
+                    vm.topThree[index].name),
               ),
             ),
           );
