@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:motel/services/firestore/hotel_provider.dart';
 import 'package:motel/viewmodels/search_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/widgets/search_widgets/search_result_list.dart';
 
 class SearchResultScreen extends StatelessWidget {
+  final Stream stream;
   final String city;
-  SearchResultScreen(this.city);
+  SearchResultScreen(this.stream, this.city);
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +17,8 @@ class SearchResultScreen extends StatelessWidget {
         vm.searchResultController.text = city;
       },
       builder: (context, vm, appUser) {
+        final _value = vm.searchResultController.text.trim();
+
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.white,
@@ -45,7 +49,10 @@ class SearchResultScreen extends StatelessWidget {
                       height: 20.0,
                     ),
                     _searchBuilder(context, vm),
-                    SearchResultList(vm.searchResultController.text.trim()),
+                    SearchResultList(
+                      stream,
+                      _value,
+                    ),
                   ],
                 ),
               ),
@@ -102,7 +109,16 @@ class SearchResultScreen extends StatelessWidget {
             width: 45.0,
             height: 45.0,
             child: FloatingActionButton(
-              onPressed: null,
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SearchResultScreen(
+                        stream, vm.searchResultController.text.trim()),
+                  ),
+                );
+              },
               backgroundColor: Color(0xff45ad90),
               child: Icon(
                 Icons.search,

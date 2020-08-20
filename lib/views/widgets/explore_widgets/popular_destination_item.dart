@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:motel/models/firebase/popular_destination_model.dart';
+import 'package:motel/services/firestore/hotel_provider.dart';
 import 'package:motel/views/screens/home/search_result_screen.dart';
 
 class PopularDestinationItem extends StatelessWidget {
@@ -12,7 +13,11 @@ class PopularDestinationItem extends StatelessWidget {
     return GestureDetector(
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => SearchResultScreen(popularDestination.name),
+          builder: (context) => SearchResultScreen(
+              HotelProvider(
+                city: popularDestination.name,
+              ).searchedHotelsFromCity,
+              popularDestination.name),
         ),
       ),
       child: Padding(
