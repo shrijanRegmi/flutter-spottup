@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/views/widgets/search_widgets/search_result_list_item.dart';
-import 'package:motel/services/firestore/hotel_provider.dart';
 
 class SearchResultList extends StatelessWidget {
   final Stream stream;
@@ -13,6 +12,7 @@ class SearchResultList extends StatelessWidget {
     return StreamBuilder<List<Hotel>>(
       stream: stream,
       builder: (BuildContext context, AsyncSnapshot<List<Hotel>> snapshot) {
+        print(snapshot.data);
         if (snapshot.hasData) {
           final _hotels = snapshot.data;
 
@@ -63,7 +63,7 @@ class SearchResultList extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            '${count} hotels found',
+            '$count hotels found',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 12.0,

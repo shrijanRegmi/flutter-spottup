@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:motel/viewmodels/search_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
-import 'package:motel/views/screens/home/search_result_screen.dart';
 import 'package:motel/views/widgets/search_widgets/hotel_types_list.dart';
 import 'package:motel/views/widgets/search_widgets/last_searches_list.dart';
 

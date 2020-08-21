@@ -21,20 +21,22 @@ class HotelRoomsList extends StatelessWidget {
                 : Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      LeftRightText(
-                        leftText: 'Rooms',
-                        rightText: '',
-                        requiredIcon: false,
-                      ),
+                      if (!smallImg)
+                        LeftRightText(
+                          leftText: 'Rooms',
+                          rightText: '',
+                          requiredIcon: false,
+                        ),
                       SizedBox(
                         height: 20.0,
                       ),
                       _roomsList(context, snapshot.data),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20.0, vertical: 10.0),
-                        child: Divider(),
-                      ),
+                      if (!smallImg)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20.0, vertical: 10.0),
+                          child: Divider(),
+                        ),
                     ],
                   );
           }
@@ -50,7 +52,7 @@ class HotelRoomsList extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemCount: data.length,
         itemBuilder: (context, index) {
-          if (index == 0) {
+          if (index == 0 && !smallImg) {
             return Padding(
               padding: const EdgeInsets.only(left: 20.0),
               child: GestureDetector(

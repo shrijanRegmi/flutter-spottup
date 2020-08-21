@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server/gmail.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:motel/helpers/date_helper.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
+import 'package:motel/models/firebase/room_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +19,10 @@ class BookVm extends ChangeNotifier {
   ScrollController _scrollController = ScrollController();
   bool _isProcessing = false;
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  List<SelectedRoom> _selectedRooms = [];
+  TextEditingController _adultController = TextEditingController();
+  TextEditingController _kidController = TextEditingController();
+  bool _isRoomSelected = false;
 
   DateTime get checkInDate => _checkInDate;
   DateTime get checkOutDate => _checkOutDate;
@@ -29,6 +33,8 @@ class BookVm extends ChangeNotifier {
   ScrollController get scrollController => _scrollController;
   bool get isProcessing => _isProcessing;
   GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
+  List<SelectedRoom> get selectedRoom => _selectedRooms;
+  bool get isRoomSelected => _isRoomSelected;
 
   // show checkin dialog
   Future showCheckInDialog() async {
@@ -97,7 +103,7 @@ class BookVm extends ChangeNotifier {
       _noBookingDialog(_checkIn, _checkOut);
     }
 
-    if (_isEmailPhoneConfirmed) {
+    if (_isBookingAvailable) {
       _scrollController.animateTo(
         MediaQuery.of(context).size.height,
         duration: Duration(milliseconds: 1000),
@@ -138,7 +144,7 @@ class BookVm extends ChangeNotifier {
 
     if (_isBookingAvailable) {
       _scrollController.animateTo(
-        MediaQuery.of(context).size.height,
+        MediaQuery.of(context).size.height + 200,
         duration: Duration(milliseconds: 1000),
         curve: Curves.ease,
       );
@@ -153,18 +159,17 @@ class BookVm extends ChangeNotifier {
   }
 
   // send email
-  sendEmail(final email) async {
+  sendEmail(final Email _email) async {
     _isProcessing = true;
     notifyListeners();
     try {
-      final _result =
-          await send(email, gmail('ilyyhs9@gmail.com', 'ilmfasf52'));
-      print('Success: Sending email');
+      final _result = await FlutterEmailSender.send(_email);
       _isProcessing = false;
       notifyListeners();
       Navigator.pop(context);
       Navigator.pop(context);
       Navigator.pop(context);
+      print('Success: Sending email');
       return _result;
     } catch (e) {
       print(e);
@@ -216,7 +221,7 @@ class BookVm extends ChangeNotifier {
                 _isEmailPhoneConfirmed = true;
                 if (_isBookingAvailable) {
                   _scrollController.animateTo(
-                    MediaQuery.of(context).size.height,
+                    MediaQuery.of(context).size.height + 200.0,
                     duration: Duration(milliseconds: 1000),
                     curve: Curves.ease,
                   );
@@ -279,4 +284,127 @@ class BookVm extends ChangeNotifier {
       ),
     );
   }
+
+  // select number of people dialog
+  selectRoomDialog(final Room room) async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          room.name,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('Select number of adults and kids'),
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'Adults',
+              ),
+              controller: _adultController,
+              keyboardType: TextInputType.number,
+            ),
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'Kids',
+              ),
+              controller: _kidController,
+              keyboardType: TextInputType.number,
+            ),
+          ],
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10.0, bottom: 10.0),
+            child: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Text(
+                  'Cancle',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 10.0, bottom: 10.0),
+            child: InkWell(
+              onTap: () {
+                if (_adultController.text != '' || _kidController.text != '') {
+                  if (_selectedRooms
+                      .where((element) => element.roomName == room.name)
+                      .toList()
+                      .isEmpty) {
+                    _selectedRooms.add(
+                      SelectedRoom(
+                        roomName: room.name,
+                        adult: _adultController.text != ''
+                            ? int.parse(_adultController.text.trim())
+                            : 0,
+                        kid: _kidController.text != ''
+                            ? int.parse(_kidController.text.trim())
+                            : 0,
+                        price: room.price,
+                      ),
+                    );
+                  }
+                  notifyListeners();
+                  _adultController.clear();
+                  // _kidController.clear();
+                  Navigator.pop(context);
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Text(
+                  'Done',
+                  style: TextStyle(
+                    color: Color(0xff45ad90),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // remove selected room
+  removeSelectedRoom(final SelectedRoom room) {
+    _isRoomSelected = false;
+    _selectedRooms.remove(room);
+    notifyListeners();
+  }
+
+  // update room selected value
+  updateRoomSelectedValue(final bool newVal,
+      {final bool requiresScroll = true}) {
+    _isRoomSelected = newVal;
+    if (_isRoomSelected && requiresScroll) {
+      _scrollController.animateTo(
+        MediaQuery.of(context).size.height,
+        duration: Duration(milliseconds: 1000),
+        curve: Curves.ease,
+      );
+    }
+    notifyListeners();
+  }
+}
+
+class SelectedRoom {
+  final String roomName;
+  final int adult;
+  final int kid;
+  final int price;
+  SelectedRoom({this.roomName, this.adult, this.kid, this.price});
 }

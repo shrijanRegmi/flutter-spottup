@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:motel/views/screens/home/home_tabs/explore_tab.dart';
 import 'package:motel/views/screens/home/home_tabs/profile_tab.dart';
@@ -171,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen>
   //   },
   // ];
 
-  final _ref = Firestore.instance;
+  // final _ref = Firestore.instance;
 
   @override
   void initState() {

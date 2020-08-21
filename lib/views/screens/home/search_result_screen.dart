@@ -18,7 +18,6 @@ class SearchResultScreen extends StatelessWidget {
       },
       builder: (context, vm, appUser) {
         final _value = vm.searchResultController.text.trim();
-
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.white,
@@ -111,11 +110,19 @@ class SearchResultScreen extends StatelessWidget {
             child: FloatingActionButton(
               onPressed: () {
                 Navigator.pop(context);
+                print(vm.searchResultController.text.trim());
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => SearchResultScreen(
-                        stream, vm.searchResultController.text.trim()),
+                      HotelProvider(
+                        searchKey: vm.searchResultController.text
+                            .trim()
+                            .substring(0, 1)
+                            .toUpperCase(),
+                      ).searchedHotelsFromKey,
+                      vm.searchResultController.text.trim(),
+                    ),
                   ),
                 );
               },
