@@ -126,7 +126,7 @@ class _BookScreenState extends State<BookScreen> {
                                     vm.checkOutDate.millisecondsSinceEpoch,
                                 name: vm.emailController.text.trim(),
                                 phone: vm.phoneController.text.trim(),
-                                room: widget.room,
+                                rooms: vm.selectedRoom,
                               ),
                             ),
                           );
