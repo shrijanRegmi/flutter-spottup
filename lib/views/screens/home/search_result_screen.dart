@@ -136,4 +136,5 @@ class SearchResultScreen extends StatelessWidget {
       ),
     );
   }
+
 }
