@@ -1,11 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/room_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/services/firestore/user_provider.dart';
 import 'package:motel/views/screens/home/book_screen.dart';
-import 'package:motel/views/widgets/hotel_view_widgets/hotel_rooms_list.dart';
 
 class HotelViewVm extends ChangeNotifier {
   final BuildContext context;
@@ -46,32 +44,32 @@ class HotelViewVm extends ChangeNotifier {
 
   // open rooms dialog
   showRoomDialog(final Hotel hotel) async {
-    final _ref = Firestore.instance;
-    final _roomRef = await _ref
-        .collection('hotels')
-        .document(hotel.id)
-        .collection('rooms')
-        .limit(2)
-        .getDocuments();
+    // final _ref = Firestore.instance;
+    // final _roomRef = await _ref
+    //     .collection('hotels')
+    //     .document(hotel.id)
+    //     .collection('rooms')
+    //     .limit(2)
+    //     .getDocuments();
 
-    final _isRoom = _roomRef.documents.length > 1;
+    // final _isRoom = _roomRef.documents.length > 1;
 
-    if (_isRoom) {
-      return showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          content: HotelRoomsList(
-            hotel.id,
-            smallImg: true,
-            onPressed: (room) {
-              Navigator.pop(context);
-              gotoBookScreen(hotel, room);
-            },
-          ),
-        ),
-      );
-    } else {
+    // if (_isRoom) {
+    //   return showDialog(
+    //     context: context,
+    //     builder: (context) => AlertDialog(
+    //       content: HotelRoomsList(
+    //         hotel.id,
+    //         smallImg: true,
+    //         onPressed: (room) {
+    //           Navigator.pop(context);
+    //           gotoBookScreen(hotel, room);
+    //         },
+    //       ),
+    //     ),
+    //   );
+    // } else {
       return gotoBookScreen(hotel, null);
-    }
+    // }
   }
 }

@@ -2,7 +2,7 @@ class Room {
   final String id;
   final String name;
   final String dp;
-  final double price;
+  final int price;
 
   Room({this.id, this.name, this.dp, this.price});
 
@@ -11,7 +11,7 @@ class Room {
       id: id ?? '',
       name: data['name'] ?? '',
       dp: data['dp'] ?? '',
-      price: (data['price'] ?? 0.0).toDouble(),
+      price: data['price'] ?? 0,
     );
   }
 }

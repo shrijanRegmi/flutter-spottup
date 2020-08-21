@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:motel/models/firebase/hotel_model.dart';
 
 class ViewAllScreen extends StatelessWidget {
   final String title;

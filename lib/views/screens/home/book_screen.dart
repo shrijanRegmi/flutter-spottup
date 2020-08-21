@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:motel/helpers/date_helper.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
@@ -7,6 +8,7 @@ import 'package:motel/viewmodels/booking_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/screens/home/proceed_booking_screen.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
+import 'package:motel/views/widgets/hotel_view_widgets/hotel_rooms_list.dart';
 
 class BookScreen extends StatefulWidget {
   @override
@@ -21,6 +23,17 @@ class _BookScreenState extends State<BookScreen> {
   Widget build(BuildContext context) {
     return VmProvider<BookVm>(
       vm: BookVm(context: context),
+      onInit: (vm) async {
+        final _ref = Firestore.instance;
+        final _roomRef = await _ref
+            .collection('hotels')
+            .document(widget.hotel.id)
+            .collection('rooms')
+            .limit(1)
+            .getDocuments();
+        vm.updateRoomSelectedValue(_roomRef.documents.isEmpty,
+            requiresScroll: false);
+      },
       builder: (context, vm, appUser) {
         return Scaffold(
           body: GestureDetector(
@@ -50,12 +63,27 @@ class _BookScreenState extends State<BookScreen> {
                     SizedBox(
                       height: 30.0,
                     ),
-                    _checkAvailabilityBuilder(vm),
-                    SizedBox(
-                      height: 40.0,
-                    ),
-                    _confirmationBuilder(vm),
-                    if (vm.isEmailPhoneConfirmed && vm.isBookingAvailable)
+                    StreamBuilder(
+                        stream: Firestore.instance
+                            .collection('hotels')
+                            .document(widget.hotel.id)
+                            .collection('rooms')
+                            .limit(1)
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData &&
+                              snapshot.data.documents.isNotEmpty) {
+                            return _roomSelectionBuilder(vm);
+                          }
+                          return Container();
+                        }),
+                    if (vm.isRoomSelected) _checkAvailabilityBuilder(vm),
+                    if (vm.isRoomSelected) SizedBox(height: 40.0),
+                    if (vm.isRoomSelected && vm.isBookingAvailable)
+                      _confirmationBuilder(vm),
+                    if (vm.isEmailPhoneConfirmed &&
+                        vm.isBookingAvailable &&
+                        vm.isRoomSelected)
                       Column(
                         children: <Widget>[
                           SizedBox(
@@ -73,11 +101,15 @@ class _BookScreenState extends State<BookScreen> {
                         ],
                       ),
                     SizedBox(
-                      height: vm.isEmailPhoneConfirmed && vm.isBookingAvailable
+                      height: vm.isEmailPhoneConfirmed &&
+                              vm.isBookingAvailable &&
+                              vm.isRoomSelected
                           ? 10.0
                           : 40.0,
                     ),
-                    if (vm.isEmailPhoneConfirmed && vm.isBookingAvailable)
+                    if (vm.isEmailPhoneConfirmed &&
+                        vm.isBookingAvailable &&
+                        vm.isRoomSelected)
                       RoundedBtn(
                         title: 'Proceed',
                         onPressed: () {
@@ -271,7 +303,16 @@ class _BookScreenState extends State<BookScreen> {
   }
 
   Widget _grandTotalPriceBuilder(BookVm vm) {
-    final _price = widget.room != null ? widget.room.price : widget.hotel.price;
+    int _price = 0;
+
+    if (vm.selectedRoom.isNotEmpty) {
+      for (final room in vm.selectedRoom) {
+        _price += room.price;
+      }
+    } else {
+      _price = widget.hotel.price;
+    }
+
     final _totalPrice = _price;
 
     int _days;
@@ -330,6 +371,112 @@ class _BookScreenState extends State<BookScreen> {
     );
   }
 
+  Widget _roomSelectionBuilder(BookVm vm) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '1. Select Rooms',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16.0,
+                ),
+              ),
+              Text(
+                'Select rooms you want to book and select the number of adults and kids in a room.',
+              ),
+              HotelRoomsList(
+                widget.hotel.id,
+                smallImg: true,
+                onPressed: (Room room) {
+                  if (vm.selectedRoom
+                      .where((element) => element.roomName == room.name)
+                      .toList()
+                      .isEmpty) {
+                    vm.selectRoomDialog(room);
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 20.0,
+        ),
+        ..._roomAddition(vm),
+        SizedBox(
+          height: 20.0,
+        ),
+        Align(
+          alignment: Alignment.center,
+          child: MaterialButton(
+            child: vm.isRoomSelected
+                ? Icon(
+                    Icons.check,
+                    color: Colors.white,
+                  )
+                : Text('Next'),
+            color: Color(0xff45ad90),
+            textColor: Colors.white,
+            disabledColor: Colors.grey.withOpacity(0.3),
+            minWidth: 180.0,
+            onPressed: vm.selectedRoom.isEmpty
+                ? null
+                : () => vm.updateRoomSelectedValue(true),
+          ),
+        ),
+        SizedBox(height: 40.0)
+      ],
+    );
+  }
+
+  List<Widget> _roomAddition(BookVm vm) {
+    final _selectedRooms = vm.selectedRoom;
+    final List<Widget> _list = [];
+    for (var room in _selectedRooms) {
+      _list.add(
+        Container(
+          color: Colors.grey[200],
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Text(
+                          '${room.roomName} : ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text('${room.adult} Adult, ${room.kid} Kids'),
+                      ],
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      vm.removeSelectedRoom(room);
+                    },
+                    child: Icon(Icons.close),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    return _list;
+  }
+
   Widget _checkAvailabilityBuilder(BookVm vm) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -337,7 +484,7 @@ class _BookScreenState extends State<BookScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            '1. Check Availability',
+            '2. Check Availability',
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 16.0,
@@ -453,7 +600,7 @@ class _BookScreenState extends State<BookScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            '2. Confirmation',
+            '3. Confirmation',
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 16.0,
@@ -515,4 +662,5 @@ class _BookScreenState extends State<BookScreen> {
       ),
     );
   }
+
 }
