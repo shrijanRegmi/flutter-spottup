@@ -69,31 +69,31 @@ class SearchResultList extends StatelessWidget {
               fontSize: 12.0,
             ),
           ),
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              color: Colors.transparent,
-              child: Row(
-                children: [
-                  Text(
-                    'Filter',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12.0,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  Icon(
-                    Icons.filter_list,
-                    size: 20.0,
-                    color: Color(0xff45ad90),
-                  )
-                ],
-              ),
-            ),
-          ),
+          // GestureDetector(
+          //   onTap: () {},
+          //   child: Container(
+          //     color: Colors.transparent,
+          //     child: Row(
+          //       children: [
+          //         Text(
+          //           'Filter',
+          //           style: TextStyle(
+          //             fontWeight: FontWeight.bold,
+          //             fontSize: 12.0,
+          //           ),
+          //         ),
+          //         SizedBox(
+          //           width: 10.0,
+          //         ),
+          //         Icon(
+          //           Icons.filter_list,
+          //           size: 20.0,
+          //           color: Color(0xff45ad90),
+          //         )
+          //       ],
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

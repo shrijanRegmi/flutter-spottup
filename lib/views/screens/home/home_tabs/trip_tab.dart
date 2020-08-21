@@ -17,7 +17,7 @@ class _TripTabState extends State<TripTab> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _tripTabController = TabController(length: 3, vsync: this);
+    _tripTabController = TabController(length: 2, vsync: this);
   }
 
   @override
@@ -78,9 +78,9 @@ class _TripTabState extends State<TripTab> with SingleTickerProviderStateMixin {
             Tab(
               text: 'Upcoming',
             ),
-            Tab(
-              text: 'Finished',
-            ),
+            // Tab(
+            //   text: 'Finished',
+            // ),
             Tab(
               text: 'Favourite',
             ),
@@ -102,7 +102,7 @@ class _TripTabState extends State<TripTab> with SingleTickerProviderStateMixin {
   List<Widget> _getTabs(AppUser appUser) {
     return [
       UpcomingTab(appUser.upcoming),
-      FinishedTab(appUser.finished),
+      // FinishedTab(appUser.finished),
       FavouriteTab(appUser.favourite),
     ];
   }
