@@ -358,7 +358,7 @@ class BookVm extends ChangeNotifier {
                   }
                   notifyListeners();
                   _adultController.clear();
-                  // _kidController.clear();
+                  _kidController.clear();
                   Navigator.pop(context);
                 }
               },

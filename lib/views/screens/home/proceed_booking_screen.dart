@@ -3,7 +3,6 @@ import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:lottie/lottie.dart';
 import 'package:motel/helpers/date_helper.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
-import 'package:motel/models/firebase/room_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/viewmodels/booking_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
@@ -11,20 +10,20 @@ import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 
 class ProceedBookingScreen extends StatelessWidget {
   final Hotel hotel;
-  final Room room;
   final int days;
   final int checkIn;
   final int checkOut;
   final String name;
   final String phone;
+  final List<SelectedRoom> rooms;
   ProceedBookingScreen({
     this.hotel,
-    this.room,
     this.days,
     this.checkIn,
     this.checkOut,
     this.name,
     this.phone,
+    this.rooms,
   });
 
   @override
@@ -90,13 +89,11 @@ class ProceedBookingScreen extends StatelessWidget {
                                           final _date = DateHelper()
                                               .getFormattedDate(DateTime.now()
                                                   .millisecondsSinceEpoch);
-                                          final _total = room != null
-                                              ? room.price * days
-                                              : hotel.price * days;
+                                          final _total = hotel.price * days;
 
                                           final Email _email = Email(
                                             body:
-                                                '<h1>$name</h1><p>${appUser.email}</p><p>$phone</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Hotel Name:</h3><p>${room != null ? room.name : "Ordinary Room"} : ${hotel.name}, ${hotel.city}, ${hotel.country}</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Hotel Id:</h3><p>${hotel.id}</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Check In - Check Out</h3><p>$_checkInDate - $_checkOutDate</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Issue Date:</h3><p>$_date</p><div style="height: 20px;" ></div><div style="display: flex; align-items: flex-end;" ><h3>Total: </h3><div style="margin-left: 20px;"><h2 style="margin: 0px;" >Rs $_total</h2><p style="margin: 0px;">for $days night</p></div></div>',
+                                                '<h1>$name</h1><p>${appUser.email}</p><p>$phone</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Hotel Name:</h3><p>${hotel.name} : ${hotel.name}, ${hotel.city}, ${hotel.country}</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Rooms :</h3>${_getHtmlString()}<div style="height: 30px;" ></div><h3 style="margin: 0px">Hotel Id:</h3><p>${hotel.id}</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Check In - Check Out</h3><p>$_checkInDate - $_checkOutDate</p><div style="height: 30px;" ></div><h3 style="margin: 0px">Issue Date:</h3><p>$_date</p><div style="height: 20px;" ></div><div style="display: flex; align-items: flex-end;" ><h3>Total: </h3><div style="margin-left: 20px;"><h2 style="margin: 0px;" >Rs $_total</h2><p style="margin: 0px;">for $days night</p></div></div>',
                                             subject: '${hotel.name}',
                                             recipients: [
                                               'shrijanregmi9@gmail.com'
@@ -121,6 +118,26 @@ class ProceedBookingScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  String _getHtmlString() {
+    String _string = '';
+    for (final room in rooms) {
+      _string +=
+          '<p>${room.roomName}: ${room.adult} Adults, ${room.kid} Kids</p>';
+    }
+    print(_string);
+    return _string;
+  }
+
+  List<Widget> _getString() {
+    List<Widget> _list = [];
+    for (final room in rooms) {
+      _list.add(
+        Text('${room.roomName}: ${room.adult} Adults, ${room.kid} Kids'),
+      );
+    }
+    return _list;
   }
 
   Widget _appbarBuilder(BuildContext context) {
@@ -194,8 +211,21 @@ class ProceedBookingScreen extends StatelessWidget {
           ),
         ),
         Text(
-          room != null ? '${room.name} - ${hotel.name}' : hotel.name,
+          hotel.name,
         ),
+        if (rooms.isNotEmpty)
+          SizedBox(
+            height: 20.0,
+          ),
+        if (rooms.isNotEmpty)
+          Text(
+            'Rooms: ',
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 16.0,
+            ),
+          ),
+        ..._getString(),
         SizedBox(
           height: 20.0,
         ),
@@ -223,7 +253,14 @@ class ProceedBookingScreen extends StatelessWidget {
   }
 
   Widget _totalPriceBuilder() {
-    final _price = room != null ? room.price : hotel.price;
+    int _price = 0;
+    if (rooms.isNotEmpty) {
+      for (final room in rooms) {
+        _price += room.price;
+      }
+    } else {
+      _price = hotel.price;
+    }
     final _total = _price * days;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
