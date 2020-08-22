@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:lottie/lottie.dart';
 import 'package:motel/helpers/date_helper.dart';
+import 'package:motel/models/firebase/confirm_booking_model.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/viewmodels/booking_vm.dart';
@@ -89,7 +90,15 @@ class ProceedBookingScreen extends StatelessWidget {
                                           final _date = DateHelper()
                                               .getFormattedDate(DateTime.now()
                                                   .millisecondsSinceEpoch);
-                                          final _total = hotel.price * days;
+                                          int _total = 0;
+
+                                          if (rooms.isNotEmpty) {
+                                            for (final room in rooms) {
+                                              _total += room.price;
+                                            }
+                                          } else {
+                                            _total = hotel.price * days;
+                                          }
 
                                           final Email _email = Email(
                                             body:
@@ -101,7 +110,24 @@ class ProceedBookingScreen extends StatelessWidget {
                                             isHTML: true,
                                           );
 
-                                          vm.sendEmail(_email);
+                                          final _booking = ConfirmBooking(
+                                            hotelRef: hotel.toRef(),
+                                            userRef: appUser.toRef(),
+                                            checkInDate: _checkInDate,
+                                            checkOutDate: _checkOutDate,
+                                            rooms: _getListString(),
+                                            issueDate: _date,
+                                            total: _total,
+                                            nights: days,
+                                            userDetail: {
+                                              'name': name,
+                                              'email': appUser.email,
+                                              'phone': phone,
+                                            },
+                                            hotelName: hotel.name,
+                                          );
+
+                                          vm.sendEmail(_booking, appUser);
                                         },
                                       ),
                                     ],
@@ -135,6 +161,16 @@ class ProceedBookingScreen extends StatelessWidget {
     for (final room in rooms) {
       _list.add(
         Text('${room.roomName}: ${room.adult} Adults, ${room.kid} Kids'),
+      );
+    }
+    return _list;
+  }
+
+  List<String> _getListString() {
+    List<String> _list = [];
+    for (final room in rooms) {
+      _list.add(
+        '${room.roomName}: ${room.adult} Adults, ${room.kid} Kids',
       );
     }
     return _list;

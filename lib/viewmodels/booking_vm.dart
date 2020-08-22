@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:lottie/lottie.dart';
 import 'package:motel/helpers/date_helper.dart';
+import 'package:motel/models/firebase/confirm_booking_model.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/room_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
+import 'package:motel/services/firestore/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class BookVm extends ChangeNotifier {
@@ -159,18 +162,19 @@ class BookVm extends ChangeNotifier {
   }
 
   // send email
-  sendEmail(final Email _email) async {
+  sendEmail(final ConfirmBooking booking, final AppUser appUser) async {
     _isProcessing = true;
     notifyListeners();
     try {
-      final _result = await FlutterEmailSender.send(_email);
+      // final _result = await FlutterEmailSender.send(_email);
+      await UserProvider(uid: appUser.uid).confirmBooking(booking);
       _isProcessing = false;
       notifyListeners();
       Navigator.pop(context);
       Navigator.pop(context);
       Navigator.pop(context);
       print('Success: Sending email');
-      return _result;
+      bookingDoneDialog();
     } catch (e) {
       print(e);
       print('Error!!!: Sending email');
@@ -398,6 +402,59 @@ class BookVm extends ChangeNotifier {
       );
     }
     notifyListeners();
+  }
+
+  // dialog when booking is done
+  bookingDoneDialog() async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Text(
+              'Thank You',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(
+              width: 5.0,
+            ),
+            Icon(
+              Icons.check,
+              color: Color(0xff45ad90),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+                'We have received your booking with Spott Up app. Our customer service representative will contact you soon.'),
+          ],
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10.0, bottom: 10.0),
+            child: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Text(
+                  'OK',
+                  style: TextStyle(
+                    color: Color(0xff45ad90),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 

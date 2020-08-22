@@ -7,18 +7,24 @@ import 'package:motel/views/widgets/hotel_view_widgets/expanded_hotel_view_scree
 class HotelRoomItem extends StatelessWidget {
   final Hotel room;
   final smallImg;
-  HotelRoomItem(this.room, {this.smallImg = false});
+  final Function onPressed;
+  HotelRoomItem(this.room, {this.smallImg = false, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => ExpandedHotelViewScreen(hotel: room, isRoom: true),
-          ),
-        );
+        if (!smallImg) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) =>
+                  ExpandedHotelViewScreen(hotel: room, isRoom: true),
+            ),
+          );
+        } else {
+          onPressed(room);
+        }
       },
       child: Padding(
         padding: const EdgeInsets.only(right: 20.0),

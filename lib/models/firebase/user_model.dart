@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class AppUser {
   final String firstName;
   final String lastName;
@@ -49,5 +51,10 @@ class AppUser {
       'email': email,
       'phone': phone,
     };
+  }
+
+  DocumentReference toRef() {
+    final _ref = Firestore.instance;
+    return _ref.collection('users').document(uid);
   }
 }
