@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "924444965033",
-    "firebase_url": "https://motel-868fa.firebaseio.com",
-    "project_id": "motel-868fa",
-    "storage_bucket": "motel-868fa.appspot.com"
+    "project_number": "254483205100",
+    "firebase_url": "https://spott-up.firebaseio.com",
+    "project_id": "spott-up",
+    "storage_bucket": "spott-up.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:924444965033:android:c240224b0821f93f9b11b8",
+        "mobilesdk_app_id": "1:254483205100:android:0184d8de45f32a9a040ec9",
         "android_client_info": {
           "package_name": "com.example.motel"
         }
       },
       "oauth_client": [
         {
-          "client_id": "924444965033-o68o415qc8h0pqrh3bcu0tr6dclku6fi.apps.googleusercontent.com",
+          "client_id": "254483205100-d2bihrn66u587h403iu4i0i1nohe5dp7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB8tPYAnlHwYjTni04orZtl45kRx8EjYIA"
+          "current_key": "AIzaSyDBAl2yMdy42g0Cy4ROtuFoLplYSEZ2hwo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "924444965033-o68o415qc8h0pqrh3bcu0tr6dclku6fi.apps.googleusercontent.com",
+              "client_id": "254483205100-d2bihrn66u587h403iu4i0i1nohe5dp7.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
