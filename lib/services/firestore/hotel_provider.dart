@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/popular_destination_model.dart';
-import 'package:motel/models/firebase/room_model.dart';
 import 'package:motel/models/firebase/last_search_model.dart';
 import 'package:motel/models/firebase/top_three_model.dart';
 
@@ -49,9 +48,9 @@ class HotelProvider {
   }
 
   // room from firebase
-  List<Room> _roomFromFirebase(QuerySnapshot colSnap) {
+  List<Hotel> _roomFromFirebase(QuerySnapshot colSnap) {
     return colSnap.documents.map((docSnap) {
-      return Room.fromJson(docSnap.data, docSnap.documentID);
+      return Hotel.fromJson(docSnap.data, docSnap.documentID);
     }).toList();
   }
 
@@ -113,7 +112,7 @@ class HotelProvider {
   }
 
   // stream of rooms
-  Stream<List<Room>> get roomsList {
+  Stream<List<Hotel>> get roomsList {
     return _ref
         .collection('hotels')
         .document(hotelId)

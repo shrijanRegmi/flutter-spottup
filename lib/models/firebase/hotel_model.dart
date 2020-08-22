@@ -13,7 +13,8 @@ class Hotel {
   final List<dynamic> photos;
   final List<dynamic> reviews;
   final int rooms;
-  final int persons;
+  final int adults;
+  final int kids;
   final HotelType type;
   final int commission;
   final int availableCheckIn;
@@ -31,7 +32,8 @@ class Hotel {
     this.photos,
     this.reviews,
     this.rooms,
-    this.persons,
+    this.adults,
+    this.kids,
     this.type,
     this.commission,
     this.availableCheckIn,
@@ -52,7 +54,8 @@ class Hotel {
         photos: data['photos'] ?? [],
         reviews: data['reviews'] ?? [],
         rooms: data['rooms'] ?? 1,
-        persons: data['persons'] ?? 0,
+        adults: data['adults'] ?? 0,
+        kids: data['kids'] ?? 0,
         type: HotelType.hotel,
         commission: data['commission'] ?? 0,
         availableCheckIn: data['available_check_in'],
@@ -71,7 +74,8 @@ class Hotel {
         photos: data['photos'] ?? [],
         reviews: data['reviews'] ?? [],
         rooms: data['rooms'] ?? 1,
-        persons: data['persons'] ?? 0,
+        adults: data['adults'] ?? 0,
+        kids: data['kids'] ?? 0,
         type: HotelType.backpack,
         commission: data['commission'] ?? 0,
         availableCheckIn: data['available_check_in'],
@@ -90,7 +94,8 @@ class Hotel {
         photos: data['photos'] ?? [],
         reviews: data['reviews'] ?? [],
         rooms: data['rooms'] ?? 1,
-        persons: data['persons'] ?? 0,
+        adults: data['adults'] ?? 0,
+        kids: data['kids'] ?? 0,
         type: HotelType.resorts,
         commission: data['commission'] ?? 0,
         availableCheckIn: data['available_check_in'],
@@ -109,7 +114,8 @@ class Hotel {
         photos: data['photos'] ?? [],
         reviews: data['reviews'] ?? [],
         rooms: data['rooms'] ?? 1,
-        persons: data['persons'] ?? 0,
+        adults: data['adults'] ?? 0,
+        kids: data['kids'] ?? 0,
         type: HotelType.villa,
         commission: data['commission'] ?? 0,
         availableCheckIn: data['available_check_in'],
@@ -128,7 +134,8 @@ class Hotel {
       photos: data['photos'] ?? [],
       reviews: data['reviews'] ?? [],
       rooms: data['rooms'] ?? 1,
-      persons: data['persons'] ?? 0,
+      adults: data['adults'] ?? 0,
+      kids: data['kids'] ?? 0,
       type: HotelType.hotel,
       commission: data['commission'] ?? 0,
       availableCheckIn: data['available_check_in'],

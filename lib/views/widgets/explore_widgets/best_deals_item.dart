@@ -103,8 +103,8 @@ class BestDealItem extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       bestDeal.rooms != 1
-                          ? '${bestDeal.rooms} Rooms - ${bestDeal.persons} Adults'
-                          : '${bestDeal.rooms} Room - ${bestDeal.persons} Adults',
+                          ? '${bestDeal.rooms} Rooms - ${bestDeal.adults} Adults'
+                          : '${bestDeal.rooms} Room - ${bestDeal.adults} Adults',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 12.0,
