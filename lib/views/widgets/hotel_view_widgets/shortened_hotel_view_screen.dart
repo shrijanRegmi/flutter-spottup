@@ -136,7 +136,7 @@ class ShortenedHotelViewScreen extends StatelessWidget {
                   Column(
                     children: <Widget>[
                       Text(
-                          hotel.rooms != 1 ? '${hotel.rooms} Rooms - ${hotel.persons} Adults' : '${hotel.rooms} Room - ${hotel.persons} Adults',
+                          hotel.rooms != 1 ? '${hotel.rooms} Rooms - ${hotel.adults} Adults' : '${hotel.rooms} Room - ${hotel.adults} Adults',
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 12.0,

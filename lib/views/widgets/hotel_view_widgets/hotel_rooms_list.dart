@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:motel/models/firebase/room_model.dart';
+import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/services/firestore/hotel_provider.dart';
 import 'package:motel/views/widgets/common_widgets/left_right_text.dart';
 import 'package:motel/views/widgets/hotel_view_widgets/hotel_room_item.dart';
@@ -7,12 +7,12 @@ import 'package:motel/views/widgets/hotel_view_widgets/hotel_room_item.dart';
 class HotelRoomsList extends StatelessWidget {
   final String hotelId;
   final bool smallImg;
-  final Function(Room room) onPressed;
+  final Function(Hotel room) onPressed;
   HotelRoomsList(this.hotelId, {this.smallImg = false, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<Room>>(
+    return StreamBuilder<List<Hotel>>(
         stream: HotelProvider(hotelId: hotelId).roomsList,
         builder: (context, snapshot) {
           if (snapshot.hasData) {

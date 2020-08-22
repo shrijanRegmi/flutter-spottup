@@ -15,7 +15,12 @@ import 'hotel_photos_list.dart';
 class ExpandedHotelViewScreen extends StatefulWidget {
   final PageController pageController;
   final Hotel hotel;
-  ExpandedHotelViewScreen({this.pageController, this.hotel});
+  final bool isRoom;
+  ExpandedHotelViewScreen({
+    this.pageController,
+    this.hotel,
+    this.isRoom = false,
+  });
 
   @override
   _ExpandedHotelViewScreenState createState() =>
@@ -87,7 +92,7 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
               ),
             ),
           ),
-          floatingActionButton: !_isKeyboardVisible
+          floatingActionButton: !_isKeyboardVisible && !widget.isRoom
               ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: RoundedBtn(
@@ -138,9 +143,13 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
                 height: _size,
                 child: FloatingActionButton(
                   onPressed: () {
-                    widget.pageController.animateTo(-1,
-                        duration: Duration(milliseconds: 1000),
-                        curve: Curves.ease);
+                    if (widget.isRoom) {
+                      return Navigator.pop(context);
+                    } else {
+                      widget.pageController.animateTo(-1,
+                          duration: Duration(milliseconds: 1000),
+                          curve: Curves.ease);
+                    }
                   },
                   child: Center(
                     child: Icon(Icons.arrow_back_ios),
@@ -149,24 +158,25 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
                   heroTag: 'backBtn2',
                 ),
               ),
-              Container(
-                width: _size,
-                height: _size,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    vm.updateFavourite(!vm.isFavourite);
-                    vm.sendFavourite(widget.hotel.id, appUser);
-                  },
-                  child: Center(
-                    child: Icon(
-                      vm.isFavourite ? Icons.favorite : Icons.favorite_border,
-                      color: Color(0xff45ad90),
+              if (!widget.isRoom)
+                Container(
+                  width: _size,
+                  height: _size,
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      vm.updateFavourite(!vm.isFavourite);
+                      vm.sendFavourite(widget.hotel.id, appUser);
+                    },
+                    child: Center(
+                      child: Icon(
+                        vm.isFavourite ? Icons.favorite : Icons.favorite_border,
+                        color: Color(0xff45ad90),
+                      ),
                     ),
+                    backgroundColor: Colors.white,
+                    heroTag: 'favBtn2',
                   ),
-                  backgroundColor: Colors.white,
-                  heroTag: 'favBtn2',
                 ),
-              ),
             ],
           ),
         ),
@@ -208,7 +218,11 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
                     Column(
                       children: <Widget>[
                         Text(
-                          widget.hotel.rooms != 1 ? '${widget.hotel.rooms} Rooms - ${widget.hotel.persons} Adults' : '${widget.hotel.rooms} Room - ${widget.hotel.persons} Adults',
+                          widget.isRoom
+                              ? '${widget.hotel.adults} Adults, ${widget.hotel.kids} Kids'
+                              : widget.hotel.rooms != 1
+                                  ? '${widget.hotel.rooms} Rooms - ${widget.hotel.adults} Adults'
+                                  : '${widget.hotel.rooms} Room - ${widget.hotel.adults} Adults',
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 12.0,

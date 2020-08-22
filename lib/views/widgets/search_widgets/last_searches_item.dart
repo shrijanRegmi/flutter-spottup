@@ -70,7 +70,7 @@ class LastSearchesItem extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '${hotel.rooms} Room - ${hotel.persons} Adults',
+                      '${hotel.rooms} Room - ${hotel.adults} Adults',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.black26,

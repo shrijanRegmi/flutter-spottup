@@ -286,7 +286,7 @@ class BookVm extends ChangeNotifier {
   }
 
   // select number of people dialog
-  selectRoomDialog(final Room room) async {
+  selectRoomDialog(final Hotel room) async {
     return await showDialog(
       context: context,
       builder: (context) => AlertDialog(

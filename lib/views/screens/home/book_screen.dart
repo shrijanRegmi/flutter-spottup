@@ -260,8 +260,8 @@ class _BookScreenState extends State<BookScreen> {
                           children: <Widget>[
                             Text(
                               widget.hotel.rooms != 1
-                                  ? '${widget.hotel.rooms} Rooms - ${widget.hotel.persons} Adults'
-                                  : '${widget.hotel.rooms} Room - ${widget.hotel.persons} Adults',
+                                  ? '${widget.hotel.rooms} Rooms - ${widget.hotel.adults} Adults'
+                                  : '${widget.hotel.rooms} Room - ${widget.hotel.adults} Adults',
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 color: Colors.black26,
@@ -393,7 +393,7 @@ class _BookScreenState extends State<BookScreen> {
               HotelRoomsList(
                 widget.hotel.id,
                 smallImg: true,
-                onPressed: (Room room) {
+                onPressed: (Hotel room) {
                   if (vm.selectedRoom
                       .where((element) => element.roomName == room.name)
                       .toList()
