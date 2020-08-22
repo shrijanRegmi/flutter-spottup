@@ -3,7 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
-import 'package:motel/helper/date_helper.dart';
+import 'package:motel/helpers/date_helper.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/services/auth/auth_provider.dart';
 import 'package:motel/viewmodels/profile_vm.dart';
@@ -203,7 +203,7 @@ class ProfileTab extends StatelessWidget {
         _editProfileItem(
           context,
           'Date of birth',
-          appUser.dob == 0 ? 'N/A' : DateHelper(appUser.dob).getFormattedDate(),
+          appUser.dob == 0 ? 'N/A' : DateHelper().getFormattedDate(appUser.dob),
           TextInputType.datetime,
           null,
           vm.updateData,

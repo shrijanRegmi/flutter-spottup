@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:motel/models/firebase/last_search_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
 
 class UserProvider {
@@ -30,6 +31,61 @@ class UserProvider {
     } catch (e) {
       print(e);
       print('Error!!!: Updating user data $data');
+      return null;
+    }
+  }
+
+  // save last search
+  Future saveLastSearch(final LastSearch lastSearch) async {
+    try {
+      final _lastSearchRef =
+          _ref.collection('users').document(uid).collection('last_search');
+
+      final _values = await _lastSearchRef
+          .limit(5)
+          .orderBy('last_updated', descending: true)
+          .getDocuments();
+      var _result;
+      bool _alreadyExists = false;
+      if (_values.documents.isNotEmpty) {
+        for (final doc in _values.documents) {
+          final _hotelRef = doc.data['hotel_ref'];
+          _alreadyExists = lastSearch.hotelRef.path == _hotelRef.path;
+          if (_alreadyExists) {
+            break;
+          }
+        }
+      }
+      if (!_alreadyExists) {
+        _result = await _lastSearchRef.add(lastSearch.toJson());
+        print('Success: Saving last search');
+      }
+      return _result;
+    } catch (e) {
+      print(e);
+      print('Error!!!: Saving last search');
+      return null;
+    }
+  }
+
+  // clear all the last searches
+  Future clearSearch() async {
+    try {
+      final _lastSearchRef = await _ref
+          .collection('users')
+          .document(uid)
+          .collection('last_search')
+          .getDocuments();
+      if (_lastSearchRef.documents.isNotEmpty) {
+        for (final doc in _lastSearchRef.documents) {
+          doc.reference.delete();
+        }
+      }
+      print('Success: Clearing last search');
+      return 'Success';
+    } catch (e) {
+      print(e);
+      print('Error!!!: Clearing last search');
       return null;
     }
   }

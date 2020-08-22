@@ -1,7 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/views/screens/home/hotel_view_screen.dart';
 
 class LastSearchesItem extends StatelessWidget {
+  final Hotel hotel;
+  LastSearchesItem(this.hotel);
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -9,7 +14,9 @@ class LastSearchesItem extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => HotelViewScreen(),
+            builder: (_) => HotelViewScreen(
+              hotel: hotel,
+            ),
           ),
         );
       },
@@ -32,7 +39,7 @@ class LastSearchesItem extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/welcome_img.jpg'),
+                    image: CachedNetworkImageProvider(hotel.dp),
                     fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.only(
@@ -49,13 +56,13 @@ class LastSearchesItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      'London',
+                      hotel.name,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      '1 Room - 2 Adults',
+                      '${hotel.city}, ${hotel.country}',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.black26,
@@ -63,7 +70,7 @@ class LastSearchesItem extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '12 Dec - 22 Dec',
+                      '${hotel.rooms} Room - ${hotel.persons} Adults',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.black26,
@@ -77,7 +84,7 @@ class LastSearchesItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         Text(
-                          'Rs 345',
+                          'Rs ${hotel.price}',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           ),

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/popular_destination_model.dart';
 import 'package:motel/models/firebase/room_model.dart';
+import 'package:motel/models/firebase/last_search_model.dart';
 import 'package:motel/models/firebase/top_three_model.dart';
 
 class HotelProvider {
@@ -9,7 +10,15 @@ class HotelProvider {
   final int limit;
   final String city;
   final String searchKey;
-  HotelProvider({this.hotelId, this.limit = 5, this.city, this.searchKey});
+  final String uid;
+  final DocumentReference hotelRef;
+  HotelProvider(
+      {this.hotelId,
+      this.limit = 5,
+      this.city,
+      this.searchKey,
+      this.uid,
+      this.hotelRef});
 
   final _ref = Firestore.instance;
   // hotels list from firestore
@@ -43,6 +52,12 @@ class HotelProvider {
   List<Room> _roomFromFirebase(QuerySnapshot colSnap) {
     return colSnap.documents.map((docSnap) {
       return Room.fromJson(docSnap.data, docSnap.documentID);
+    }).toList();
+  }
+
+  List<LastSearch> _lastSearchFromFirebase(QuerySnapshot colSnap) {
+    return colSnap.documents.map((docSnap) {
+      return LastSearch.fromJson(docSnap.data);
     }).toList();
   }
 
@@ -92,6 +107,11 @@ class HotelProvider {
         .map(_hotelFromFirebase);
   }
 
+  // stream of hotel from document reference
+  Stream<Hotel> get hotelFromRef {
+    return hotelRef.snapshots().map(_hotelFromFirebase);
+  }
+
   // stream of rooms
   Stream<List<Room>> get roomsList {
     return _ref
@@ -121,5 +141,17 @@ class HotelProvider {
         .where('search_key', isEqualTo: searchKey)
         .snapshots()
         .map(_hotelsFromFirestore);
+  }
+
+  // stream of hotel that user last searched
+  Stream<List<LastSearch>> get lastSearchList {
+    return _ref
+        .collection('users')
+        .document(uid)
+        .collection('last_search')
+        .limit(5)
+        .orderBy('last_updated', descending: true)
+        .snapshots()
+        .map(_lastSearchFromFirebase);
   }
 }

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:motel/enums/hotel_types.dart';
 
 class Hotel {
@@ -133,5 +134,10 @@ class Hotel {
       availableCheckIn: data['available_check_in'],
       availableCheckOut: data['available_check_out'],
     );
+  }
+
+  DocumentReference toRef() {
+    final _ref = Firestore.instance;
+    return _ref.collection('hotels').document(id);
   }
 }

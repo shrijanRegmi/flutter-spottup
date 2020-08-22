@@ -12,7 +12,6 @@ class SearchResultList extends StatelessWidget {
     return StreamBuilder<List<Hotel>>(
       stream: stream,
       builder: (BuildContext context, AsyncSnapshot<List<Hotel>> snapshot) {
-        print(snapshot.data);
         if (snapshot.hasData) {
           final _hotels = snapshot.data;
 
