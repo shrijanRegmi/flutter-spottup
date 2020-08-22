@@ -1,27 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
+import 'package:motel/models/firebase/upcomming_bookings_model.dart';
+import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/services/firestore/hotel_provider.dart';
+import 'package:motel/services/firestore/user_provider.dart';
 import 'package:motel/views/widgets/explore_widgets/best_deals_item.dart';
+import 'package:provider/provider.dart';
 
 class UpcomingTab extends StatelessWidget {
-  final List<dynamic> upcomingBookings;
-  UpcomingTab(this.upcomingBookings);
-
   @override
   Widget build(BuildContext context) {
-    return upcomingBookings.length == 0
-        ? _emptyBuilder()
-        : ListView.builder(
-            itemCount: upcomingBookings.length,
-            itemBuilder: (context, index) {
-              return _itemBuilder(upcomingBookings[index]);
-            },
-          );
+    final _appUser = Provider.of<AppUser>(context);
+    return StreamBuilder<List<UpcomingBooking>>(
+      stream: UserProvider(uid: _appUser.uid).upcomingBookings,
+      builder: (context, snap) {
+        if (snap.hasData) {
+          final _upcomingBookings = snap.data;
+          return _upcomingBookings.length == 0
+              ? _emptyBuilder()
+              : ListView.builder(
+                  itemCount: _upcomingBookings.length,
+                  itemBuilder: (context, index) {
+                    return _itemBuilder(_upcomingBookings[index]);
+                  },
+                );
+        }
+        return Container();
+      },
+    );
   }
 
-  Widget _itemBuilder(String _hotelId) {
+  Widget _itemBuilder(UpcomingBooking upcomingBookings) {
     return StreamBuilder<Hotel>(
-      stream: HotelProvider(hotelId: _hotelId).hotelFromId,
+      stream: HotelProvider(hotelRef: upcomingBookings.hotelRef).hotelFromRef,
       builder: (BuildContext context, AsyncSnapshot<Hotel> hotelSnap) {
         if (hotelSnap.hasData) {
           return Padding(
@@ -29,7 +40,7 @@ class UpcomingTab extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Text(
-                  '01 Oct - 07 Oct, 1 Room - 2 Adult',
+                  '${upcomingBookings.checkIn} - ${upcomingBookings.checkOut}',
                   style: TextStyle(
                     fontSize: 12.0,
                   ),

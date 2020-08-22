@@ -55,21 +55,17 @@ class HotelRoomsList extends StatelessWidget {
           if (index == 0 && !smallImg) {
             return Padding(
               padding: const EdgeInsets.only(left: 20.0),
-              child: GestureDetector(
-                onTap: () => onPressed(data[index]),
-                child: HotelRoomItem(
-                  data[index],
-                  smallImg: smallImg,
-                ),
+              child: HotelRoomItem(
+                data[index],
+                smallImg: smallImg,
+                onPressed: onPressed,
               ),
             );
           }
-          return GestureDetector(
-            onTap: () => onPressed(data[index]),
-            child: HotelRoomItem(
-              data[index],
-              smallImg: smallImg,
-            ),
+          return HotelRoomItem(
+            data[index],
+            smallImg: smallImg,
+            onPressed: onPressed,
           );
         },
       ),

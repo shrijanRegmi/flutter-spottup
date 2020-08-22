@@ -101,7 +101,7 @@ class _TripTabState extends State<TripTab> with SingleTickerProviderStateMixin {
 
   List<Widget> _getTabs(AppUser appUser) {
     return [
-      UpcomingTab(appUser.upcoming),
+      UpcomingTab(),
       // FinishedTab(appUser.finished),
       FavouriteTab(appUser.favourite),
     ];
