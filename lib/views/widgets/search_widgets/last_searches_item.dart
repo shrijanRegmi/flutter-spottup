@@ -53,32 +53,40 @@ class LastSearchesItem extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      hotel.name,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            hotel.name,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '${hotel.city}, ${hotel.country}',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black26,
+                              fontSize: 12.0,
+                            ),
+                          ),
+                          Text(
+                            '${hotel.rooms} Room - ${hotel.adults} Adults',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black26,
+                              fontSize: 10.0,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                        ],
                       ),
-                    ),
-                    Text(
-                      '${hotel.city}, ${hotel.country}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black26,
-                        fontSize: 12.0,
-                      ),
-                    ),
-                    Text(
-                      '${hotel.rooms} Room - ${hotel.adults} Adults',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black26,
-                        fontSize: 10.0,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10.0,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
