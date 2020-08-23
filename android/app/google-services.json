@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "254483205100-jcakn76n5l7993drpa8348439vb2ga7o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.motel",
+            "certificate_hash": "c45105f9199c824eb8b92e852742b4a052e2d2fa"
+          }
+        },
+        {
+          "client_id": "254483205100-8vdg5p68h9j0s16jgfkb2ln639n4ts1v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.motel",
+            "certificate_hash": "410bf0da1db4c02126db8fb2e0c8656661f349b9"
+          }
+        },
+        {
           "client_id": "254483205100-d2bihrn66u587h403iu4i0i1nohe5dp7.apps.googleusercontent.com",
           "client_type": 3
         }
