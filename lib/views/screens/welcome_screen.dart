@@ -69,7 +69,7 @@ class WelcomeScreen extends StatelessWidget {
               height: 10.0,
             ),
             Text(
-              'Spott Up',
+              'Motel',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 20.0,
