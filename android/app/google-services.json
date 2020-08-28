@@ -50,6 +50,51 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:254483205100:android:f55bb6fef59f588b040ec9",
+        "android_client_info": {
+          "package_name": "com.spottup.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "254483205100-9u006vd11jeivhl92m2fnprqdqnqvktn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.spottup.app",
+            "certificate_hash": "c45105f9199c824eb8b92e852742b4a052e2d2fa"
+          }
+        },
+        {
+          "client_id": "254483205100-s2b5klvuk342upa1554iogbvcejg3h0m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.spottup.app",
+            "certificate_hash": "410bf0da1db4c02126db8fb2e0c8656661f349b9"
+          }
+        },
+        {
+          "client_id": "254483205100-d2bihrn66u587h403iu4i0i1nohe5dp7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBAl2yMdy42g0Cy4ROtuFoLplYSEZ2hwo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "254483205100-d2bihrn66u587h403iu4i0i1nohe5dp7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
