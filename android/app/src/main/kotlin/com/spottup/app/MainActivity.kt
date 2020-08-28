@@ -1,4 +1,4 @@
-package com.example.motel
+package com.spottup.app
 
 import io.flutter.embedding.android.FlutterActivity
 
