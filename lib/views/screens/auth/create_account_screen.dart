@@ -65,8 +65,12 @@ class CreateAccountScreen extends StatelessWidget {
                                   ),
                                   _loginTextSection(context),
                                   SizedBox(
-                                    height: 10.0,
+                                    height: 50.0,
                                   ),
+                                  // _hotelOwnerAccountChoose(),
+                                  // SizedBox(
+                                  //   height: 20.0,
+                                  // ),
                                 ],
                               ),
                             )
@@ -94,6 +98,30 @@ class CreateAccountScreen extends StatelessWidget {
       style: TextStyle(
         fontWeight: FontWeight.w600,
         fontSize: 22.0,
+      ),
+    );
+  }
+
+  Widget _hotelOwnerAccountChoose() {
+    return GestureDetector(
+      onTap: () {
+        // Navigator.push(context, route);
+      },
+      child: Container(
+        color: Colors.transparent,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'I want to create account as Hotel Owner',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 12.0,
+                color: Colors.black38,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

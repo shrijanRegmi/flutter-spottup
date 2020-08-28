@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:motel/enums/account_type.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/services/auth/auth_provider.dart';
 
@@ -66,6 +67,7 @@ class AuthVm extends ChangeNotifier {
         lastName: _lastName,
         phone: int.parse(_phone),
         email: _email,
+        accountType: AccountType.general,
       );
 
       _result = await AuthProvider().signUpWithEmailAndPassword(

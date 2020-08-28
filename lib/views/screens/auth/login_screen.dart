@@ -57,8 +57,12 @@ class LoginScreen extends StatelessWidget {
                                   _loginBtnBuilder(
                                       vm.loginWithEmailAndPassword),
                                   SizedBox(
-                                    height: 10.0,
+                                    height: 50.0,
                                   ),
+                                  // _hotelOwnerAccountChoose(),
+                                  // SizedBox(
+                                  //   height: 10.0,
+                                  // ),
                                 ],
                               ),
                             )
@@ -112,6 +116,30 @@ class LoginScreen extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _hotelOwnerAccountChoose() {
+    return GestureDetector(
+      onTap: () {
+        // Navigator.push(context, route);
+      },
+      child: Container(
+        color: Colors.transparent,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'I want to login as Hotel Owner',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 12.0,
+                color: Colors.black38,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
