@@ -16,10 +16,12 @@ class ExpandedHotelViewScreen extends StatefulWidget {
   final PageController pageController;
   final Hotel hotel;
   final bool isRoom;
+  final bool isEditing;
   ExpandedHotelViewScreen({
     this.pageController,
     this.hotel,
     this.isRoom = false,
+    this.isEditing = false,
   });
 
   @override
@@ -46,7 +48,7 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
     return VmProvider<HotelViewVm>(
       vm: HotelViewVm(context: context),
       onInit: (vm) {
-        bool _isFav = _appUser.favourite.contains(widget.hotel.id);
+        bool _isFav = _appUser?.favourite?.contains(widget.hotel.id) != null;
         vm.updateFavourite(_isFav);
       },
       builder: (context, vm, appUser) {
@@ -92,18 +94,43 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
               ),
             ),
           ),
-          floatingActionButton: !_isKeyboardVisible && !widget.isRoom
-              ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: RoundedBtn(
-                    title: 'Book now',
-                    padding: 0.0,
-                    onPressed: () => vm.showRoomDialog(widget.hotel),
-                  ),
-                )
-              : null,
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
+          floatingActionButton:
+              !_isKeyboardVisible && !widget.isRoom && !widget.isEditing
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: RoundedBtn(
+                        title: 'Book now',
+                        padding: 0.0,
+                        onPressed: () => vm.showRoomDialog(widget.hotel),
+                      ),
+                    )
+                  : widget.isEditing
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            FloatingActionButton(
+                              onPressed: () {},
+                              child: Center(
+                                child: Icon(Icons.edit),
+                              ),
+                              backgroundColor: Color(0xff45ad90),
+                            ),
+                            SizedBox(
+                              width: 20.0,
+                            ),
+                            FloatingActionButton(
+                              onPressed: () {},
+                              child: Center(
+                                child: Icon(Icons.delete),
+                              ),
+                              backgroundColor: Color(0xff45ad90),
+                            ),
+                          ],
+                        )
+                      : null,
+          floatingActionButtonLocation: widget.isEditing
+              ? FloatingActionButtonLocation.endFloat
+              : FloatingActionButtonLocation.centerFloat,
         );
       },
     );
@@ -158,7 +185,7 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
                   heroTag: 'backBtn2',
                 ),
               ),
-              if (!widget.isRoom)
+              if (!widget.isRoom && !widget.isEditing)
                 Container(
                   width: _size,
                   height: _size,

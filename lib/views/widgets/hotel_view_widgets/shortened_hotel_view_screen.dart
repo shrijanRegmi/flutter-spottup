@@ -13,7 +13,12 @@ import 'package:provider/provider.dart';
 class ShortenedHotelViewScreen extends StatelessWidget {
   final PageController pageController;
   final Hotel hotel;
-  ShortenedHotelViewScreen({this.pageController, this.hotel});
+  final bool isEditing;
+  ShortenedHotelViewScreen({
+    this.pageController,
+    this.hotel,
+    this.isEditing = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +26,7 @@ class ShortenedHotelViewScreen extends StatelessWidget {
     return VmProvider<HotelViewVm>(
       vm: HotelViewVm(context: context),
       onInit: (vm) {
-        bool _isFav = _appUser.favourite.contains(hotel.id);
+        bool _isFav = _appUser?.favourite?.contains(hotel.id) != null;
         vm.updateFavourite(_isFav);
       },
       builder: (context, vm, appUser) {
@@ -65,20 +70,21 @@ class ShortenedHotelViewScreen extends StatelessWidget {
                 backgroundColor: Colors.black87,
                 heroTag: 'backBtn',
               ),
-              FloatingActionButton(
-                onPressed: () {
-                  vm.updateFavourite(!vm.isFavourite);
-                  vm.sendFavourite(hotel.id, appUser);
-                },
-                child: Center(
-                  child: Icon(
-                    vm.isFavourite ? Icons.favorite : Icons.favorite_border,
-                    color: Color(0xff45ad90),
+              if (!isEditing)
+                FloatingActionButton(
+                  onPressed: () {
+                    vm.updateFavourite(!vm.isFavourite);
+                    vm.sendFavourite(hotel.id, appUser);
+                  },
+                  child: Center(
+                    child: Icon(
+                      vm.isFavourite ? Icons.favorite : Icons.favorite_border,
+                      color: Color(0xff45ad90),
+                    ),
                   ),
+                  backgroundColor: Colors.white,
+                  heroTag: 'favBtn',
                 ),
-                backgroundColor: Colors.white,
-                heroTag: 'favBtn',
-              ),
             ],
           ),
         ),
@@ -136,13 +142,15 @@ class ShortenedHotelViewScreen extends StatelessWidget {
                   Column(
                     children: <Widget>[
                       Text(
-                          hotel.rooms != 1 ? '${hotel.rooms} Rooms - ${hotel.adults} Adults' : '${hotel.rooms} Room - ${hotel.adults} Adults',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 12.0,
-                            color: Colors.black26,
-                          ),
+                        hotel.rooms != 1
+                            ? '${hotel.rooms} Rooms - ${hotel.adults} Adults'
+                            : '${hotel.rooms} Room - ${hotel.adults} Adults',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12.0,
+                          color: Colors.black26,
                         ),
+                      ),
                       SizedBox(
                         height: 5.0,
                       ),
@@ -176,11 +184,12 @@ class ShortenedHotelViewScreen extends StatelessWidget {
               SizedBox(
                 height: 20.0,
               ),
-              RoundedBtn(
-                title: 'Book now',
-                padding: 0.0,
-                onPressed: () => vm.showRoomDialog(hotel),
-              ),
+              if (!isEditing)
+                RoundedBtn(
+                  title: 'Book now',
+                  padding: 0.0,
+                  onPressed: () => vm.showRoomDialog(hotel),
+                ),
             ],
           ),
         ),
