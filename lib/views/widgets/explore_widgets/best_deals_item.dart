@@ -6,7 +6,11 @@ import 'package:motel/models/firebase/hotel_model.dart';
 
 class BestDealItem extends StatelessWidget {
   final Hotel bestDeal;
-  BestDealItem({this.bestDeal});
+  final bool isEditing;
+  BestDealItem({
+    this.bestDeal,
+    this.isEditing = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +19,8 @@ class BestDealItem extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => HotelViewScreen(hotel: bestDeal),
+            builder: (_) =>
+                HotelViewScreen(hotel: bestDeal, isEditing: isEditing),
           ),
         );
       },
