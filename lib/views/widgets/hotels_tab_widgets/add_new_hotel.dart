@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
+import 'package:motel/services/auth/auth_provider.dart';
 import 'package:motel/viewmodels/add_new_hotel_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
@@ -50,7 +51,11 @@ class _AddNewHotelState extends State<AddNewHotel> {
               : RoundedBtn(
                   title: vm.isNextPressed ? 'Confirm' : 'Next',
                   onPressed: () {
-                    vm.onNextPressed(true);
+                    if (!vm.isNextPressed) {
+                      vm.onNextPressed(true);
+                    } else {
+                      vm.uploadNewHotel(appUser.uid);
+                    }
                   },
                 ),
           body: SafeArea(
@@ -68,7 +73,7 @@ class _AddNewHotelState extends State<AddNewHotel> {
                       _appbarBuilder(context, vm),
                       vm.isNextPressed
                           ? _addImageBuilder(vm)
-                          : _hotelDetailBuilder(),
+                          : _hotelDetailBuilder(vm),
                     ],
                   ),
                 ),
@@ -80,7 +85,7 @@ class _AddNewHotelState extends State<AddNewHotel> {
     );
   }
 
-  Widget _hotelDetailBuilder() {
+  Widget _hotelDetailBuilder(AddNewHotelVm vm) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -93,7 +98,7 @@ class _AddNewHotelState extends State<AddNewHotel> {
               SizedBox(
                 height: 30.0,
               ),
-              _inputFieldContainer(),
+              _inputFieldContainer(vm),
             ],
           ),
         ),
@@ -127,11 +132,12 @@ class _AddNewHotelState extends State<AddNewHotel> {
     );
   }
 
-  Widget _inputFieldContainer() {
+  Widget _inputFieldContainer(AddNewHotelVm vm) {
     return Column(
       children: [
         NewHotelField(
           hintText: 'Hotel title',
+          controller: vm.nameController,
         ),
         SizedBox(
           height: 30.0,
@@ -141,6 +147,7 @@ class _AddNewHotelState extends State<AddNewHotel> {
             Expanded(
               child: NewHotelField(
                 hintText: 'City',
+                controller: vm.cityController,
               ),
             ),
             SizedBox(
@@ -149,6 +156,7 @@ class _AddNewHotelState extends State<AddNewHotel> {
             Expanded(
               child: NewHotelField(
                 hintText: 'Country',
+                controller: vm.countryController,
               ),
             ),
           ],
@@ -159,6 +167,7 @@ class _AddNewHotelState extends State<AddNewHotel> {
         NewHotelField(
           hintText: 'Price',
           textInputType: TextInputType.number,
+          controller: vm.priceController,
         ),
         SizedBox(
           height: 30.0,
@@ -166,6 +175,7 @@ class _AddNewHotelState extends State<AddNewHotel> {
         NewHotelField(
           hintText: 'Summary',
           isExpanded: true,
+          controller: vm.summaryController,
         ),
       ],
     );
