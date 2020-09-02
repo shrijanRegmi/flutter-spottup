@@ -19,6 +19,7 @@ class Hotel {
   final int commission;
   final int availableCheckIn;
   final int availableCheckOut;
+  final String ownerId;
 
   Hotel({
     this.id,
@@ -38,6 +39,7 @@ class Hotel {
     this.commission,
     this.availableCheckIn,
     this.availableCheckOut,
+    this.ownerId,
   });
 
   static Hotel fromJson(final Map<String, dynamic> data, final String id) {
@@ -60,6 +62,7 @@ class Hotel {
         commission: data['commission'] ?? 0,
         availableCheckIn: data['available_check_in'],
         availableCheckOut: data['available_check_out'],
+        ownerId: data['owner_id'] ?? '',
       );
     } else if (data['type'] == 1) {
       return Hotel(
@@ -80,6 +83,7 @@ class Hotel {
         commission: data['commission'] ?? 0,
         availableCheckIn: data['available_check_in'],
         availableCheckOut: data['available_check_out'],
+        ownerId: data['owner_id'] ?? '',
       );
     } else if (data['type'] == 2) {
       return Hotel(
@@ -100,6 +104,7 @@ class Hotel {
         commission: data['commission'] ?? 0,
         availableCheckIn: data['available_check_in'],
         availableCheckOut: data['available_check_out'],
+        ownerId: data['owner_id'] ?? '',
       );
     } else if (data['type'] == 3) {
       return Hotel(
@@ -120,6 +125,7 @@ class Hotel {
         commission: data['commission'] ?? 0,
         availableCheckIn: data['available_check_in'],
         availableCheckOut: data['available_check_out'],
+        ownerId: data['owner_id'] ?? '',
       );
     }
     return Hotel(
@@ -140,11 +146,26 @@ class Hotel {
       commission: data['commission'] ?? 0,
       availableCheckIn: data['available_check_in'],
       availableCheckOut: data['available_check_out'],
+      ownerId: data['owner_id'] ?? '',
     );
   }
 
   DocumentReference toRef() {
     final _ref = Firestore.instance;
     return _ref.collection('hotels').document(id);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'dp': dp,
+      'city': city,
+      'country': country,
+      'price': price,
+      'summary': summary,
+      'photos': photos,
+      'owner_id' : ownerId,
+    };
   }
 }

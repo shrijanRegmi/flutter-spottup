@@ -20,6 +20,20 @@ class HotelProvider {
       this.hotelRef});
 
   final _ref = Firestore.instance;
+
+  // upload new hotel by hotel owner
+  Future uploadNewHotel(Hotel hotel) async {
+    try {
+      final _hotelRef = _ref.collection('hotels');
+      print('Success: Adding new hotel');
+      return await _hotelRef.add(hotel.toJson());
+    } catch (e) {
+      print(e);
+      print('Error!!!: Adding new hotel');
+      return null;
+    }
+  }
+
   // hotels list from firestore
   List<Hotel> _hotelsFromFirestore(QuerySnapshot colSnap) {
     return colSnap.documents.map((docSnap) {
@@ -152,5 +166,15 @@ class HotelProvider {
         .orderBy('last_updated', descending: true)
         .snapshots()
         .map(_lastSearchFromFirebase);
+  }
+
+  // stream of hotels owned by owner
+  Stream<List<Hotel>> get myHotels {
+    return _ref
+        .collection('hotels')
+        .limit(50)
+        .where('owner_id', isEqualTo: uid)
+        .snapshots()
+        .map(_hotelsFromFirestore);
   }
 }

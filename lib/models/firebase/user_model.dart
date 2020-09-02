@@ -85,7 +85,7 @@ class AppUser {
       'last_name': lastName,
       'email': email,
       'phone': phone,
-      'account_type': accountType,
+      'account_type': accountType.index,
     };
   }
 
