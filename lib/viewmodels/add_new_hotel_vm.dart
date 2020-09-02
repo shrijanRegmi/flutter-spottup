@@ -15,12 +15,14 @@ class AddNewHotelVm extends ChangeNotifier {
   TextEditingController _countryController = TextEditingController();
   TextEditingController _priceController = TextEditingController();
   TextEditingController _summaryController = TextEditingController();
+  List<Hotel> _rooms = [];
 
   TextEditingController get nameController => _nameController;
   TextEditingController get cityController => _cityController;
   TextEditingController get countryController => _countryController;
   TextEditingController get priceController => _priceController;
   TextEditingController get summaryController => _summaryController;
+  List<Hotel> get rooms => _rooms;
 
   bool get isNextPressed => _isNextPressed;
   File get dp => _dp;
