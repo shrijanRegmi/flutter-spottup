@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
-import 'package:lottie/lottie.dart';
 import 'package:motel/helpers/date_helper.dart';
 import 'package:motel/models/firebase/confirm_booking_model.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
-import 'package:motel/models/firebase/room_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/services/firestore/user_provider.dart';
 import 'package:provider/provider.dart';

@@ -102,29 +102,29 @@ class CreateAccountScreen extends StatelessWidget {
     );
   }
 
-  Widget _hotelOwnerAccountChoose() {
-    return GestureDetector(
-      onTap: () {
-        // Navigator.push(context, route);
-      },
-      child: Container(
-        color: Colors.transparent,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'I want to create account as Hotel Owner',
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 12.0,
-                color: Colors.black38,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget _hotelOwnerAccountChoose() {
+  //   return GestureDetector(
+  //     onTap: () {
+  //       // Navigator.push(context, route);
+  //     },
+  //     child: Container(
+  //       color: Colors.transparent,
+  //       child: Row(
+  //         mainAxisAlignment: MainAxisAlignment.center,
+  //         children: <Widget>[
+  //           Text(
+  //             'I want to create account as Hotel Owner',
+  //             style: TextStyle(
+  //               fontWeight: FontWeight.w600,
+  //               fontSize: 12.0,
+  //               color: Colors.black38,
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _googleSignInBuilder(final Function googleSignUp) {
     return RoundedBtn(

@@ -5,8 +5,6 @@ import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/screens/home/booking_tabs/contacted_booking_tab.dart';
 import 'package:motel/views/screens/home/booking_tabs/new_booking_tab.dart';
 import 'package:motel/views/screens/home/booking_tabs/other_booking_tab.dart';
-import 'package:motel/views/screens/home/trip_tabs/favourite_tab.dart';
-import 'package:motel/views/screens/home/trip_tabs/upcoming_tab.dart';
 
 class BookingsTab extends StatefulWidget {
   @override

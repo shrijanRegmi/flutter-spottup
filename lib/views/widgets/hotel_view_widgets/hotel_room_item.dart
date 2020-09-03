@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
-import 'package:motel/models/firebase/room_model.dart';
 import 'package:motel/views/widgets/hotel_view_widgets/expanded_hotel_view_screen.dart';
 
 class HotelRoomItem extends StatelessWidget {
