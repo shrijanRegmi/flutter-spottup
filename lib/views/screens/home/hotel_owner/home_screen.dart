@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:motel/views/screens/home/home_tabs/profile_tab.dart';
 import 'package:motel/views/screens/home/hotel_owner/home_tabs/bookings_tab.dart';
 import 'package:motel/views/screens/home/hotel_owner/home_tabs/hotels_tab.dart';
-import 'package:motel/views/screens/home/hotel_owner/home_tabs/profile_tab.dart';
 
 class OwnerHomeScreen extends StatefulWidget {
   @override
