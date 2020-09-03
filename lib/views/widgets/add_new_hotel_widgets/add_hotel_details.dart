@@ -47,7 +47,7 @@ class AddHotelDetail extends StatelessWidget {
       children: [
         NewHotelField(
           hintText: isRoom ? 'Room title' : 'Hotel title',
-          controller: vm.nameController,
+          controller: isRoom ? vm.roomNameController : vm.nameController,
         ),
         SizedBox(
           height: 30.0,
@@ -57,7 +57,7 @@ class AddHotelDetail extends StatelessWidget {
             Expanded(
               child: NewHotelField(
                 hintText: isRoom ? 'Adults' : 'City',
-                controller: vm.cityController,
+                controller: isRoom ? vm.roomAdultController : vm.cityController,
               ),
             ),
             SizedBox(
@@ -66,7 +66,8 @@ class AddHotelDetail extends StatelessWidget {
             Expanded(
               child: NewHotelField(
                 hintText: isRoom ? 'Kids' : 'Country',
-                controller: vm.countryController,
+                controller:
+                    isRoom ? vm.roomKidController : vm.countryController,
               ),
             ),
           ],
@@ -77,7 +78,7 @@ class AddHotelDetail extends StatelessWidget {
         NewHotelField(
           hintText: 'Price',
           textInputType: TextInputType.number,
-          controller: vm.priceController,
+          controller: isRoom ? vm.roomPriceController : vm.priceController,
         ),
         SizedBox(
           height: 30.0,
@@ -85,7 +86,7 @@ class AddHotelDetail extends StatelessWidget {
         NewHotelField(
           hintText: 'Summary',
           isExpanded: true,
-          controller: vm.summaryController,
+          controller: isRoom ? vm.roomSummaryController : vm.summaryController,
         ),
       ],
     );
