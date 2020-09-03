@@ -34,6 +34,34 @@ class HotelProvider {
     }
   }
 
+  // upload all rooms
+  Future uploadNewRoom(
+      final DocumentReference _hotelRef, final Hotel _room) async {
+    try {
+      final _roomRef = _hotelRef.collection('rooms');
+      print('Success: Uploading new room');
+      return await _roomRef.add(_room.toJson());
+    } catch (e) {
+      print(e);
+      print('Error!!!: Uploading new room');
+      return null;
+    }
+  }
+
+  // delele hotel
+  Future deleteHotel(final String _hotelId) async {
+    try {
+      final _hotelRef = _ref.collection('hotels').document(_hotelId);
+      await _hotelRef.delete();
+      print('Success: Deleting hotel with id $_hotelId');
+      return 'Success';
+    } catch (e) {
+      print(e);
+      print('Error!!!: Deleting hotel with id $_hotelId');
+      return null;
+    }
+  }
+
   // hotels list from firestore
   List<Hotel> _hotelsFromFirestore(QuerySnapshot colSnap) {
     return colSnap.documents.map((docSnap) {

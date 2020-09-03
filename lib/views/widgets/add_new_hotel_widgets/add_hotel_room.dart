@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/viewmodels/add_new_hotel_vm.dart';
@@ -54,12 +56,15 @@ class AddHotelRoom extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.only(right: 20.0, bottom: 20.0),
               child: GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => AddNewRoom(vm),
-                  ),
-                ),
+                onTap: () {
+                  vm.clearControllers();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => AddNewRoom(vm),
+                    ),
+                  );
+                },
                 child: Container(
                   width: 150.0,
                   height: 100.0,
@@ -87,7 +92,7 @@ class AddHotelRoom extends StatelessWidget {
               ),
             );
           }
-          return _imgListItemBuilder(_list[index].dp);
+          return _imgListItemBuilder(File(_list[index].dp));
         },
       ),
     );
@@ -96,22 +101,19 @@ class AddHotelRoom extends StatelessWidget {
   Widget _imgListItemBuilder(final _img) {
     return Padding(
       padding: const EdgeInsets.only(right: 20.0, bottom: 20.0),
-      child: GestureDetector(
-        onTap: vm.uploadPhotos,
-        child: Container(
-          width: 100.0,
-          height: 100.0,
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-            border: Border.all(
-              color: Color(0xff45ad90),
-              width: 2.0,
-            ),
-            borderRadius: BorderRadius.circular(5.0),
-            image: DecorationImage(
-              image: FileImage(_img),
-              fit: BoxFit.cover,
-            ),
+      child: Container(
+        width: 150.0,
+        height: 100.0,
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          border: Border.all(
+            color: Color(0xff45ad90),
+            width: 2.0,
+          ),
+          borderRadius: BorderRadius.circular(5.0),
+          image: DecorationImage(
+            image: FileImage(_img),
+            fit: BoxFit.cover,
           ),
         ),
       ),

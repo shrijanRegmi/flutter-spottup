@@ -114,16 +114,18 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
                                 child: Icon(Icons.edit),
                               ),
                               backgroundColor: Color(0xff45ad90),
+                              heroTag: 'edit',
                             ),
                             SizedBox(
                               width: 20.0,
                             ),
                             FloatingActionButton(
-                              onPressed: () {},
+                              onPressed: () => vm.deleteHotel(widget.hotel.id),
                               child: Center(
                                 child: Icon(Icons.delete),
                               ),
                               backgroundColor: Color(0xff45ad90),
+                              heroTag: 'delete',
                             ),
                           ],
                         )

@@ -165,7 +165,9 @@ class Hotel {
       'price': price,
       'summary': summary,
       'photos': photos,
-      'owner_id' : ownerId,
+      'owner_id': ownerId,
+      'kids': kids,
+      'adults': adults,
     };
   }
 }

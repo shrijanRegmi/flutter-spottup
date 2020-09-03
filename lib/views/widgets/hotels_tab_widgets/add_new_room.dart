@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/viewmodels/add_new_hotel_vm.dart';
 import 'package:motel/views/widgets/add_new_hotel_widgets/add_hotel_details.dart';
 import 'package:motel/views/widgets/add_new_hotel_widgets/add_hotel_photos.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
+import 'package:provider/provider.dart';
 
 class AddNewRoom extends StatefulWidget {
   final AddNewHotelVm vm;
@@ -37,13 +39,14 @@ class _AddNewRoomState extends State<AddNewRoom> {
 
   @override
   Widget build(BuildContext context) {
+    final _appUser = Provider.of<AppUser>(context);
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: _isTyping
           ? Container()
           : RoundedBtn(
               title: 'Confirm',
-              onPressed: () {},
+              onPressed: () => widget.vm.addRoomList(context, _appUser.uid),
             ),
       body: SafeArea(
         child: GestureDetector(

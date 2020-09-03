@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:motel/models/firebase/confirm_booking_model.dart';
-import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/last_search_model.dart';
 import 'package:motel/models/firebase/upcomming_bookings_model.dart';
 import 'package:motel/models/firebase/user_model.dart';

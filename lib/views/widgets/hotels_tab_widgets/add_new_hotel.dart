@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:lottie/lottie.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/viewmodels/add_new_hotel_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
@@ -46,36 +47,61 @@ class _AddNewHotelState extends State<AddNewHotel> {
         return Scaffold(
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: _isTyping
+          floatingActionButton: _isTyping || vm.isLoading
               ? Container()
               : RoundedBtn(
                   title: 'Publish Hotel',
-                  onPressed: () {},
+                  onPressed: () {
+                    vm.uploadNewHotel(context, appUser.uid);
+                  },
                 ),
           body: SafeArea(
             child: GestureDetector(
               onTap: () {
                 FocusScope.of(context).unfocus();
               },
-              child: Container(
-                color: Colors.transparent,
-                height: MediaQuery.of(context).size.height,
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _appbarBuilder(context, vm),
-                      _addNewHotelBuilder(),
-                      SizedBox(
-                        height: 20.0,
+              child: vm.isLoading
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Lottie.asset('assets/lottie/loading.json'),
+                          Text(
+                            'Please wait. This may take some while.',
+                            style: TextStyle(
+                              // fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                          SizedBox(height: 10.0),
+                          Text(
+                            'Uploading Hotel Photos',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
-                      AddHotelDetail(vm),
-                      AddHotelPhotos(vm),
-                      AddHotelRoom(vm),
-                    ],
-                  ),
-                ),
-              ),
+                    )
+                  : Container(
+                      color: Colors.transparent,
+                      height: MediaQuery.of(context).size.height,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _appbarBuilder(context, vm),
+                            _addNewHotelBuilder(),
+                            SizedBox(
+                              height: 20.0,
+                            ),
+                            AddHotelDetail(vm),
+                            AddHotelPhotos(vm),
+                            AddHotelRoom(vm),
+                          ],
+                        ),
+                      ),
+                    ),
             ),
           ),
         );

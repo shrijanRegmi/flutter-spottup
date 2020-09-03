@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:motel/viewmodels/add_new_hotel_vm.dart';
 
-class AddHotelPhotos extends StatelessWidget {
+class AddHotelPhotos extends StatefulWidget {
   final AddNewHotelVm vm;
   final bool isRoom;
   AddHotelPhotos(this.vm, {this.isRoom = false});
 
+  @override
+  _AddHotelPhotosState createState() => _AddHotelPhotosState();
+}
+
+class _AddHotelPhotosState extends State<AddHotelPhotos> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -18,7 +23,7 @@ class AddHotelPhotos extends StatelessWidget {
         _addDpBuilder(context),
         _addPhotoBuilder(),
         SizedBox(
-          height: isRoom ? 60.0 : 20.0,
+          height: widget.isRoom ? 60.0 : 20.0,
         ),
       ],
     );
@@ -26,7 +31,7 @@ class AddHotelPhotos extends StatelessWidget {
 
   Widget _addPhotosTextBuilder() {
     return Text(
-      isRoom ? 'Add room photos' : 'Add hotel photos',
+      widget.isRoom ? 'Add room photos' : 'Add hotel photos',
       style: TextStyle(
         fontWeight: FontWeight.w600,
         fontSize: 14.0,
@@ -35,10 +40,14 @@ class AddHotelPhotos extends StatelessWidget {
   }
 
   Widget _addDpBuilder(BuildContext context) {
+    final _dp = widget.isRoom ? widget.vm.roomDp : widget.vm.dp;
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: GestureDetector(
-        onTap: vm.uploadDp,
+        onTap: () async {
+          await widget.vm.uploadDp(widget.isRoom);
+          setState(() {});
+        },
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: 200.0,
@@ -49,14 +58,14 @@ class AddHotelPhotos extends StatelessWidget {
               width: 2.0,
             ),
             borderRadius: BorderRadius.circular(5.0),
-            image: vm.dp != null
+            image: _dp != null
                 ? DecorationImage(
-                    image: FileImage(vm.dp),
+                    image: FileImage(_dp),
                     fit: BoxFit.cover,
                   )
                 : null,
           ),
-          child: vm.dp != null
+          child: _dp != null
               ? Container()
               : Center(
                   child: Column(
@@ -76,7 +85,9 @@ class AddHotelPhotos extends StatelessWidget {
   }
 
   Widget _addPhotoBuilder() {
-    final _list = ['', ...vm.photos.reversed];
+    final _list = widget.isRoom
+        ? ['', ...widget.vm.roomPhotos.reversed]
+        : ['', ...widget.vm.photos.reversed];
     return Container(
       height: 120.0,
       child: ListView.builder(
@@ -88,7 +99,10 @@ class AddHotelPhotos extends StatelessWidget {
               padding:
                   const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
               child: GestureDetector(
-                onTap: vm.uploadPhotos,
+                onTap: () async {
+                  await widget.vm.uploadPhotos(widget.isRoom);
+                  setState(() {});
+                },
                 child: Container(
                   width: 100.0,
                   height: 100.0,
@@ -126,7 +140,10 @@ class AddHotelPhotos extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 20.0, bottom: 20.0),
       child: GestureDetector(
-        onTap: vm.uploadPhotos,
+        onTap: () async {
+          await widget.vm.uploadPhotos(widget.isRoom);
+          setState(() {});
+        },
         child: Container(
           width: 100.0,
           height: 100.0,
