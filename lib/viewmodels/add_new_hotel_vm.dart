@@ -92,6 +92,13 @@ class AddNewHotelVm extends ChangeNotifier {
       _updateProgressVal('Publishing Hotel Started');
       String _mDp = '';
       List<String> _mPhotos = [];
+      int _adults = 0;
+      int _kids = 0;
+
+      for (final _room in _rooms) {
+        _adults = _adults < _room.adults ? _room.adults : _adults;
+        _kids = _kids < _room.kids ? _room.kids : _kids;
+      }
 
       var _result;
 
@@ -110,6 +117,9 @@ class AddNewHotelVm extends ChangeNotifier {
           dp: _mDp,
           photos: _mPhotos ?? [],
           ownerId: appUserId,
+          rooms: _rooms.length,
+          adults: _adults,
+          kids: _kids,
         );
         _updateProgressVal('Uploading Hotel Data');
         _result = await HotelProvider().uploadNewHotel(_hotel);
@@ -188,6 +198,8 @@ class AddNewHotelVm extends ChangeNotifier {
         ownerId: appUserId,
         kids: int.parse(_roomKidController.text.trim()),
         adults: int.parse(_roomAdultController.text.trim()),
+        city: _cityController.text.trim(),
+        country: _countryController.text.trim(),
       );
 
       _rooms.add(_room);

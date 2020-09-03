@@ -20,6 +20,7 @@ class Hotel {
   final int availableCheckIn;
   final int availableCheckOut;
   final String ownerId;
+  final String searchKey;
 
   Hotel({
     this.id,
@@ -40,6 +41,7 @@ class Hotel {
     this.availableCheckIn,
     this.availableCheckOut,
     this.ownerId,
+    this.searchKey,
   });
 
   static Hotel fromJson(final Map<String, dynamic> data, final String id) {
@@ -168,6 +170,7 @@ class Hotel {
       'owner_id': ownerId,
       'kids': kids,
       'adults': adults,
+      'search_key': name.substring(0,1),
     };
   }
 }
