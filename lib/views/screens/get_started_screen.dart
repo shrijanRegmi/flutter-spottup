@@ -15,7 +15,15 @@ class GetStartedScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               _textAndImgBuilder(context),
-              _btnBuilder(context),
+              Column(
+                children: [
+                  _btnBuilder(context),
+                  _hotelOwnerAccountChoose(context),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -93,6 +101,37 @@ class GetStartedScreen extends StatelessWidget {
             },
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _hotelOwnerAccountChoose(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => LoginScreen(
+              isOwner: true,
+            ),
+          ),
+        );
+      },
+      child: Container(
+        color: Colors.transparent,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Are you a hotel owner ? Login here',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 12.0,
+                color: Colors.black38,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
