@@ -21,7 +21,7 @@ class AuthVm extends ChangeNotifier {
   bool get showingProgressBar => _showingProgressBar;
 
   // login with email and password
-  Future loginWithEmailAndPassword() async {
+  Future loginWithEmailAndPassword({final bool isOwner}) async {
     _updateProgressBar(true);
     final _email = _emailController.text.trim();
     final _pass = _passController.text.trim();
@@ -32,6 +32,7 @@ class AuthVm extends ChangeNotifier {
       _result = await AuthProvider().loginWithEmailAndPassword(
         email: _email,
         password: _pass,
+        isOwner: isOwner,
       );
     } else {
       _scaffoldKey.currentState.showSnackBar(SnackBar(
@@ -88,13 +89,11 @@ class AuthVm extends ChangeNotifier {
 
   // sign up with google
   Future googleSignUp({
-    final bool isLogin = false,
-    final bool isSignUp = false,
+    final bool isOwner,
   }) async {
     _updateProgressBar(true);
 
-    final _result = await AuthProvider()
-        .signUpWithGoogle(isLogin: isLogin, isSignUp: isSignUp);
+    final _result = await AuthProvider().signUpWithGoogle();
 
     if (_result == null) {
       _updateProgressBar(false);

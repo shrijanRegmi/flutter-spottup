@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:motel/viewmodels/auth_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
+import 'package:motel/views/screens/auth/create_account_screen.dart';
 import 'package:motel/views/widgets/auth_widgets/auth_field.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 
 class LoginScreen extends StatelessWidget {
+  final bool isOwner;
+  LoginScreen({this.isOwner = false});
+
   @override
   Widget build(BuildContext context) {
     return VmProvider<AuthVm>(
@@ -59,10 +63,8 @@ class LoginScreen extends StatelessWidget {
                                   SizedBox(
                                     height: 50.0,
                                   ),
-                                  // _hotelOwnerAccountChoose(),
-                                  // SizedBox(
-                                  //   height: 10.0,
-                                  // ),
+                                  if (isOwner) _signUpTextBuilder(context),
+                                  if (isOwner) SizedBox(height: 20.0),
                                 ],
                               ),
                             )
@@ -86,7 +88,7 @@ class LoginScreen extends StatelessWidget {
 
   Widget _loginTextBuilder() {
     return Text(
-      'Login',
+      isOwner ? 'Login - Hotel Owner' : 'Login',
       style: TextStyle(
         fontWeight: FontWeight.w600,
         fontSize: 22.0,
@@ -119,29 +121,36 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  // Widget _hotelOwnerAccountChoose() {
-  //   return GestureDetector(
-  //     onTap: () {
-  //       // Navigator.push(context, route);
-  //     },
-  //     child: Container(
-  //       color: Colors.transparent,
-  //       child: Row(
-  //         mainAxisAlignment: MainAxisAlignment.center,
-  //         children: <Widget>[
-  //           Text(
-  //             'I want to login as Hotel Owner',
-  //             style: TextStyle(
-  //               fontWeight: FontWeight.w600,
-  //               fontSize: 12.0,
-  //               color: Colors.black38,
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
+  Widget _signUpTextBuilder(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => CreateAccountScreen(
+              isOwner: true,
+            ),
+          ),
+        );
+      },
+      child: Container(
+        color: Colors.transparent,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              "Don't have an account ? Sign Up here",
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 12.0,
+                color: Colors.black38,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget _authContainerBuilder(final TextEditingController _emailController,
       final TextEditingController _passController) {
@@ -171,7 +180,7 @@ class LoginScreen extends StatelessWidget {
     return RoundedBtn(
       title: 'Login',
       padding: 0.0,
-      onPressed: loginUser,
+      onPressed: () => loginUser(isOwner: isOwner),
     );
   }
 }

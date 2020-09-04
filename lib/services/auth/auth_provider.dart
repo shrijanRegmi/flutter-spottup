@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:motel/enums/account_type.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/services/firestore/user_provider.dart';
 
 class AuthProvider {
   final _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final _ref = Firestore.instance;
 
   // create account with email and password
   Future signUpWithEmailAndPassword({
@@ -37,10 +39,19 @@ class AuthProvider {
   Future loginWithEmailAndPassword({
     final String email,
     final String password,
+    final bool isOwner,
   }) async {
     try {
       final _result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
+
+      final _userRef = _ref.collection('users').document(_result.user.uid);
+
+      await _userRef.updateData({
+        'account_type':
+            isOwner ? AccountType.hotelOwner.index : AccountType.general.index
+      });
+
       _userFromFirebase(_result.user);
       print('Success: Logging in user with email $email');
       return _result;
@@ -53,8 +64,7 @@ class AuthProvider {
 
   // sign up with google
   Future signUpWithGoogle({
-    final bool isLogin = false,
-    final bool isSignUp = false,
+    final bool isOwner,
   }) async {
     try {
       final _account = await _googleSignIn.signIn();
@@ -70,6 +80,7 @@ class AuthProvider {
         lastName: _user.displayName.split(' ')[1],
         email: _user.email,
         uid: _result.user.uid,
+        accountType: isOwner ? AccountType.hotelOwner : AccountType.general,
       );
 
       final _ref = Firestore.instance;
