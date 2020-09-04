@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:motel/models/firebase/confirm_booking_model.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/popular_destination_model.dart';
 import 'package:motel/models/firebase/last_search_model.dart';
@@ -96,10 +97,18 @@ class HotelProvider {
     }).toList();
   }
 
+  // last searches collection from firebase
   List<LastSearch> _lastSearchFromFirebase(QuerySnapshot colSnap) {
     return colSnap.documents.map((docSnap) {
       return LastSearch.fromJson(docSnap.data);
     }).toList();
+  }
+
+  // bookings from firebase
+  List<ConfirmBooking> _bookingFromFirebase(QuerySnapshot colSnap) {
+    return colSnap.documents
+        .map((doc) => ConfirmBooking.fromJson(doc.data))
+        .toList();
   }
 
   // stream of hotels list
@@ -204,5 +213,14 @@ class HotelProvider {
         .where('owner_id', isEqualTo: uid)
         .snapshots()
         .map(_hotelsFromFirestore);
+  }
+
+  // stream of bookings
+  Stream<List<ConfirmBooking>> get bookingsList {
+    return _ref
+        .collection('bookings')
+        .where('owner_id', isEqualTo: uid)
+        .snapshots()
+        .map(_bookingFromFirebase);
   }
 }

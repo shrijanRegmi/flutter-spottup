@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:motel/models/firebase/confirm_booking_model.dart';
 import 'package:motel/models/firebase/popular_destination_model.dart';
 import 'package:motel/models/firebase/top_three_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
@@ -31,6 +32,9 @@ class WrapperBuilder extends StatelessWidget {
           ),
           StreamProvider<List<PopularDestination>>.value(
             value: HotelProvider().popularDestinations,
+          ),
+          StreamProvider<List<ConfirmBooking>>.value(
+            value: HotelProvider(uid: _appUser.uid).bookingsList,
           ),
         ],
         child: builder(context, _appUser),
