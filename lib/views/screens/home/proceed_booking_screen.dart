@@ -82,13 +82,6 @@ class ProceedBookingScreen extends StatelessWidget {
                                       RoundedBtn(
                                         title: 'Confirm Booking',
                                         onPressed: () {
-                                          final _checkInDate = DateHelper()
-                                              .getFormattedDate(checkIn);
-                                          final _checkOutDate = DateHelper()
-                                              .getFormattedDate(checkOut);
-                                          final _date = DateHelper()
-                                              .getFormattedDate(DateTime.now()
-                                                  .millisecondsSinceEpoch);
                                           int _total = 0;
 
                                           if (rooms.isNotEmpty) {
@@ -102,21 +95,19 @@ class ProceedBookingScreen extends StatelessWidget {
                                           final _booking = ConfirmBooking(
                                             hotelRef: hotel.toRef(),
                                             userRef: appUser.toRef(),
-                                            checkInDate: _checkInDate,
-                                            checkOutDate: _checkOutDate,
+                                            checkInDate: checkIn,
+                                            checkOutDate: checkOut,
                                             rooms: _getListString(),
-                                            issueDate: _date,
+                                            issueDate: DateTime.now()
+                                                .millisecondsSinceEpoch,
                                             total: _total,
                                             nights: days,
-                                            userDetail: {
-                                              'name': name,
-                                              'email': appUser.email,
-                                              'phone': phone,
-                                            },
-                                            hotelName: hotel.name,
+                                            ownerId: hotel.ownerId,
+                                            isSeen: false,
+                                            isContacted: false,
                                           );
 
-                                          vm.sendEmail(_booking, appUser);
+                                          vm.confirmBooking(_booking, appUser);
                                         },
                                       ),
                                     ],

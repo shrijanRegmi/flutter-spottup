@@ -12,10 +12,10 @@ class Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _user = Provider.of<AppUser>(context);
-    return _user == null && appUser == null
+    final _appUser = Provider.of<AppUser>(context);
+    return _appUser == null && appUser == null
         ? WelcomeScreen()
-        : _user?.accountType == AccountType.hotelOwner
+        : _appUser?.accountType == AccountType.hotelOwner
             ? OwnerHomeScreen()
             : HomeScreen();
   }

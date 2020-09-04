@@ -158,8 +158,8 @@ class BookVm extends ChangeNotifier {
     notifyListeners();
   }
 
-  // send email
-  sendEmail(final ConfirmBooking booking, final AppUser appUser) async {
+  // confirm booking
+  confirmBooking(final ConfirmBooking booking, final AppUser appUser) async {
     _isProcessing = true;
     notifyListeners();
     try {

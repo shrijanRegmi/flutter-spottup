@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:motel/helpers/date_helper.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/upcomming_bookings_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
@@ -40,7 +41,7 @@ class UpcomingTab extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Text(
-                  '${upcomingBookings.checkIn} - ${upcomingBookings.checkOut}',
+                  '${DateHelper().getFormattedDate(upcomingBookings.checkIn)} - ${DateHelper().getFormattedDate(upcomingBookings.checkOut)}',
                   style: TextStyle(
                     fontSize: 12.0,
                   ),

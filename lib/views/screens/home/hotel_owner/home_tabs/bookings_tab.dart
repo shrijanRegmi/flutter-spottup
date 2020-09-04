@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:motel/models/firebase/user_model.dart';
-import 'package:motel/viewmodels/trip_vm.dart';
+import 'package:motel/viewmodels/booking_tab_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/screens/home/booking_tabs/contacted_booking_tab.dart';
 import 'package:motel/views/screens/home/booking_tabs/new_booking_tab.dart';
@@ -23,8 +23,8 @@ class _BookingsTabState extends State<BookingsTab>
 
   @override
   Widget build(BuildContext context) {
-    return VmProvider<TripVm>(
-      vm: TripVm(),
+    return VmProvider<BookingTabVm>(
+      vm: BookingTabVm(context),
       builder: (context, vm, appUser) {
         return Container(
           child: Column(
@@ -35,7 +35,7 @@ class _BookingsTabState extends State<BookingsTab>
               ),
               _titleBuilder(),
               _tabBarBuilder(context),
-              _tabBarViewBuilder(appUser),
+              _tabBarViewBuilder(appUser, vm),
             ],
           ),
         );
@@ -91,20 +91,20 @@ class _BookingsTabState extends State<BookingsTab>
     );
   }
 
-  Widget _tabBarViewBuilder(AppUser appUser) {
+  Widget _tabBarViewBuilder(AppUser appUser, BookingTabVm vm) {
     return Expanded(
       child: TabBarView(
         controller: _bookingsTabController,
-        children: _getTabs(appUser),
+        children: _getTabs(appUser, vm),
       ),
     );
   }
 
-  List<Widget> _getTabs(AppUser appUser) {
+  List<Widget> _getTabs(AppUser appUser, BookingTabVm vm) {
     return [
-      NewBookingTab(),
-      OtherBookingTab(),
-      ContactedBookingTab(),
+      NewBookingTab(vm.newBookings),
+      OtherBookingTab(vm.otherBookings),
+      ContactedBookingTab(vm.contactedBookings),
     ];
   }
 }

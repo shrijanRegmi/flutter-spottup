@@ -26,7 +26,7 @@ class ShortenedHotelViewScreen extends StatelessWidget {
     return VmProvider<HotelViewVm>(
       vm: HotelViewVm(context: context),
       onInit: (vm) {
-        bool _isFav = _appUser?.favourite?.contains(hotel.id) != null;
+        bool _isFav = _appUser.favourite.contains(hotel.id);
         vm.updateFavourite(_isFav);
       },
       builder: (context, vm, appUser) {
