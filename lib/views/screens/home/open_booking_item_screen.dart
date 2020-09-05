@@ -1,64 +1,83 @@
 import 'package:flutter/material.dart';
+import 'package:motel/enums/booking_type.dart';
 import 'package:motel/helpers/date_helper.dart';
 import 'package:motel/models/firebase/confirm_booking_model.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
-import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
+import 'package:motel/viewmodels/booking_tab_vm.dart';
+import 'package:motel/viewmodels/vm_provider.dart';
 
 class OpenBookingItemScreen extends StatelessWidget {
   final ConfirmBooking booking;
   final AppUser appUser;
   final Hotel hotel;
-  OpenBookingItemScreen(this.booking, this.appUser, this.hotel);
+  final BookingType bookingType;
+  OpenBookingItemScreen(
+    this.booking,
+    this.appUser,
+    this.hotel, {
+    this.bookingType,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height - kToolbarHeight,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _appbarBuilder(context),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Expanded(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                _topSectionBuilder(appUser),
-                                SizedBox(
-                                  height: 20.0,
-                                ),
-                                _hotelDetailBuilder(),
-                                SizedBox(
-                                  height: 20.0,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        _totalPriceBuilder(),
-                        SizedBox(
-                          height: 20.0,
-                        ),
-                      ],
+    return VmProvider<BookingTabVm>(
+      vm: BookingTabVm(context),
+      onInit: (vm) {
+        if (!booking.isSeen) {
+          vm.updateSeenState(bookingType, booking.bookingId);
+        }
+        vm.updateIsContacted(booking.isContacted);
+      },
+      builder: (context, vm, appUser) {
+        return Scaffold(
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Container(
+                height: MediaQuery.of(context).size.height - kToolbarHeight,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _appbarBuilder(context, vm),
+                    SizedBox(
+                      height: 20.0,
                     ),
-                  ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Expanded(
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    _topSectionBuilder(appUser),
+                                    SizedBox(
+                                      height: 20.0,
+                                    ),
+                                    _hotelDetailBuilder(),
+                                    SizedBox(
+                                      height: 20.0,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            _totalPriceBuilder(),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -72,10 +91,21 @@ class OpenBookingItemScreen extends StatelessWidget {
     return _list;
   }
 
-  Widget _appbarBuilder(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.arrow_back),
-      onPressed: () => Navigator.pop(context),
+  Widget _appbarBuilder(BuildContext context, BookingTabVm vm) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+        IconButton(
+          icon: Icon(
+            vm.isContacted ? Icons.check_circle : Icons.check_circle_outline,
+          ),
+          onPressed: () => vm.onPressedContactedBtn(booking.bookingId),
+        ),
+      ],
     );
   }
 
@@ -175,7 +205,8 @@ class OpenBookingItemScreen extends StatelessWidget {
             fontSize: 16.0,
           ),
         ),
-        Text('${DateHelper().getFormattedDate(booking.checkInDate)} - ${DateHelper().getFormattedDate(booking.checkOutDate)}'),
+        Text(
+            '${DateHelper().getFormattedDate(booking.checkInDate)} - ${DateHelper().getFormattedDate(booking.checkOutDate)}'),
       ],
     );
   }

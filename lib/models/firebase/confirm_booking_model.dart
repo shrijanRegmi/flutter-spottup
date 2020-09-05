@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ConfirmBooking {
+  final String bookingId;
   final DocumentReference hotelRef;
   final DocumentReference userRef;
   final int checkInDate;
@@ -14,6 +15,7 @@ class ConfirmBooking {
   final bool isContacted;
 
   ConfirmBooking({
+    this.bookingId,
     this.hotelRef,
     this.userRef,
     this.checkInDate,
@@ -43,8 +45,10 @@ class ConfirmBooking {
     };
   }
 
-  static ConfirmBooking fromJson(final Map<String, dynamic> data) {
+  static ConfirmBooking fromJson(
+      final Map<String, dynamic> data, final String id) {
     return ConfirmBooking(
+      bookingId: id,
       hotelRef: data['hotel_ref'] ?? '',
       userRef: data['user_ref'] ?? '',
       checkInDate: data['check_in'] ?? DateTime.now().millisecondsSinceEpoch,

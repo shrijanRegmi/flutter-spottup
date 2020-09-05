@@ -63,6 +63,19 @@ class HotelProvider {
     }
   }
 
+  // update booking data
+  Future updateBookingData(final Map<String, dynamic> data, final String id) {
+    try {
+      final _bookingRef = _ref.collection('bookings').document(id);
+      print('Success: Updating hotel data $data');
+      return _bookingRef.updateData(data);
+    } catch (e) {
+      print(e);
+      print('Error!!!: Updating hotel data $data');
+      return null;
+    }
+  }
+
   // hotels list from firestore
   List<Hotel> _hotelsFromFirestore(QuerySnapshot colSnap) {
     return colSnap.documents.map((docSnap) {
@@ -107,7 +120,7 @@ class HotelProvider {
   // bookings from firebase
   List<ConfirmBooking> _bookingFromFirebase(QuerySnapshot colSnap) {
     return colSnap.documents
-        .map((doc) => ConfirmBooking.fromJson(doc.data))
+        .map((doc) => ConfirmBooking.fromJson(doc.data, doc.documentID))
         .toList();
   }
 

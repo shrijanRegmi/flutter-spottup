@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:motel/enums/booking_type.dart';
 import 'package:motel/helpers/date_helper.dart';
 import 'package:motel/models/firebase/confirm_booking_model.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
@@ -11,7 +12,8 @@ import 'package:motel/views/screens/home/open_booking_item_screen.dart';
 
 class BookingListItem extends StatelessWidget {
   final ConfirmBooking _booking;
-  BookingListItem(this._booking);
+  final BookingType bookingType;
+  BookingListItem(this._booking, this.bookingType);
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +32,12 @@ class BookingListItem extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) =>
-                            OpenBookingItemScreen(_booking, _appUser, _hotel),
+                        builder: (_) => OpenBookingItemScreen(
+                          _booking,
+                          _appUser,
+                          _hotel,
+                          bookingType: bookingType,
+                        ),
                       ),
                     );
                   },
@@ -80,11 +86,10 @@ class BookingListItem extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               image: DecorationImage(
-                image: CachedNetworkImageProvider(
-                  appUser.photoUrl,
-                ),
-                fit: BoxFit.cover
-              ),
+                  image: CachedNetworkImageProvider(
+                    appUser.photoUrl,
+                  ),
+                  fit: BoxFit.cover),
             ),
           );
   }
