@@ -219,4 +219,34 @@ class AddNewHotelVm extends ChangeNotifier {
     _roomPhotos.clear();
     notifyListeners();
   }
+
+  // remove hotel dp
+  removeHotelDp() {
+    _dp = null;
+    notifyListeners();
+  }
+
+  // remove hotel dp
+  removeRoomDp() {
+    _roomDp = null;
+    notifyListeners();
+  }
+
+  // remove hotel photo
+  removeHotelPhoto(final File hotelPhoto) {
+    _photos.remove(hotelPhoto);
+    notifyListeners();
+  }
+
+  // remove room photo
+  removeRoomPhoto(final File roomPhoto) {
+    _roomPhotos.remove(roomPhoto);
+    notifyListeners();
+  }
+
+  // remove room
+  removeRoom(final Hotel room) {
+    _rooms.remove(room);
+    notifyListeners();
+  }
 }

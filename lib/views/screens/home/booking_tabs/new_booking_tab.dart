@@ -9,14 +9,35 @@ class NewBookingTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      itemCount: bookings.length,
-      itemBuilder: (context, index) {
-        return BookingListItem(bookings[index], BookingType.neww);
-      },
-      separatorBuilder: (context, index) {
-        return Divider();
-      },
+    return bookings.isEmpty
+        ? _emptyBuilder()
+        : ListView.separated(
+            itemCount: bookings.length,
+            itemBuilder: (context, index) {
+              return BookingListItem(bookings[index], BookingType.neww);
+            },
+            separatorBuilder: (context, index) {
+              return Divider();
+            },
+          );
+  }
+
+  Widget _emptyBuilder() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 100.0),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              "You don't have any new bookings",
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

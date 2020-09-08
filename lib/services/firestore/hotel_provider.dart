@@ -224,6 +224,7 @@ class HotelProvider {
         .collection('hotels')
         .limit(50)
         .where('owner_id', isEqualTo: uid)
+        .orderBy('updated_at', descending: true)
         .snapshots()
         .map(_hotelsFromFirestore);
   }

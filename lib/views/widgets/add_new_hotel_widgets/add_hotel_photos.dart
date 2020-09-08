@@ -41,6 +41,8 @@ class _AddHotelPhotosState extends State<AddHotelPhotos> {
 
   Widget _addDpBuilder(BuildContext context) {
     final _dp = widget.isRoom ? widget.vm.roomDp : widget.vm.dp;
+    final _removeDpCallback =
+        widget.isRoom ? widget.vm.removeRoomDp : widget.vm.removeHotelDp;
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: GestureDetector(
@@ -66,7 +68,28 @@ class _AddHotelPhotosState extends State<AddHotelPhotos> {
                 : null,
           ),
           child: _dp != null
-              ? Container()
+              ? Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Container(
+                      width: 50.0,
+                      height: 70.0,
+                      decoration: BoxDecoration(
+                        color: Colors.black26,
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: IconButton(
+                        icon: Icon(Icons.delete),
+                        color: Colors.grey[100],
+                        onPressed: () {
+                          _removeDpCallback();
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                  ),
+                )
               : Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -137,6 +160,9 @@ class _AddHotelPhotosState extends State<AddHotelPhotos> {
   }
 
   Widget _imgListItemBuilder(final _img) {
+    final _removePhotoCallback = widget.isRoom
+        ? () => widget.vm.removeRoomPhoto(_img)
+        : () => widget.vm.removeHotelPhoto(_img);
     return Padding(
       padding: const EdgeInsets.only(right: 20.0, bottom: 20.0),
       child: GestureDetector(
@@ -157,6 +183,29 @@ class _AddHotelPhotosState extends State<AddHotelPhotos> {
             image: DecorationImage(
               image: FileImage(_img),
               fit: BoxFit.cover,
+            ),
+          ),
+          child: Align(
+            alignment: Alignment.topRight,
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Container(
+                width: 40.0,
+                height: 50.0,
+                decoration: BoxDecoration(
+                  color: Colors.black26,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: IconButton(
+                  icon: Icon(Icons.delete),
+                  iconSize: 18.0,
+                  color: Colors.grey[100],
+                  onPressed: () {
+                    _removePhotoCallback();
+                    setState(() {});
+                  },
+                ),
+              ),
             ),
           ),
         ),

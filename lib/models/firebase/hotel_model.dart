@@ -170,7 +170,9 @@ class Hotel {
       'owner_id': ownerId,
       'kids': kids,
       'adults': adults,
-      'search_key': name.substring(0,1),
+      'rooms': rooms,
+      'search_key': name.substring(0, 1),
+      'updated_at': DateTime.now().millisecondsSinceEpoch,
     };
   }
 }

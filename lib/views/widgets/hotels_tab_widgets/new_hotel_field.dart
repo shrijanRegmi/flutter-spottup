@@ -5,11 +5,13 @@ class NewHotelField extends StatelessWidget {
   final TextEditingController controller;
   final TextInputType textInputType;
   final bool isExpanded;
+  final bool requiredCapitalization;
   NewHotelField({
     this.hintText,
     this.controller,
     this.textInputType = TextInputType.text,
     this.isExpanded = false,
+    this.requiredCapitalization = true,
   });
 
   @override
@@ -20,7 +22,9 @@ class NewHotelField extends StatelessWidget {
         maxLines: isExpanded ? 5 : 1,
         minLines: 1,
         keyboardType: textInputType,
-        textCapitalization: TextCapitalization.words,
+        textCapitalization: requiredCapitalization
+            ? TextCapitalization.words
+            : TextCapitalization.sentences,
         decoration: InputDecoration(
           labelText: hintText,
           border: OutlineInputBorder(),
