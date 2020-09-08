@@ -92,13 +92,13 @@ class AddHotelRoom extends StatelessWidget {
               ),
             );
           }
-          return _imgListItemBuilder(File(_list[index].dp));
+          return _imgListItemBuilder(_list[index], File(_list[index].dp));
         },
       ),
     );
   }
 
-  Widget _imgListItemBuilder(final _img) {
+  Widget _imgListItemBuilder(final Hotel room, final _img) {
     return Padding(
       padding: const EdgeInsets.only(right: 20.0, bottom: 20.0),
       child: Container(
@@ -114,6 +114,25 @@ class AddHotelRoom extends StatelessWidget {
           image: DecorationImage(
             image: FileImage(_img),
             fit: BoxFit.cover,
+          ),
+        ),
+        child: Align(
+          alignment: Alignment.topRight,
+          child: Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Container(
+              width: 40.0,
+              height: 50.0,
+              decoration: BoxDecoration(
+                color: Colors.black26,
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: IconButton(
+                  icon: Icon(Icons.delete),
+                  iconSize: 18.0,
+                  color: Colors.grey[100],
+                  onPressed: () => vm.removeRoom(room)),
+            ),
           ),
         ),
       ),
