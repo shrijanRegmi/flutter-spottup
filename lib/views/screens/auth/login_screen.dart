@@ -101,7 +101,7 @@ class LoginScreen extends StatelessWidget {
       title: 'Google',
       color: Color(0xfffde4343),
       padding: 0.0,
-      onPressed: () => googleSignUp(isLogin: true),
+      onPressed: googleSignUp,
     );
   }
 

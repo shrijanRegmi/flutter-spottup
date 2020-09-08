@@ -88,9 +88,7 @@ class AuthVm extends ChangeNotifier {
   }
 
   // sign up with google
-  Future googleSignUp({
-    final bool isOwner,
-  }) async {
+  Future googleSignUp() async {
     _updateProgressBar(true);
 
     final _result = await AuthProvider().signUpWithGoogle();

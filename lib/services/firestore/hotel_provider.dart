@@ -233,6 +233,7 @@ class HotelProvider {
     return _ref
         .collection('bookings')
         .where('owner_id', isEqualTo: uid)
+        .orderBy('issue_date', descending: true)
         .snapshots()
         .map(_bookingFromFirebase);
   }
