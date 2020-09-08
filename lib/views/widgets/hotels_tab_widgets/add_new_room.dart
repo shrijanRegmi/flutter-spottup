@@ -41,6 +41,7 @@ class _AddNewRoomState extends State<AddNewRoom> {
   Widget build(BuildContext context) {
     final _appUser = Provider.of<AppUser>(context);
     return Scaffold(
+      key: widget.vm.roomScaffoldKey,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: _isTyping
           ? Container()
