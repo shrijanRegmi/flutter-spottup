@@ -26,6 +26,8 @@ class AddNewHotelVm extends ChangeNotifier {
   List<Hotel> _rooms = [];
   bool _isLoading = false;
   String _progressText = '';
+  GlobalKey<ScaffoldState> _hotelScaffoldKey = GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> _roomScaffoldKey = GlobalKey<ScaffoldState>();
 
   TextEditingController get nameController => _nameController;
   TextEditingController get cityController => _cityController;
@@ -40,12 +42,13 @@ class AddNewHotelVm extends ChangeNotifier {
   List<Hotel> get rooms => _rooms;
   bool get isLoading => _isLoading;
   String get progressText => _progressText;
-
   bool get isNextPressed => _isNextPressed;
   File get dp => _dp;
   File get roomDp => _roomDp;
   List<File> get photos => _photos;
   List<File> get roomPhotos => _roomPhotos;
+  GlobalKey<ScaffoldState> get hotelScaffoldKey => _hotelScaffoldKey;
+  GlobalKey<ScaffoldState> get roomScaffoldKey => _roomScaffoldKey;
 
   // next btn pressed
   onNextPressed(bool newVal) {
@@ -86,56 +89,65 @@ class AddNewHotelVm extends ChangeNotifier {
         _cityController.text.trim() != '' &&
         _countryController.text.trim() != '' &&
         _priceController.text.trim() != '' &&
-        _summaryController.text.trim() != '' &&
-        _dp != null) {
-      _updateLoaderValue(true);
-      _updateProgressVal('Publishing Hotel Started');
-      String _mDp = '';
-      List<String> _mPhotos = [];
-      int _adults = 0;
-      int _kids = 0;
+        _summaryController.text.trim() != '') {
+      if (_dp != null) {
+        _updateLoaderValue(true);
+        _updateProgressVal('Publishing Hotel Started');
+        String _mDp = '';
+        List<String> _mPhotos = [];
+        int _adults = 0;
+        int _kids = 0;
 
-      for (final _room in _rooms) {
-        _adults = _adults < _room.adults ? _room.adults : _adults;
-        _kids = _kids < _room.kids ? _room.kids : _kids;
-      }
-
-      var _result;
-
-      _updateProgressVal('Uploading Hotel Display Picture');
-      _mDp = await HotelStorage().uploadHotelDp(dp);
-      _updateProgressVal('Uploading Hotel Photos');
-      _mPhotos = await HotelStorage().uploadHotelPhotos(photos);
-
-      if (_mDp != null) {
-        final _hotel = Hotel(
-          name: _nameController.text.trim(),
-          city: _cityController.text.trim(),
-          country: _countryController.text.trim(),
-          price: int.parse(_priceController.text.trim()),
-          summary: _summaryController.text.trim(),
-          dp: _mDp,
-          photos: _mPhotos ?? [],
-          ownerId: appUserId,
-          rooms: _rooms.length,
-          adults: _adults,
-          kids: _kids,
-        );
-        _updateProgressVal('Uploading Hotel Data');
-        _result = await HotelProvider().uploadNewHotel(_hotel);
-
-        if (_rooms.isNotEmpty) {
-          _updateProgressVal('Publishing Room Started');
-          _result = await _uploadRooms(_result);
+        for (final _room in _rooms) {
+          _adults = _adults < _room.adults ? _room.adults : _adults;
+          _kids = _kids < _room.kids ? _room.kids : _kids;
         }
-      }
 
-      if (_result == null) {
-        _updateLoaderValue(false);
+        var _result;
+
+        _updateProgressVal('Uploading Hotel Display Picture');
+        _mDp = await HotelStorage().uploadHotelDp(dp);
+        _updateProgressVal('Uploading Hotel Photos');
+        _mPhotos = await HotelStorage().uploadHotelPhotos(photos);
+
+        if (_mDp != null) {
+          final _hotel = Hotel(
+            name: _nameController.text.trim(),
+            city: _cityController.text.trim(),
+            country: _countryController.text.trim(),
+            price: int.parse(_priceController.text.trim()),
+            summary: _summaryController.text.trim(),
+            dp: _mDp,
+            photos: _mPhotos ?? [],
+            ownerId: appUserId,
+            rooms: _rooms.length,
+            adults: _adults,
+            kids: _kids,
+          );
+          _updateProgressVal('Uploading Hotel Data');
+          _result = await HotelProvider().uploadNewHotel(_hotel);
+
+          if (_rooms.isNotEmpty) {
+            _updateProgressVal('Publishing Room Started');
+            _result = await _uploadRooms(_result);
+          }
+        }
+
+        if (_result == null) {
+          _updateLoaderValue(false);
+        } else {
+          Navigator.pop(context);
+        }
+        return _result;
       } else {
-        Navigator.pop(context);
+        _hotelScaffoldKey.currentState.showSnackBar(SnackBar(
+          content: Text('Please upload display picture.'),
+        ));
       }
-      return _result;
+    } else {
+      _hotelScaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text('Please fill up all the input fields.'),
+      ));
     }
   }
 
@@ -186,24 +198,35 @@ class AddNewHotelVm extends ChangeNotifier {
   // update rooms list
   addRoomList(final BuildContext context, final String appUserId) {
     if (_roomNameController.text.trim() != '' &&
-        roomPriceController.text.trim() != '' &&
-        _roomSummaryController.text.trim() != '' &&
-        _roomDp != null) {
-      final _room = Hotel(
-        name: _roomNameController.text.trim(),
-        price: int.parse(_roomPriceController.text.trim()),
-        summary: _roomSummaryController.text.trim(),
-        dp: _roomDp.path,
-        photos: _roomPhotos,
-        ownerId: appUserId,
-        kids: int.parse(_roomKidController.text.trim()),
-        adults: int.parse(_roomAdultController.text.trim()),
-        city: _cityController.text.trim(),
-        country: _countryController.text.trim(),
-      );
+        _roomAdultController.text.trim() != '' &&
+        _roomKidController.text.trim() != '' &&
+        _roomPriceController.text.trim() != '' &&
+        _roomSummaryController.text.trim() != '') {
+      if (_roomDp != null) {
+        final _room = Hotel(
+          name: _roomNameController.text.trim(),
+          price: int.parse(_roomPriceController.text.trim()),
+          summary: _roomSummaryController.text.trim(),
+          dp: _roomDp.path,
+          photos: _roomPhotos,
+          ownerId: appUserId,
+          kids: int.parse(_roomKidController.text.trim()),
+          adults: int.parse(_roomAdultController.text.trim()),
+          city: _cityController.text.trim(),
+          country: _countryController.text.trim(),
+        );
 
-      _rooms.add(_room);
-      Navigator.pop(context);
+        _rooms.add(_room);
+        Navigator.pop(context);
+      } else {
+        _roomScaffoldKey.currentState.showSnackBar(SnackBar(
+          content: Text('Please upload display picture.'),
+        ));
+      }
+    } else {
+      _roomScaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text('Please fill up all the input fields.'),
+      ));
     }
     notifyListeners();
   }

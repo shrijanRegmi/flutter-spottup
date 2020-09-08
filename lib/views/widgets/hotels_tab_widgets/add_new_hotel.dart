@@ -45,6 +45,7 @@ class _AddNewHotelState extends State<AddNewHotel> {
       vm: AddNewHotelVm(),
       builder: (context, vm, appUser) {
         return Scaffold(
+          key: vm.hotelScaffoldKey,
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
           floatingActionButton: _isTyping || vm.isLoading
