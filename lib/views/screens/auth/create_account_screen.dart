@@ -101,7 +101,7 @@ class CreateAccountScreen extends StatelessWidget {
       title: 'Google',
       color: Color(0xfffde4343),
       padding: 0.0,
-      onPressed: googleSignUp,
+      onPressed: () => googleSignUp(isOwner),
     );
   }
 
