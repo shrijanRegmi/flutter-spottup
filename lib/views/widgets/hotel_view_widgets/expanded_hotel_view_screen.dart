@@ -6,6 +6,7 @@ import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/viewmodels/hotel_view_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
+import 'package:motel/views/widgets/hotel_view_widgets/hotel_features_list.dart';
 import 'package:motel/views/widgets/hotel_view_widgets/hotel_reviews_list.dart';
 import 'package:motel/views/widgets/hotel_view_widgets/hotel_rooms_list.dart';
 import 'package:provider/provider.dart';
@@ -74,6 +75,18 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
                         horizontal: 20.0, vertical: 10.0),
                     child: Divider(),
                   ),
+                  if (widget.hotel.features.isNotEmpty)
+                    HotelFeaturesList(widget.hotel.features),
+                  if (widget.hotel.features.isNotEmpty)
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                  if (widget.hotel.features.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 10.0),
+                      child: Divider(),
+                    ),
                   HotelRoomsList(widget.hotel.id),
                   if (widget.hotel.photos.isNotEmpty)
                     HotelPhotosList(widget.hotel.photos),
