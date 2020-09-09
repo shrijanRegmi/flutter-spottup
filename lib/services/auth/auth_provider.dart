@@ -85,14 +85,20 @@ class AuthProvider {
 
       final _ref = Firestore.instance;
 
-      final _userSnap =
-          await _ref.collection('users').document(_user.uid).get();
+      final _userRef = _ref.collection('users').document(_user.uid);
+
+      final _userSnap = await _userRef.get();
 
       if (_userSnap.data == null) {
         await UserProvider().sendUserToFirestore(_appUser, _result.user.uid);
         _userFromFirebase(_user);
         print('Success: Signing up user with name ${_user.displayName}');
       } else {
+        await _userRef.updateData({
+          'account_type': isOwner
+              ? AccountType.hotelOwner.index
+              : AccountType.general.index,
+        });
         _userFromFirebase(_user);
         print('Success: Logging in user with name ${_user.displayName}');
       }
