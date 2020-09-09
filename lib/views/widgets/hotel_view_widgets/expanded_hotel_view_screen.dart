@@ -49,7 +49,7 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
     return VmProvider<HotelViewVm>(
       vm: HotelViewVm(context: context),
       onInit: (vm) {
-        bool _isFav = _appUser?.favourite?.contains(widget.hotel.id) != null;
+        bool _isFav = _appUser.favourite.contains(widget.hotel.id);
         vm.updateFavourite(_isFav);
       },
       builder: (context, vm, appUser) {
