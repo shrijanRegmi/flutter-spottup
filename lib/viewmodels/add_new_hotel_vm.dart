@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/services/firestore/hotel_provider.dart';
 import 'package:motel/services/storage/hotel_storage_service.dart';
+import 'package:motel/models/app/hotel_features.dart';
 
 class AddNewHotelVm extends ChangeNotifier {
   bool _isNextPressed = false;
@@ -28,6 +29,7 @@ class AddNewHotelVm extends ChangeNotifier {
   String _progressText = '';
   GlobalKey<ScaffoldState> _hotelScaffoldKey = GlobalKey<ScaffoldState>();
   GlobalKey<ScaffoldState> _roomScaffoldKey = GlobalKey<ScaffoldState>();
+  List<HotelFeatures> _selectedFeatures = [];
 
   TextEditingController get nameController => _nameController;
   TextEditingController get cityController => _cityController;
@@ -49,6 +51,7 @@ class AddNewHotelVm extends ChangeNotifier {
   List<File> get roomPhotos => _roomPhotos;
   GlobalKey<ScaffoldState> get hotelScaffoldKey => _hotelScaffoldKey;
   GlobalKey<ScaffoldState> get roomScaffoldKey => _roomScaffoldKey;
+  List<HotelFeatures> get selectedFeatures => _selectedFeatures;
 
   // next btn pressed
   onNextPressed(bool newVal) {
@@ -123,6 +126,7 @@ class AddNewHotelVm extends ChangeNotifier {
             rooms: _rooms.length,
             adults: _adults,
             kids: _kids,
+            features: _selectedFeatures,
           );
           _updateProgressVal('Uploading Hotel Data');
           _result = await HotelProvider().uploadNewHotel(_hotel);
@@ -270,6 +274,18 @@ class AddNewHotelVm extends ChangeNotifier {
   // remove room
   removeRoom(final Hotel room) {
     _rooms.remove(room);
+    notifyListeners();
+  }
+
+  // add features
+  addFeature(final HotelFeatures feature) {
+    _selectedFeatures.add(feature);
+    notifyListeners();
+  }
+
+  // remove feature
+  removeFeature(final HotelFeatures feature) {
+    _selectedFeatures.remove(feature);
     notifyListeners();
   }
 }
