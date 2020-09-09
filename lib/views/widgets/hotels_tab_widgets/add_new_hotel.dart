@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:lottie/lottie.dart';
+import 'package:motel/models/app/hotel_features.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/viewmodels/add_new_hotel_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/widgets/add_new_hotel_widgets/add_hotel_details.dart';
+import 'package:motel/views/widgets/add_new_hotel_widgets/add_hotel_features.dart';
 import 'package:motel/views/widgets/add_new_hotel_widgets/add_hotel_photos.dart';
 import 'package:motel/views/widgets/add_new_hotel_widgets/add_hotel_room.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
@@ -42,6 +44,11 @@ class _AddNewHotelState extends State<AddNewHotel> {
   @override
   Widget build(BuildContext context) {
     return VmProvider<AddNewHotelVm>(
+      onInit: (vm) {
+        featuresList.forEach((feature) {
+          feature.isSelected = false;
+        });
+      },
       vm: AddNewHotelVm(),
       builder: (context, vm, appUser) {
         return Scaffold(
@@ -97,6 +104,7 @@ class _AddNewHotelState extends State<AddNewHotel> {
                               height: 20.0,
                             ),
                             AddHotelDetail(vm),
+                            AddHotelFeatures(vm),
                             AddHotelPhotos(vm),
                             AddHotelRoom(vm),
                           ],

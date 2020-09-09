@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:motel/enums/hotel_types.dart';
+import 'package:motel/models/app/hotel_features.dart';
 
 class Hotel {
   final String id;
@@ -21,6 +22,7 @@ class Hotel {
   final int availableCheckOut;
   final String ownerId;
   final String searchKey;
+  final List<HotelFeatures> features;
 
   Hotel({
     this.id,
@@ -42,6 +44,7 @@ class Hotel {
     this.availableCheckOut,
     this.ownerId,
     this.searchKey,
+    this.features,
   });
 
   static Hotel fromJson(final Map<String, dynamic> data, final String id) {
@@ -65,6 +68,7 @@ class Hotel {
         availableCheckIn: data['available_check_in'],
         availableCheckOut: data['available_check_out'],
         ownerId: data['owner_id'] ?? '',
+        features: HotelFeatures.listFromJson(data['features'] ?? []),
       );
     } else if (data['type'] == 1) {
       return Hotel(
@@ -86,6 +90,7 @@ class Hotel {
         availableCheckIn: data['available_check_in'],
         availableCheckOut: data['available_check_out'],
         ownerId: data['owner_id'] ?? '',
+        features: HotelFeatures.listFromJson(data['features'] ?? []),
       );
     } else if (data['type'] == 2) {
       return Hotel(
@@ -107,6 +112,7 @@ class Hotel {
         availableCheckIn: data['available_check_in'],
         availableCheckOut: data['available_check_out'],
         ownerId: data['owner_id'] ?? '',
+        features: HotelFeatures.listFromJson(data['features'] ?? []),
       );
     } else if (data['type'] == 3) {
       return Hotel(
@@ -128,6 +134,7 @@ class Hotel {
         availableCheckIn: data['available_check_in'],
         availableCheckOut: data['available_check_out'],
         ownerId: data['owner_id'] ?? '',
+        features: HotelFeatures.listFromJson(data['features'] ?? []),
       );
     }
     return Hotel(
@@ -149,6 +156,7 @@ class Hotel {
       availableCheckIn: data['available_check_in'],
       availableCheckOut: data['available_check_out'],
       ownerId: data['owner_id'] ?? '',
+      features: HotelFeatures.listFromJson(data['features'] ?? []),
     );
   }
 
@@ -173,6 +181,7 @@ class Hotel {
       'rooms': rooms,
       'search_key': name.substring(0, 1),
       'updated_at': DateTime.now().millisecondsSinceEpoch,
+      'features': HotelFeatures().listToJson(features)
     };
   }
 }
