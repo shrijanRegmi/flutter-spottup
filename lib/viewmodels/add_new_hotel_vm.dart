@@ -189,6 +189,7 @@ class AddNewHotelVm extends ChangeNotifier {
         name: _room.name,
         price: _room.price,
         summary: _room.summary,
+        features: [],
       );
       _updateProgressVal('Uploading Room Data');
       final _result =
