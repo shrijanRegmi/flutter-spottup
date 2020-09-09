@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/room_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
+import 'package:motel/services/firestore/hotel_provider.dart';
 import 'package:motel/services/firestore/user_provider.dart';
 import 'package:motel/views/screens/home/book_screen.dart';
 
@@ -69,7 +70,16 @@ class HotelViewVm extends ChangeNotifier {
     //     ),
     //   );
     // } else {
-      return gotoBookScreen(hotel, null);
+    return gotoBookScreen(hotel, null);
     // }
+  }
+
+  // delete hotel
+  deleteHotel(final String _hotelId) async {
+    final _result = await HotelProvider().deleteHotel(_hotelId);
+    if (_result != null) {
+      Navigator.pop(context);
+    }
+    return _result;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:motel/models/firebase/confirm_booking_model.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/popular_destination_model.dart';
 import 'package:motel/models/firebase/last_search_model.dart';
@@ -20,6 +21,61 @@ class HotelProvider {
       this.hotelRef});
 
   final _ref = Firestore.instance;
+
+  // upload new hotel by hotel owner
+  Future uploadNewHotel(Hotel hotel) async {
+    try {
+      final _hotelRef = _ref.collection('hotels');
+      print('Success: Adding new hotel');
+      return await _hotelRef.add(hotel.toJson());
+    } catch (e) {
+      print(e);
+      print('Error!!!: Adding new hotel');
+      return null;
+    }
+  }
+
+  // upload all rooms
+  Future uploadNewRoom(
+      final DocumentReference _hotelRef, final Hotel _room) async {
+    try {
+      final _roomRef = _hotelRef.collection('rooms');
+      print('Success: Uploading new room');
+      return await _roomRef.add(_room.toJson());
+    } catch (e) {
+      print(e);
+      print('Error!!!: Uploading new room');
+      return null;
+    }
+  }
+
+  // delele hotel
+  Future deleteHotel(final String _hotelId) async {
+    try {
+      final _hotelRef = _ref.collection('hotels').document(_hotelId);
+      await _hotelRef.delete();
+      print('Success: Deleting hotel with id $_hotelId');
+      return 'Success';
+    } catch (e) {
+      print(e);
+      print('Error!!!: Deleting hotel with id $_hotelId');
+      return null;
+    }
+  }
+
+  // update booking data
+  Future updateBookingData(final Map<String, dynamic> data, final String id) {
+    try {
+      final _bookingRef = _ref.collection('bookings').document(id);
+      print('Success: Updating hotel data $data');
+      return _bookingRef.updateData(data);
+    } catch (e) {
+      print(e);
+      print('Error!!!: Updating hotel data $data');
+      return null;
+    }
+  }
+
   // hotels list from firestore
   List<Hotel> _hotelsFromFirestore(QuerySnapshot colSnap) {
     return colSnap.documents.map((docSnap) {
@@ -54,10 +110,18 @@ class HotelProvider {
     }).toList();
   }
 
+  // last searches collection from firebase
   List<LastSearch> _lastSearchFromFirebase(QuerySnapshot colSnap) {
     return colSnap.documents.map((docSnap) {
       return LastSearch.fromJson(docSnap.data);
     }).toList();
+  }
+
+  // bookings from firebase
+  List<ConfirmBooking> _bookingFromFirebase(QuerySnapshot colSnap) {
+    return colSnap.documents
+        .map((doc) => ConfirmBooking.fromJson(doc.data, doc.documentID))
+        .toList();
   }
 
   // stream of hotels list
@@ -152,5 +216,26 @@ class HotelProvider {
         .orderBy('last_updated', descending: true)
         .snapshots()
         .map(_lastSearchFromFirebase);
+  }
+
+  // stream of hotels owned by owner
+  Stream<List<Hotel>> get myHotels {
+    return _ref
+        .collection('hotels')
+        .limit(50)
+        .where('owner_id', isEqualTo: uid)
+        .orderBy('updated_at', descending: true)
+        .snapshots()
+        .map(_hotelsFromFirestore);
+  }
+
+  // stream of bookings
+  Stream<List<ConfirmBooking>> get bookingsList {
+    return _ref
+        .collection('bookings')
+        .where('owner_id', isEqualTo: uid)
+        .orderBy('issue_date', descending: true)
+        .snapshots()
+        .map(_bookingFromFirebase);
   }
 }

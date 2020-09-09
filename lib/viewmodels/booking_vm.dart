@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
-import 'package:lottie/lottie.dart';
 import 'package:motel/helpers/date_helper.dart';
 import 'package:motel/models/firebase/confirm_booking_model.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
-import 'package:motel/models/firebase/room_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/services/firestore/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -161,8 +158,8 @@ class BookVm extends ChangeNotifier {
     notifyListeners();
   }
 
-  // send email
-  sendEmail(final ConfirmBooking booking, final AppUser appUser) async {
+  // confirm booking
+  confirmBooking(final ConfirmBooking booking, final AppUser appUser) async {
     _isProcessing = true;
     notifyListeners();
     try {
@@ -430,7 +427,7 @@ class BookVm extends ChangeNotifier {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-                'We have received your booking with Spott Up app. Our customer service representative will contact you soon.'),
+                'We have received your booking with Motel app. Our customer service representative will contact you soon.'),
           ],
         ),
         actions: [
