@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:motel/viewmodels/auth_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
-import 'package:motel/views/screens/auth/login_screen.dart';
 import 'package:motel/views/widgets/auth_widgets/auth_field.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 
 class CreateAccountScreen extends StatelessWidget {
+  final bool isOwner;
+  CreateAccountScreen({this.isOwner = false});
+
   @override
   Widget build(BuildContext context) {
     return VmProvider<AuthVm>(
@@ -61,11 +63,7 @@ class CreateAccountScreen extends StatelessWidget {
                                   ),
                                   _policyTextBuilder(),
                                   SizedBox(
-                                    height: 20.0,
-                                  ),
-                                  _loginTextSection(context),
-                                  SizedBox(
-                                    height: 10.0,
+                                    height: 50.0,
                                   ),
                                 ],
                               ),
@@ -90,7 +88,7 @@ class CreateAccountScreen extends StatelessWidget {
 
   Widget _signUpTextBuilder() {
     return Text(
-      'Sign Up',
+      isOwner ? 'Sign Up - Hotel Owner' : 'Sign Up',
       style: TextStyle(
         fontWeight: FontWeight.w600,
         fontSize: 22.0,
@@ -103,7 +101,7 @@ class CreateAccountScreen extends StatelessWidget {
       title: 'Google',
       color: Color(0xfffde4343),
       padding: 0.0,
-      onPressed: () => googleSignUp(isSignUp: true),
+      onPressed: googleSignUp,
     );
   }
 
@@ -190,45 +188,6 @@ class CreateAccountScreen extends StatelessWidget {
             color: Colors.black38,
           ),
           textAlign: TextAlign.center,
-        ),
-      ],
-    );
-  }
-
-  Widget _loginTextSection(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => LoginScreen(),
-              ),
-            );
-          },
-          child: RichText(
-            text: TextSpan(
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 12.0,
-                color: Colors.black38,
-                fontFamily: 'Nunito',
-              ),
-              children: [
-                TextSpan(
-                  text: 'Already have an account? ',
-                ),
-                TextSpan(
-                  text: 'Login',
-                  style: TextStyle(
-                    color: Color(0xff45ad90),
-                  ),
-                ),
-              ],
-            ),
-          ),
         ),
       ],
     );

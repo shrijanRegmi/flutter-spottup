@@ -7,7 +7,8 @@ class HotelViewScreen extends StatefulWidget {
   @override
   _HotelViewScreenState createState() => _HotelViewScreenState();
   final Hotel hotel;
-  HotelViewScreen({this.hotel});
+  final bool isEditing;
+  HotelViewScreen({this.hotel, this.isEditing = false});
 }
 
 class _HotelViewScreenState extends State<HotelViewScreen> {
@@ -28,9 +29,15 @@ class _HotelViewScreenState extends State<HotelViewScreen> {
         controller: _pageController,
         children: <Widget>[
           ShortenedHotelViewScreen(
-              pageController: _pageController, hotel: widget.hotel),
+            pageController: _pageController,
+            hotel: widget.hotel,
+            isEditing: widget.isEditing,
+          ),
           ExpandedHotelViewScreen(
-              pageController: _pageController, hotel: widget.hotel),
+            pageController: _pageController,
+            hotel: widget.hotel,
+            isEditing: widget.isEditing,
+          ),
         ],
       ),
     );

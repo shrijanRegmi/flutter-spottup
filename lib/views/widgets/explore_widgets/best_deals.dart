@@ -7,7 +7,8 @@ import 'package:motel/models/firebase/hotel_model.dart';
 
 class BestDeals extends StatelessWidget {
   final List<Hotel> bestDeals;
-  BestDeals(this.bestDeals);
+  final bool isEditing;
+  BestDeals(this.bestDeals, {this.isEditing = false});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,8 @@ class BestDeals extends StatelessWidget {
                     title: 'Best deals',
                     stream: HotelProvider().allBestDeals,
                     listItem: (List list, int index) {
-                      return BestDealItem(bestDeal: list[index]);
+                      return BestDealItem(
+                          bestDeal: list[index], isEditing: isEditing);
                     }),
               ),
             );

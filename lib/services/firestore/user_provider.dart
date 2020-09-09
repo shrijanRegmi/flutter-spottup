@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:motel/models/firebase/confirm_booking_model.dart';
-import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/last_search_model.dart';
 import 'package:motel/models/firebase/upcomming_bookings_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
 
 class UserProvider {
   final String uid;
-  UserProvider({this.uid});
+  final DocumentReference appUserRef;
+  UserProvider({this.uid, this.appUserRef});
 
   final _ref = Firestore.instance;
 
@@ -139,8 +139,18 @@ class UserProvider {
         .map(_appUserFromFirebase);
   }
 
+  // stream of user from reference
+  Stream<AppUser> get appUserFromRef {
+    return appUserRef.snapshots().map(_appUserFromFirebase);
+  }
+
   // stream of list of upcoming bookings
   Stream<List<UpcomingBooking>> get upcomingBookings {
-    return _ref.collection('users').document(uid).collection('upcomming').snapshots().map(_upcomingBookingFromFirebase);
+    return _ref
+        .collection('users')
+        .document(uid)
+        .collection('upcomming')
+        .snapshots()
+        .map(_upcomingBookingFromFirebase);
   }
 }

@@ -51,9 +51,8 @@ class LastSearchesList extends StatelessWidget {
         physics: NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          mainAxisSpacing: 20.0,
           crossAxisSpacing: 20.0,
-          childAspectRatio: 2 / 3,
+          childAspectRatio: 3 / 6.0,
         ),
         itemBuilder: (context, index) {
           return StreamBuilder<Hotel>(
@@ -61,7 +60,10 @@ class LastSearchesList extends StatelessWidget {
                   .hotelFromRef,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return LastSearchesItem(snapshot.data);
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 20.0),
+                    child: LastSearchesItem(snapshot.data),
+                  );
                 }
                 return Container();
               });
