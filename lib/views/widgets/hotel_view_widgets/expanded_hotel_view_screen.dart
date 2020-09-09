@@ -122,17 +122,17 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            FloatingActionButton(
-                              onPressed: () {},
-                              child: Center(
-                                child: Icon(Icons.edit),
-                              ),
-                              backgroundColor: Color(0xff45ad90),
-                              heroTag: 'edit',
-                            ),
-                            SizedBox(
-                              width: 20.0,
-                            ),
+                            // FloatingActionButton(
+                            //   onPressed: () {},
+                            //   child: Center(
+                            //     child: Icon(Icons.edit),
+                            //   ),
+                            //   backgroundColor: Color(0xff45ad90),
+                            //   heroTag: 'edit',
+                            // ),
+                            // SizedBox(
+                            //   width: 20.0,
+                            // ),
                             FloatingActionButton(
                               onPressed: () => vm.deleteHotel(widget.hotel.id),
                               child: Center(
