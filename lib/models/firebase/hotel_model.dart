@@ -12,7 +12,7 @@ class Hotel {
   final int price;
   final String summary;
   final List<dynamic> photos;
-  final List<dynamic> reviews;
+  final int reviews;
   final int rooms;
   final int adults;
   final int kids;
@@ -59,7 +59,7 @@ class Hotel {
         price: data['price'] ?? 0,
         summary: data['summary'] ?? '',
         photos: data['photos'] ?? [],
-        reviews: data['reviews'] ?? [],
+        reviews: data['reviews'] ?? 0,
         rooms: data['rooms'] ?? 1,
         adults: data['adults'] ?? 0,
         kids: data['kids'] ?? 0,
@@ -81,7 +81,7 @@ class Hotel {
         price: data['price'] ?? 0,
         summary: data['summary'] ?? '',
         photos: data['photos'] ?? [],
-        reviews: data['reviews'] ?? [],
+        reviews: data['reviews'] ?? 0,
         rooms: data['rooms'] ?? 1,
         adults: data['adults'] ?? 0,
         kids: data['kids'] ?? 0,
@@ -103,7 +103,7 @@ class Hotel {
         price: data['price'] ?? 0,
         summary: data['summary'] ?? '',
         photos: data['photos'] ?? [],
-        reviews: data['reviews'] ?? [],
+        reviews: data['reviews'] ?? 0,
         rooms: data['rooms'] ?? 1,
         adults: data['adults'] ?? 0,
         kids: data['kids'] ?? 0,
@@ -125,7 +125,7 @@ class Hotel {
         price: data['price'] ?? 0,
         summary: data['summary'] ?? '',
         photos: data['photos'] ?? [],
-        reviews: data['reviews'] ?? [],
+        reviews: data['reviews'] ?? 0,
         rooms: data['rooms'] ?? 1,
         adults: data['adults'] ?? 0,
         kids: data['kids'] ?? 0,
@@ -147,7 +147,7 @@ class Hotel {
       price: data['price'] ?? 0,
       summary: data['summary'] ?? '',
       photos: data['photos'] ?? [],
-      reviews: data['reviews'] ?? [],
+      reviews: data['reviews'] ?? 0,
       rooms: data['rooms'] ?? 1,
       adults: data['adults'] ?? 0,
       kids: data['kids'] ?? 0,

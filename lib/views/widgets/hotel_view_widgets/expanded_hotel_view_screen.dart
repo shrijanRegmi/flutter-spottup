@@ -55,6 +55,7 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
       builder: (context, vm, appUser) {
         return Scaffold(
           body: Container(
+            padding: EdgeInsets.only(bottom: 50.0),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,7 +100,7 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
                           horizontal: 20.0, vertical: 10.0),
                       child: Divider(),
                     ),
-                  if (widget.hotel.reviews.isNotEmpty) HotelReviewsList(),
+                  HotelReviewsList(widget.hotel),
                   SizedBox(
                     height: 50.0,
                   ),
