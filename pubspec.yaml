@@ -40,6 +40,8 @@ dependencies:
   google_sign_in: ^4.5.1
   mailer: ^3.0.4
   flutter_email_sender: ^3.0.1
+  smooth_star_rating: ^1.1.1
+  timeago: ^2.0.27
 
 dev_dependencies:
   flutter_test:
