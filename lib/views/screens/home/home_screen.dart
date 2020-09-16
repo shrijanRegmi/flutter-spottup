@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:motel/services/firestore/firebase_messaging_provider.dart';
 import 'package:motel/views/screens/home/home_tabs/explore_tab.dart';
 import 'package:motel/views/screens/home/home_tabs/profile_tab.dart';
 import 'package:motel/views/screens/home/home_tabs/trip_tab.dart';
 
 class HomeScreen extends StatefulWidget {
+  final String uid;
+  HomeScreen(this.uid);
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -17,174 +21,14 @@ class _HomeScreenState extends State<HomeScreen>
     ProfileTab(),
   ];
 
-  // final List<Map<String, dynamic>> _datas = [
-  //   {
-  //     'name': 'Grand Royal Hotel',
-  //     'city': 'London',
-  //     'country': 'United Kingdom',
-  //     'stars': 4.0,
-  //     'price': 120,
-  //     'summary':
-  //         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-  //     'photos': [],
-  //     'reviews': [],
-  //     'rooms': [],
-  //     'persons': 4,
-  //     'type': 0,
-  //     'is_best_deal': false,
-  //   },
-  //   {
-  //     'name': 'Alhambra Hotel',
-  //     'city': 'Paris',
-  //     'country': 'Italy',
-  //     'stars': 2.0,
-  //     'price': 463,
-  //     'summary':
-  //         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-  //     'photos': [],
-  //     'reviews': [],
-  //     'rooms': [],
-  //     'persons': 1,
-  //     'type': 0,
-  //     'is_best_deal': false,
-  //   },
-  //   {
-  //     'name': 'The Hoxton Holborn',
-  //     'city': 'London',
-  //     'country': 'United Kingdom',
-  //     'stars': 3.0,
-  //     'price': 104,
-  //     'summary':
-  //         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-  //     'photos': [],
-  //     'reviews': [],
-  //     'rooms': [],
-  //     'persons': 5,
-  //     'type': 0,
-  //     'is_best_deal': false,
-  //   },
-  //   {
-  //     'name': 'The Tower Hotel',
-  //     'city': 'Kathmandu',
-  //     'country': 'Nepal',
-  //     'stars': 5.0,
-  //     'price': 200,
-  //     'summary':
-  //         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-  //     'photos': [],
-  //     'reviews': [],
-  //     'rooms': [],
-  //     'persons': 3,
-  //     'type': 0,
-  //     'is_best_deal': false,
-  //   },
-  //   {
-  //     'name': 'Garden Court Hotel',
-  //     'city': 'Romatica',
-  //     'country': 'Russia',
-  //     'stars': 4.0,
-  //     'price': 120,
-  //     'summary':
-  //         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-  //     'photos': [],
-  //     'reviews': [],
-  //     'rooms': [],
-  //     'persons': 4,
-  //     'type': 0,
-  //     'is_best_deal': false,
-  //   },
-  //   {
-  //     'name': 'The Resident Covent Garden',
-  //     'city': 'London',
-  //     'country': 'United Kingdom',
-  //     'stars': 5.0,
-  //     'price': 670,
-  //     'summary':
-  //         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-  //     'photos': [],
-  //     'reviews': [],
-  //     'rooms': [],
-  //     'persons': 4,
-  //     'type': 0,
-  //     'is_best_deal': false,
-  //   },
-  //   {
-  //     'name': 'NOX Hotel',
-  //     'city': 'London',
-  //     'country': 'United Kingdom',
-  //     'stars': 3.0,
-  //     'price': 320,
-  //     'summary':
-  //         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-  //     'photos': [],
-  //     'reviews': [],
-  //     'rooms': [],
-  //     'persons': 1,
-  //     'type': 0,
-  //     'is_best_deal': false,
-  //   },
-  //   {
-  //     'name': 'Paddington Park Hotel',
-  //     'city': 'London',
-  //     'country': 'United Kingdom',
-  //     'stars': 5.0,
-  //     'price': 670,
-  //     'summary':
-  //         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-  //     'photos': [],
-  //     'reviews': [],
-  //     'rooms': [],
-  //     'persons': 4,
-  //     'type': 0,
-  //     'is_best_deal': false,
-  //   },
-  //   {
-  //     'name': 'The Royal Horseguards',
-  //     'city': 'London',
-  //     'country': 'United Kingdom',
-  //     'stars': 2.0,
-  //     'price': 90,
-  //     'summary':
-  //         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-  //     'photos': [],
-  //     'reviews': [],
-  //     'rooms': [],
-  //     'persons': 9,
-  //     'type': 0,
-  //     'is_best_deal': false,
-  //   },
-  //   {
-  //     'name': 'Amba Hotel Marble Arch',
-  //     'city': 'London',
-  //     'country': 'United Kingdom',
-  //     'stars': 5.0,
-  //     'price': 120,
-  //     'summary':
-  //         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-  //     'photos': [],
-  //     'reviews': [],
-  //     'rooms': [],
-  //     'persons': 8,
-  //     'type': 0,
-  //     'is_best_deal': false,
-  //   },
-  // ];
-
-  // final _ref = Firestore.instance;
-
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    // Future.delayed(Duration(milliseconds: 500), _sendHotels);
-  }
 
-  // Future _sendHotels() async {
-  //   for (var data in _datas) {
-  //     print(data);
-  //     await _ref.collection('hotels').add(data);
-  //   }
-  // }
+    FirebaseMessagingProvider(context: context).configureMessaging();
+    FirebaseMessagingProvider(uid: widget.uid).saveDevice();
+  }
 
   @override
   Widget build(BuildContext context) {
