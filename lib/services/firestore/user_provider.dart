@@ -96,13 +96,13 @@ class UserProvider {
   // confirm hotel booking
   Future confirmBooking(final ConfirmBooking booking) async {
     try {
-      final _bookingRef = _ref.collection('bookings');
+      final _bookingRef = _ref.collection('bookings').document();
       final _upcommingRef =
           _ref.collection('users').document(uid).collection('upcomming');
-          
-      booking.bookingId = _bookingRef.id;
 
-      var _result = await _bookingRef.add(booking.toJson());
+      booking.bookingId = _bookingRef.documentID;
+
+      var _result = await _bookingRef.setData(booking.toJson());
       final _upcoming = UpcomingBooking(
         hotelRef: booking.hotelRef,
         checkIn: booking.checkInDate,
