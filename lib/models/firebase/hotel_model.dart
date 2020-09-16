@@ -3,7 +3,7 @@ import 'package:motel/enums/hotel_types.dart';
 import 'package:motel/models/app/hotel_features.dart';
 
 class Hotel {
-  final String id;
+  String id;
   final String name;
   final String dp;
   final String city;
@@ -47,10 +47,10 @@ class Hotel {
     this.features,
   });
 
-  static Hotel fromJson(final Map<String, dynamic> data, final String id) {
+  static Hotel fromJson(final Map<String, dynamic> data) {
     if (data['type'] == 0) {
       return Hotel(
-        id: id ?? '',
+        id: data['id'] ?? '',
         name: data['name'] ?? '',
         dp: data['dp'],
         city: data['city'] ?? '',
@@ -72,7 +72,7 @@ class Hotel {
       );
     } else if (data['type'] == 1) {
       return Hotel(
-        id: id ?? '',
+        id: data['id'] ?? '',
         name: data['name'] ?? '',
         dp: data['dp'],
         city: data['city'] ?? '',
@@ -94,7 +94,7 @@ class Hotel {
       );
     } else if (data['type'] == 2) {
       return Hotel(
-        id: id ?? '',
+        id: data['id'] ?? '',
         name: data['name'] ?? '',
         dp: data['dp'],
         city: data['city'] ?? '',
@@ -116,7 +116,7 @@ class Hotel {
       );
     } else if (data['type'] == 3) {
       return Hotel(
-        id: id ?? '',
+        id: data['id'] ?? '',
         name: data['name'] ?? '',
         dp: data['dp'],
         city: data['city'] ?? '',
@@ -138,7 +138,7 @@ class Hotel {
       );
     }
     return Hotel(
-      id: id ?? '',
+      id: data['id'] ?? '',
       name: data['name'] ?? '',
       dp: data['dp'],
       city: data['city'] ?? '',

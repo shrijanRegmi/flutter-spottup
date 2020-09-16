@@ -16,7 +16,7 @@ class Wrapper extends StatelessWidget {
     return _appUser == null && appUser == null
         ? WelcomeScreen()
         : _appUser?.accountType == AccountType.hotelOwner
-            ? OwnerHomeScreen()
-            : HomeScreen();
+            ? OwnerHomeScreen(appUser.uid)
+            : HomeScreen(appUser.uid);
   }
 }
