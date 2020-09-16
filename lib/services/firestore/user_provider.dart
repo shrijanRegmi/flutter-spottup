@@ -99,6 +99,8 @@ class UserProvider {
       final _bookingRef = _ref.collection('bookings');
       final _upcommingRef =
           _ref.collection('users').document(uid).collection('upcomming');
+          
+      booking.bookingId = _bookingRef.id;
 
       var _result = await _bookingRef.add(booking.toJson());
       final _upcoming = UpcomingBooking(

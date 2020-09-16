@@ -26,6 +26,7 @@ class HotelProvider {
   Future uploadNewHotel(Hotel hotel) async {
     try {
       final _hotelRef = _ref.collection('hotels');
+      hotel.id = _hotelRef.id;
       print('Success: Adding new hotel');
       return await _hotelRef.add(hotel.toJson());
     } catch (e) {
@@ -40,6 +41,7 @@ class HotelProvider {
       final DocumentReference _hotelRef, final Hotel _room) async {
     try {
       final _roomRef = _hotelRef.collection('rooms');
+      _room.id = _roomRef.id;
       print('Success: Uploading new room');
       return await _roomRef.add(_room.toJson());
     } catch (e) {
@@ -79,7 +81,7 @@ class HotelProvider {
   // hotels list from firestore
   List<Hotel> _hotelsFromFirestore(QuerySnapshot colSnap) {
     return colSnap.documents.map((docSnap) {
-      return Hotel.fromJson(docSnap.data, docSnap.documentID);
+      return Hotel.fromJson(docSnap.data);
     }).toList();
   }
 
@@ -100,13 +102,13 @@ class HotelProvider {
 
   // hotel from firebase
   Hotel _hotelFromFirebase(DocumentSnapshot docSnap) {
-    return Hotel.fromJson(docSnap.data, docSnap.documentID);
+    return Hotel.fromJson(docSnap.data);
   }
 
   // room from firebase
   List<Hotel> _roomFromFirebase(QuerySnapshot colSnap) {
     return colSnap.documents.map((docSnap) {
-      return Hotel.fromJson(docSnap.data, docSnap.documentID);
+      return Hotel.fromJson(docSnap.data);
     }).toList();
   }
 
@@ -120,7 +122,7 @@ class HotelProvider {
   // bookings from firebase
   List<ConfirmBooking> _bookingFromFirebase(QuerySnapshot colSnap) {
     return colSnap.documents
-        .map((doc) => ConfirmBooking.fromJson(doc.data, doc.documentID))
+        .map((doc) => ConfirmBooking.fromJson(doc.data))
         .toList();
   }
 

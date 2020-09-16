@@ -54,7 +54,7 @@ class OpenBookingItemScreen extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    _topSectionBuilder(appUser),
+                                    _topSectionBuilder(),
                                     SizedBox(
                                       height: 20.0,
                                     ),
@@ -109,18 +109,18 @@ class OpenBookingItemScreen extends StatelessWidget {
     );
   }
 
-  Widget _topSectionBuilder(final AppUser appUser) {
+  Widget _topSectionBuilder() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        _userDetailBuilder(appUser),
+        _userDetailBuilder(),
         _issuedDateBuilder(),
       ],
     );
   }
 
-  Widget _userDetailBuilder(final AppUser appUser) {
+  Widget _userDetailBuilder() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
