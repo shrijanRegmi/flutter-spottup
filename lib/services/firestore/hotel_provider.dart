@@ -25,10 +25,10 @@ class HotelProvider {
   // upload new hotel by hotel owner
   Future uploadNewHotel(Hotel hotel) async {
     try {
-      final _hotelRef = _ref.collection('hotels');
-      hotel.id = _hotelRef.id;
+      final _hotelRef = _ref.collection('hotels').document();
+      hotel.id = _hotelRef.documentID;
       print('Success: Adding new hotel');
-      return await _hotelRef.add(hotel.toJson());
+      return await _hotelRef.setData(hotel.toJson());
     } catch (e) {
       print(e);
       print('Error!!!: Adding new hotel');
@@ -40,10 +40,10 @@ class HotelProvider {
   Future uploadNewRoom(
       final DocumentReference _hotelRef, final Hotel _room) async {
     try {
-      final _roomRef = _hotelRef.collection('rooms');
-      _room.id = _roomRef.id;
+      final _roomRef = _hotelRef.collection('rooms').document();
+      _room.id = _roomRef.documentID;
       print('Success: Uploading new room');
-      return await _roomRef.add(_room.toJson());
+      return await _roomRef.setData(_room.toJson());
     } catch (e) {
       print(e);
       print('Error!!!: Uploading new room');
