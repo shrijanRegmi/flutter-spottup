@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:motel/services/firestore/firebase_messaging_provider.dart';
 import 'package:motel/views/screens/home/home_tabs/explore_tab.dart';
+import 'package:motel/views/screens/home/home_tabs/notifications_tab.dart';
 import 'package:motel/views/screens/home/home_tabs/profile_tab.dart';
 import 'package:motel/views/screens/home/home_tabs/trip_tab.dart';
 
@@ -18,13 +19,14 @@ class _HomeScreenState extends State<HomeScreen>
   final _tabs = [
     ExploreTab(),
     TripTab(),
+    NotificationsTab(),
     ProfileTab(),
   ];
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
 
     FirebaseMessagingProvider(context: context).configureMessaging();
     FirebaseMessagingProvider(uid: widget.uid).saveDevice();
@@ -84,6 +86,11 @@ class _HomeScreenState extends State<HomeScreen>
             icon: Icon(Icons.favorite_border),
             iconMargin: const EdgeInsets.all(0.0),
             text: 'Trips',
+          ),
+          Tab(
+            icon: Icon(Icons.notifications),
+            iconMargin: const EdgeInsets.all(0.0),
+            text: 'Notifications',
           ),
           Tab(
             icon: Icon(Icons.perm_identity),
