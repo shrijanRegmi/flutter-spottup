@@ -1,5 +1,5 @@
 enum BookingType {
   neww,
-  other,
-  contacted,
+  accepted,
+  declined,
 }

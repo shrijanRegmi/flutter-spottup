@@ -103,7 +103,7 @@ class FirebaseMessagingProvider {
                 _booking,
                 _appUser,
                 _hotel,
-                bookingType: BookingType.other,
+                bookingType: BookingType.neww,
               ),
             ),
           );
