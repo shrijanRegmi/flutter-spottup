@@ -11,8 +11,8 @@ class ConfirmBooking {
   final int total;
   final int nights;
   final String ownerId;
-  final bool isSeen;
-  final bool isContacted;
+  final bool isAccepted;
+  final bool isDeclined;
 
   ConfirmBooking({
     this.bookingId,
@@ -25,8 +25,8 @@ class ConfirmBooking {
     this.total,
     this.nights,
     this.ownerId,
-    this.isSeen,
-    this.isContacted,
+    this.isAccepted,
+    this.isDeclined,
   });
 
   Map<String, dynamic> toJson() {
@@ -41,8 +41,8 @@ class ConfirmBooking {
       'total': total,
       'nights': nights,
       'owner_id': ownerId,
-      'is_seen': isSeen,
-      'is_contacted': isContacted,
+      'is_seen': isAccepted,
+      'is_contacted': isDeclined,
     };
   }
 
@@ -58,8 +58,8 @@ class ConfirmBooking {
       total: data['total'] ?? 0,
       nights: data['nights'] ?? 0,
       ownerId: data['owner_id'] ?? '',
-      isSeen: data['is_seen'] ?? false,
-      isContacted: data['is_contacted'] ?? false,
+      isAccepted: data['is_accepted'] ?? false,
+      isDeclined: data['is_declined'] ?? false,
     );
   }
 }

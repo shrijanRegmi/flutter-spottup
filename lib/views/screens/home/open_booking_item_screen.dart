@@ -24,10 +24,10 @@ class OpenBookingItemScreen extends StatelessWidget {
     return VmProvider<BookingTabVm>(
       vm: BookingTabVm(context),
       onInit: (vm) {
-        if (!booking.isSeen) {
-          vm.updateSeenState(bookingType, booking.bookingId);
-        }
-        vm.updateIsContacted(booking.isContacted);
+        final _newVal = booking.isAccepted && !booking.isDeclined
+            ? 'Accepted'
+            : booking.isDeclined && !booking.isAccepted ? 'Declined' : '';
+        vm.updateAcceptDeclineText(_newVal);
       },
       builder: (context, vm, appUser) {
         return Scaffold(
@@ -40,8 +40,10 @@ class OpenBookingItemScreen extends StatelessWidget {
                   children: [
                     _appbarBuilder(context, vm),
                     SizedBox(
-                      height: 20.0,
+                      height: 10.0,
                     ),
+                    if (vm.acceptDeclineText == '') _acceptDeclineBuilder(vm),
+                    if (vm.acceptDeclineText == '') SizedBox(height: 20.0),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -99,13 +101,58 @@ class OpenBookingItemScreen extends StatelessWidget {
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
-        IconButton(
-          icon: Icon(
-            vm.isContacted ? Icons.check_circle : Icons.check_circle_outline,
-          ),
-          onPressed: () => vm.onPressedContactedBtn(booking.bookingId),
-        ),
+        Row(
+          children: [
+            Text(
+              '${vm.acceptDeclineText}',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: vm.acceptDeclineText == 'Declined'
+                    ? Colors.red
+                    : Color(0xff45ad90),
+              ),
+            ),
+            SizedBox(
+              width: 20.0,
+            ),
+          ],
+        )
       ],
+    );
+  }
+
+  Widget _acceptDeclineBuilder(BookingTabVm vm) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: Center(
+              child: MaterialButton(
+                child: Text('Accept'),
+                color: Color(0xff45ad90),
+                minWidth: 180.0,
+                textColor: Colors.white,
+                onPressed: () => vm.acceptBooking(booking.bookingId),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 10.0,
+          ),
+          Expanded(
+            child: Center(
+              child: MaterialButton(
+                child: Text('Decline'),
+                color: Colors.red,
+                minWidth: 180.0,
+                textColor: Colors.white,
+                onPressed: () => vm.declineBooking(booking.bookingId),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
