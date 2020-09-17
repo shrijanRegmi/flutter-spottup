@@ -9,36 +9,41 @@ class NotificationsTab extends StatelessWidget {
     return VmProvider<NotificationTabVm>(
       vm: NotificationTabVm(context),
       builder: (context, vm, appUser) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 40.0,
-            ),
-            _titleBuilder(),
-            Expanded(
-              child: vm.notificationsList == null
-                  ? Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : vm.notificationsList.isEmpty
-                      ? _emptyBuilder()
-                      : ListView.separated(
-                          itemCount: vm.notificationsList.length,
-                          itemBuilder: (context, index) {
-                            return NotificationsListItem(
-                              vm.notificationsList[index],
-                              vm.readNotification,
-                            );
-                          },
-                          separatorBuilder: (context, index) {
-                            return Divider(
-                              height: 0.0,
-                            );
-                          },
-                        ),
-            ),
-          ],
+        return SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 20.0,
+              ),
+              _titleBuilder(),
+              SizedBox(
+                height: 20.0,
+              ),
+              Expanded(
+                child: vm.notificationsList == null
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : vm.notificationsList.isEmpty
+                        ? _emptyBuilder()
+                        : ListView.separated(
+                            itemCount: vm.notificationsList.length,
+                            itemBuilder: (context, index) {
+                              return NotificationsListItem(
+                                vm.notificationsList[index],
+                                vm.readNotification,
+                              );
+                            },
+                            separatorBuilder: (context, index) {
+                              return Divider(
+                                height: 0.0,
+                              );
+                            },
+                          ),
+              ),
+            ],
+          ),
         );
       },
     );

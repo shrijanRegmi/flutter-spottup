@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:motel/enums/notification_type.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/notification_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
@@ -33,7 +34,9 @@ class NotificationsListItem extends StatelessWidget {
               //     ),
               //   ),
               // );
-              readNotif(_appUser.uid, notification.id);
+              if (!notification.isRead) {
+                readNotif(_appUser.uid, notification.id);
+              }
             },
             child: Container(
               color: notification.isRead
@@ -97,18 +100,22 @@ class NotificationsListItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  notification.isAccepted
+                  notification.type == NotificationType.accepted
                       ? 'Congratulations, your booking of ${hotel.name} was accepted.'
-                      : 'Sorry, your booking of ${hotel.name} was declined.',
+                      : notification.type == NotificationType.bookingReceived
+                          ? '${hotel.name} is booked by Ram Bahadur'
+                          : 'Sorry, your booking of ${hotel.name} was declined.',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 14.0,
                   ),
                 ),
                 Text(
-                  notification.isAccepted
+                  notification.type == NotificationType.accepted
                       ? '${hotel.name} accepted your booking. Tap for more details.'
-                      : '${hotel.name} declined your booking. Tap to know why.',
+                      : notification.type == NotificationType.bookingReceived
+                          ? 'Ram bahadur just booked ${hotel.name}'
+                          : '${hotel.name} declined your booking. Tap to know why.',
                   style: TextStyle(
                     fontSize: 12.0,
                     color: Colors.grey,
