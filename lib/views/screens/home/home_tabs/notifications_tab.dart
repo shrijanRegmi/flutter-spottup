@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:motel/viewmodels/notifications_tab_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/widgets/notifications_tab_widgets/notifications_list_item.dart';
@@ -10,40 +11,45 @@ class NotificationsTab extends StatelessWidget {
       vm: NotificationTabVm(context),
       builder: (context, vm, appUser) {
         return SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 20.0,
-              ),
-              _titleBuilder(),
-              SizedBox(
-                height: 20.0,
-              ),
-              Expanded(
-                child: vm.notificationsList == null
-                    ? Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : vm.notificationsList.isEmpty
-                        ? _emptyBuilder()
-                        : ListView.separated(
-                            itemCount: vm.notificationsList.length,
-                            itemBuilder: (context, index) {
-                              return NotificationsListItem(
-                                vm.notificationsList[index],
-                                vm.readNotification,
-                              );
-                            },
-                            separatorBuilder: (context, index) {
-                              return Divider(
-                                height: 0.0,
-                              );
-                            },
-                          ),
-              ),
-            ],
-          ),
+          child: vm.isLoading
+              ? Center(
+                  child: Lottie.asset('assets/lottie/loading.json'),
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    _titleBuilder(),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    Expanded(
+                      child: vm.notificationsList == null
+                          ? Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : vm.notificationsList.isEmpty
+                              ? _emptyBuilder()
+                              : ListView.separated(
+                                  itemCount: vm.notificationsList.length,
+                                  itemBuilder: (context, index) {
+                                    return NotificationsListItem(
+                                      vm.notificationsList[index],
+                                      vm.readNotification,
+                                      vm.onNotifPressed,
+                                    );
+                                  },
+                                  separatorBuilder: (context, index) {
+                                    return Divider(
+                                      height: 0.0,
+                                    );
+                                  },
+                                ),
+                    ),
+                  ],
+                ),
         );
       },
     );
