@@ -1,9 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:motel/models/firebase/payment_model.dart';
 import 'package:motel/services/firestore/hotel_provider.dart';
 import 'package:motel/services/storage/boooking_storage_service.dart';
+import 'package:provider/provider.dart';
 
 class BookingAcceptedVm extends ChangeNotifier {
   BuildContext context;
@@ -11,9 +14,13 @@ class BookingAcceptedVm extends ChangeNotifier {
 
   List<File> _photos = [];
   bool _isLoading = false;
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   List<File> get photos => _photos;
   bool get isLoading => _isLoading;
+  Payment get paymentDetails =>
+      Provider.of<Payment>(context) ?? Payment(bankAcNum: '', easyPaisaNum: '');
+  GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
 
   // upload payment photos
   uploadPhotos() async {
@@ -106,6 +113,15 @@ class BookingAcceptedVm extends ChangeNotifier {
         ],
       ),
     );
+  }
+
+  // copy to clipboard
+  copyToClipboard(final String text) async {
+    await Clipboard.setData(ClipboardData(text: text)).then((value) {
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text('Copied to clipboard'),
+      ));
+    });
   }
 
   // update value of is loading
