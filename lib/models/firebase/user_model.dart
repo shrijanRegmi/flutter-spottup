@@ -91,6 +91,7 @@ class AppUser {
       'email': email,
       'phone': phone,
       'account_type': accountType?.index,
+      'photo_url': photoUrl ?? '',
     };
   }
 

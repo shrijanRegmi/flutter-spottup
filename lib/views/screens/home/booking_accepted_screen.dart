@@ -10,7 +10,8 @@ import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 class BookingAcceptedScreen extends StatelessWidget {
   final ConfirmBooking booking;
   final Hotel hotel;
-  BookingAcceptedScreen(this.booking, this.hotel);
+  final bool admin;
+  BookingAcceptedScreen(this.booking, this.hotel, {this.admin = false});
 
   @override
   Widget build(BuildContext context) {
@@ -46,14 +47,14 @@ class BookingAcceptedScreen extends StatelessWidget {
                               SizedBox(
                                 height: 40.0,
                               ),
-                              _photoUploadBuilder(vm),
+                              if (!admin) _photoUploadBuilder(vm),
                               SizedBox(
                                 height: 5.0,
                               ),
                             ],
                           ),
                         ),
-                        if (booking.screenshots.isEmpty)
+                        if (booking.screenshots.isEmpty && !admin)
                           RoundedBtn(
                             title: 'Upload',
                             onPressed: () =>
@@ -80,7 +81,7 @@ class BookingAcceptedScreen extends StatelessWidget {
 
   Widget _bookingAcceptTextBuilder() {
     return Text(
-      '${hotel.name} - Your booking was accepted !',
+      '${hotel.name} - The booking was accepted !',
       style: TextStyle(
         fontWeight: FontWeight.w600,
         fontSize: 22.0,
@@ -90,7 +91,7 @@ class BookingAcceptedScreen extends StatelessWidget {
 
   Widget _detailsBuilder() {
     return Text(
-      'Congratulations, we decided to accept your booking. Here are bank details and easy paisa details that you need to process. Please upload the screenshot of the payment after processing it. Have a great day.',
+      'Congratulations, we decided to accept the booking. Here are bank details and easy paisa details that you need to process. Please upload the screenshot of the payment after processing it. Have a great day.',
     );
   }
 
