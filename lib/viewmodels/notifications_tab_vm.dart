@@ -183,6 +183,7 @@ class NotificationTabVm extends ChangeNotifier {
             builder: (context) => BookingAcceptedScreen(
               _booking,
               _hotel,
+              admin: notification.admin,
             ),
           ),
         );

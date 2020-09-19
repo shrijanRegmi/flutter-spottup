@@ -53,7 +53,7 @@ class BookingDeclinedScreen extends StatelessWidget {
 
   Widget _bookingDeclineTextBuilder() {
     return Text(
-      '${hotel.name} - Your booking was declined !',
+      '${hotel.name} - The booking was declined !',
       style: TextStyle(
         fontWeight: FontWeight.w600,
         fontSize: 22.0,
@@ -63,7 +63,7 @@ class BookingDeclinedScreen extends StatelessWidget {
 
   Widget _detailsBuilder() {
     return Text(
-      'Sorry, we decided to decline your booking for the reason; ${booking.declineText.toLowerCase()}',
+      'Sorry, we decided to decline the booking for the reason; ${booking.declineText.toLowerCase()}',
     );
   }
 }
