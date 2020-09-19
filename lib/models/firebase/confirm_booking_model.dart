@@ -13,6 +13,8 @@ class ConfirmBooking {
   final String ownerId;
   final bool isAccepted;
   final bool isDeclined;
+  final String declineText;
+  final List<dynamic> screenshots;
 
   ConfirmBooking({
     this.bookingId,
@@ -27,6 +29,8 @@ class ConfirmBooking {
     this.ownerId,
     this.isAccepted,
     this.isDeclined,
+    this.declineText,
+    this.screenshots,
   });
 
   Map<String, dynamic> toJson() {
@@ -60,6 +64,8 @@ class ConfirmBooking {
       ownerId: data['owner_id'] ?? '',
       isAccepted: data['is_accepted'] ?? false,
       isDeclined: data['is_declined'] ?? false,
+      declineText: data['decline_text'] ?? '',
+      screenshots: data['screenshots'] ?? [],
     );
   }
 }
