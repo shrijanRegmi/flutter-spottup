@@ -8,6 +8,8 @@ class BookingTabVm extends ChangeNotifier {
   BookingTabVm(this.context);
 
   String _acceptDeclineText = '';
+  TextEditingController _controller = TextEditingController();
+
   String get acceptDeclineText => _acceptDeclineText;
 
   // all bookings
@@ -45,14 +47,65 @@ class BookingTabVm extends ChangeNotifier {
     return await HotelProvider().updateBookingData(_data, bookingId);
   }
 
-  // accept the booking
+  // decline the booking
   declineBooking(String bookingId) async {
-    updateAcceptDeclineText('Declined');
-    final _data = {
-      'is_declined': true,
-      'is_accepted': false,
-    };
-    return await HotelProvider().updateBookingData(_data, bookingId);
+    return _showDeclineDialog(bookingId);
+  }
+
+  _showDeclineDialog(String bookingId) async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Reason'),
+        content: TextFormField(
+          minLines: 1,
+          maxLines: 3,
+          textCapitalization: TextCapitalization.words,
+          decoration: InputDecoration(
+            hintText: 'Type your reason...',
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Color(0xff45ad90),
+              ),
+            ),
+          ),
+          controller: _controller,
+        ),
+        actions: <Widget>[
+          MaterialButton(
+            textColor: Colors.red,
+            child: Text(
+              'Cancel',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onPressed: () => Navigator.pop(context),
+          ),
+          MaterialButton(
+            textColor: Color(0xff45ad90),
+            child: Text(
+              'Done',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onPressed: () async {
+              if (_controller.text.trim() != '') {
+                updateAcceptDeclineText('Declined');
+                Navigator.pop(context);
+                final _data = {
+                  'is_declined': true,
+                  'is_accepted': false,
+                  'decline_text': _controller.text.trim(),
+                };
+                await HotelProvider().updateBookingData(_data, bookingId);
+              }
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   // update value of accept decline text

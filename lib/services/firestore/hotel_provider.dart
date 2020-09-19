@@ -66,14 +66,16 @@ class HotelProvider {
   }
 
   // update booking data
-  Future updateBookingData(final Map<String, dynamic> data, final String id) {
+  Future updateBookingData(
+      final Map<String, dynamic> data, final String id) async {
     try {
       final _bookingRef = _ref.collection('bookings').document(id);
-      print('Success: Updating hotel data $data');
-      return _bookingRef.updateData(data);
+      print('Success: Updating booking data $data');
+      await _bookingRef.updateData(data);
+      return 'Success';
     } catch (e) {
       print(e);
-      print('Error!!!: Updating hotel data $data');
+      print('Error!!!: Updating booking data $data');
       return null;
     }
   }
