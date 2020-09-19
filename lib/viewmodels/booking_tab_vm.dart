@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:motel/enums/booking_type.dart';
 import 'package:motel/models/firebase/confirm_booking_model.dart';
 import 'package:motel/services/firestore/hotel_provider.dart';
 import 'package:provider/provider.dart';
@@ -8,8 +7,10 @@ class BookingTabVm extends ChangeNotifier {
   final BuildContext context;
   BookingTabVm(this.context);
 
-  bool _isContacted = false;
-  bool get isContacted => _isContacted;
+  String _acceptDeclineText = '';
+  TextEditingController _controller = TextEditingController();
+
+  String get acceptDeclineText => _acceptDeclineText;
 
   // all bookings
   List<ConfirmBooking> get _bookingList =>
@@ -17,43 +18,99 @@ class BookingTabVm extends ChangeNotifier {
 
   // only new bookings
   List<ConfirmBooking> get newBookings {
-    return _bookingList.where((booking) => !booking.isSeen).toList();
+    return _bookingList
+        .where((booking) => !booking.isAccepted && !booking.isDeclined)
+        .toList();
   }
 
   // only other bookings
-  List<ConfirmBooking> get otherBookings {
+  List<ConfirmBooking> get acceptedBookings {
     return _bookingList
-        .where((booking) => booking.isSeen && !booking.isContacted)
+        .where((booking) => booking.isAccepted && !booking.isDeclined)
         .toList();
   }
 
   // only contacted bookings
-  List<ConfirmBooking> get contactedBookings {
-    return _bookingList.where((booking) => booking.isContacted).toList();
+  List<ConfirmBooking> get declinedBookings {
+    return _bookingList
+        .where((booking) => booking.isDeclined && !booking.isAccepted)
+        .toList();
   }
 
-  // update seen state
-  updateSeenState(final BookingType type, final String bookingId) async {
-    if (type == BookingType.neww) {
-      final _data = {
-        'is_seen': true,
-      };
-      return await HotelProvider().updateBookingData(_data, bookingId);
-    }
-  }
-
-  // update value of is contacted
-  updateIsContacted(final bool newVal) {
-    _isContacted = newVal;
-    notifyListeners();
-  }
-
-  // on press contacted value
-  onPressedContactedBtn(final String bookingId) async {
-    updateIsContacted(!_isContacted);
+  // accept the booking
+  acceptBooking(String bookingId) async {
+    updateAcceptDeclineText('Accepted');
     final _data = {
-      'is_contacted': _isContacted,
+      'is_accepted': true,
+      'is_declined': false,
     };
     return await HotelProvider().updateBookingData(_data, bookingId);
+  }
+
+  // decline the booking
+  declineBooking(String bookingId) async {
+    return _showDeclineDialog(bookingId);
+  }
+
+  _showDeclineDialog(String bookingId) async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Reason'),
+        content: TextFormField(
+          minLines: 1,
+          maxLines: 3,
+          textCapitalization: TextCapitalization.words,
+          decoration: InputDecoration(
+            hintText: 'Type your reason...',
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Color(0xff45ad90),
+              ),
+            ),
+          ),
+          controller: _controller,
+        ),
+        actions: <Widget>[
+          MaterialButton(
+            textColor: Colors.red,
+            child: Text(
+              'Cancel',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onPressed: () => Navigator.pop(context),
+          ),
+          MaterialButton(
+            textColor: Color(0xff45ad90),
+            child: Text(
+              'Done',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onPressed: () async {
+              if (_controller.text.trim() != '') {
+                updateAcceptDeclineText('Declined');
+                Navigator.pop(context);
+                final _data = {
+                  'is_declined': true,
+                  'is_accepted': false,
+                  'decline_text': _controller.text.trim(),
+                };
+                await HotelProvider().updateBookingData(_data, bookingId);
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  // update value of accept decline text
+  updateAcceptDeclineText(final String newVal) {
+    _acceptDeclineText = newVal;
+    notifyListeners();
   }
 }

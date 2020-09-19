@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:motel/models/firebase/confirm_booking_model.dart';
 import 'package:motel/models/firebase/last_search_model.dart';
+import 'package:motel/models/firebase/notification_model.dart';
+import 'package:motel/models/firebase/payment_model.dart';
 import 'package:motel/models/firebase/upcomming_bookings_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
 
@@ -96,11 +98,13 @@ class UserProvider {
   // confirm hotel booking
   Future confirmBooking(final ConfirmBooking booking) async {
     try {
-      final _bookingRef = _ref.collection('bookings');
+      final _bookingRef = _ref.collection('bookings').document();
       final _upcommingRef =
           _ref.collection('users').document(uid).collection('upcomming');
 
-      var _result = await _bookingRef.add(booking.toJson());
+      booking.bookingId = _bookingRef.documentID;
+
+      var _result = await _bookingRef.setData(booking.toJson());
       final _upcoming = UpcomingBooking(
         hotelRef: booking.hotelRef,
         checkIn: booking.checkInDate,
@@ -118,6 +122,24 @@ class UserProvider {
     }
   }
 
+  // read notification
+  readNotification(final String notifId) async {
+    try {
+      final _notifRef = _ref
+          .collection('users')
+          .document(uid)
+          .collection('notifications')
+          .document(notifId);
+      await _notifRef.updateData({'is_read': true});
+      print('Success: reading notification');
+      return 'Success';
+    } catch (e) {
+      print(e);
+      print('Error!!!: reading notification');
+      return null;
+    }
+  }
+
   // user from firebase
   AppUser _appUserFromFirebase(DocumentSnapshot userSnap) {
     return AppUser.fromJson(userSnap.data);
@@ -128,6 +150,18 @@ class UserProvider {
     return colSnap.documents
         .map((doc) => UpcomingBooking.fromJson(doc.data))
         .toList();
+  }
+
+  // notifications from firebase
+  List<AppNotification> _notificationFromFirebase(QuerySnapshot colSnap) {
+    return colSnap.documents
+        .map((doc) => AppNotification.fromJson(doc.data))
+        .toList();
+  }
+
+  // payment from firebase
+  Payment _paymentFromFirebase(DocumentSnapshot docSnap) {
+    return Payment.fromJson(docSnap.data);
   }
 
   // stream of user
@@ -152,5 +186,25 @@ class UserProvider {
         .collection('upcomming')
         .snapshots()
         .map(_upcomingBookingFromFirebase);
+  }
+
+  // stream of list of notifications
+  Stream<List<AppNotification>> get notificationsList {
+    return _ref
+        .collection('users')
+        .document(uid)
+        .collection('notifications')
+        .orderBy('last_updated', descending: true)
+        .snapshots()
+        .map(_notificationFromFirebase);
+  }
+
+  // stream of user
+  Stream<Payment> get paymentDetails {
+    return _ref
+        .collection('configs')
+        .document('payment')
+        .snapshots()
+        .map(_paymentFromFirebase);
   }
 }

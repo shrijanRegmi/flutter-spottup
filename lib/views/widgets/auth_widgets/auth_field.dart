@@ -6,12 +6,14 @@ class AuthField extends StatelessWidget {
   final bool isPassword;
   final TextInputType type;
   final bool requireWordCapitalization;
+  final bool isExpanded;
   AuthField({
     this.hintText,
     this.controller,
     this.isPassword = false,
     this.type = TextInputType.text,
     this.requireWordCapitalization = false,
+    this.isExpanded = false,
   });
 
   @override
@@ -31,6 +33,8 @@ class AuthField extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: TextFormField(
+          maxLines: isExpanded ? 3 : 1,
+          minLines: 1,
           textCapitalization: requireWordCapitalization
               ? TextCapitalization.words
               : TextCapitalization.none,

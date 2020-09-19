@@ -14,6 +14,7 @@ class AppUser {
   final List<dynamic> finished;
   final List<dynamic> favourite;
   final AccountType accountType;
+  final bool admin;
 
   AppUser({
     this.uid,
@@ -28,6 +29,7 @@ class AppUser {
     this.finished,
     this.favourite,
     this.accountType,
+    this.admin,
   });
 
   static AppUser fromJson(final Map<String, dynamic> data) {
@@ -45,6 +47,7 @@ class AppUser {
         finished: data['finished'] ?? [],
         favourite: data['favourite'] ?? [],
         accountType: AccountType.hotelOwner,
+        admin: data['admin'] ?? false,
       );
     } else if (data['account_type'] == AccountType.hotelOwner.index) {
       return AppUser(
@@ -60,6 +63,7 @@ class AppUser {
         finished: data['finished'] ?? [],
         favourite: data['favourite'] ?? [],
         accountType: AccountType.admin,
+        admin: data['admin'] ?? false,
       );
     }
     return AppUser(
@@ -75,6 +79,7 @@ class AppUser {
       finished: data['finished'] ?? [],
       favourite: data['favourite'] ?? [],
       accountType: AccountType.general,
+      admin: data['admin'] ?? false,
     );
   }
 

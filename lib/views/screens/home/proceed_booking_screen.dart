@@ -103,8 +103,8 @@ class ProceedBookingScreen extends StatelessWidget {
                                             total: _total,
                                             nights: days,
                                             ownerId: hotel.ownerId,
-                                            isSeen: false,
-                                            isContacted: false,
+                                            isAccepted: false,
+                                            isDeclined: false,
                                           );
 
                                           vm.confirmBooking(_booking, appUser);

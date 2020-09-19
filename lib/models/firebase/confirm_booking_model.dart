@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ConfirmBooking {
-  final String bookingId;
+  String bookingId;
   final DocumentReference hotelRef;
   final DocumentReference userRef;
   final int checkInDate;
@@ -11,8 +11,10 @@ class ConfirmBooking {
   final int total;
   final int nights;
   final String ownerId;
-  final bool isSeen;
-  final bool isContacted;
+  final bool isAccepted;
+  final bool isDeclined;
+  final String declineText;
+  final List<dynamic> screenshots;
 
   ConfirmBooking({
     this.bookingId,
@@ -25,12 +27,15 @@ class ConfirmBooking {
     this.total,
     this.nights,
     this.ownerId,
-    this.isSeen,
-    this.isContacted,
+    this.isAccepted,
+    this.isDeclined,
+    this.declineText,
+    this.screenshots,
   });
 
   Map<String, dynamic> toJson() {
     return {
+      'id': bookingId,
       'hotel_ref': hotelRef,
       'user_ref': userRef,
       'check_in': checkInDate,
@@ -40,15 +45,14 @@ class ConfirmBooking {
       'total': total,
       'nights': nights,
       'owner_id': ownerId,
-      'is_seen': isSeen,
-      'is_contacted': isContacted,
+      'is_seen': isAccepted,
+      'is_contacted': isDeclined,
     };
   }
 
-  static ConfirmBooking fromJson(
-      final Map<String, dynamic> data, final String id) {
+  static ConfirmBooking fromJson(final Map<String, dynamic> data) {
     return ConfirmBooking(
-      bookingId: id,
+      bookingId: data['id'] ?? '',
       hotelRef: data['hotel_ref'] ?? '',
       userRef: data['user_ref'] ?? '',
       checkInDate: data['check_in'] ?? DateTime.now().millisecondsSinceEpoch,
@@ -58,8 +62,10 @@ class ConfirmBooking {
       total: data['total'] ?? 0,
       nights: data['nights'] ?? 0,
       ownerId: data['owner_id'] ?? '',
-      isSeen: data['is_seen'] ?? false,
-      isContacted: data['is_contacted'] ?? false,
+      isAccepted: data['is_accepted'] ?? false,
+      isDeclined: data['is_declined'] ?? false,
+      declineText: data['decline_text'] ?? '',
+      screenshots: data['screenshots'] ?? [],
     );
   }
 }

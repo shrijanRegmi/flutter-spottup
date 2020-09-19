@@ -1,7 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:motel/models/firebase/review_model.dart';
 import 'package:motel/views/widgets/common_widgets/star_ratings.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class HotelReviewItem extends StatefulWidget {
+  final Review review;
+  HotelReviewItem(this.review);
+
   @override
   _HotelReviewItemState createState() => _HotelReviewItemState();
 }
@@ -35,7 +42,7 @@ class _HotelReviewItemState extends State<HotelReviewItem> {
               SizedBox(
                 height: 10.0,
               ),
-              _replyBtnBuilder(),
+              // _replyBtnBuilder(),
               Padding(
                 padding: const EdgeInsets.only(top: 10.0),
                 child: Divider(),
@@ -51,16 +58,22 @@ class _HotelReviewItemState extends State<HotelReviewItem> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Container(
-          width: 60.0,
-          height: 60.0,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('assets/images/welcome_img.jpg'),
-                fit: BoxFit.cover),
-            borderRadius: BorderRadius.circular(5.0),
-          ),
-        ),
+        widget.review.photoUrl != null
+            ? Container(
+                width: 55.0,
+                height: 55.0,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: CachedNetworkImageProvider(widget.review.photoUrl),
+                      fit: BoxFit.cover),
+                  shape: BoxShape.circle,
+                ),
+              )
+            : Container(
+                width: 55.0,
+                height: 55.0,
+                child: SvgPicture.asset('assets/svgs/upload_img.svg'),
+              ),
         SizedBox(
           width: 5.0,
         ),
@@ -68,14 +81,14 @@ class _HotelReviewItemState extends State<HotelReviewItem> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              'Alexia Jane',
+              '${widget.review.name}',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 14.0,
               ),
             ),
             Text(
-              'Last updated: 5 minutes ago',
+              'Last updated: ${timeago.format(DateTime.fromMillisecondsSinceEpoch(widget.review.milliseconds))}',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 12.0,
@@ -85,7 +98,7 @@ class _HotelReviewItemState extends State<HotelReviewItem> {
             Row(
               children: <Widget>[
                 Text(
-                  '(4.0)',
+                  '(${widget.review.stars})',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 12.0,
@@ -95,7 +108,7 @@ class _HotelReviewItemState extends State<HotelReviewItem> {
                   width: 5.0,
                 ),
                 StarRatings(
-                  ratings: 4.0,
+                  ratings: widget.review.stars,
                   size: 14.0,
                 ),
               ],
@@ -108,7 +121,7 @@ class _HotelReviewItemState extends State<HotelReviewItem> {
 
   Widget _reviewTextBuilder() {
     return Text(
-      'This is really well facilated hotel.',
+      '${widget.review.reviewText}',
       style: TextStyle(
         color: Colors.black26,
         fontWeight: FontWeight.bold,

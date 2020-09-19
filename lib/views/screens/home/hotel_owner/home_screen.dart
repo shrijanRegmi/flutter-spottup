@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:motel/services/firestore/firebase_messaging_provider.dart';
+import 'package:motel/views/screens/home/home_tabs/notifications_tab.dart';
 import 'package:motel/views/screens/home/home_tabs/profile_tab.dart';
 import 'package:motel/views/screens/home/hotel_owner/home_tabs/bookings_tab.dart';
 import 'package:motel/views/screens/home/hotel_owner/home_tabs/hotels_tab.dart';
 
 class OwnerHomeScreen extends StatefulWidget {
+  final String uid;
+  OwnerHomeScreen(this.uid);
+
   @override
   _OwnerHomeScreenState createState() => _OwnerHomeScreenState();
 }
@@ -15,13 +20,17 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen>
   final _tabs = [
     HotelTab(),
     BookingsTab(),
+    NotificationsTab(),
     ProfileTab(),
   ];
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
+
+    FirebaseMessagingProvider(context: context).configureMessaging();
+    FirebaseMessagingProvider(uid: widget.uid).saveDevice();
   }
 
   @override
@@ -80,6 +89,11 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen>
             icon: Icon(Icons.book),
             iconMargin: const EdgeInsets.all(0.0),
             text: 'Bookings',
+          ),
+          Tab(
+            icon: Icon(Icons.notifications),
+            iconMargin: const EdgeInsets.all(0.0),
+            text: 'Notifications',
           ),
           Tab(
             icon: Icon(Icons.perm_identity),

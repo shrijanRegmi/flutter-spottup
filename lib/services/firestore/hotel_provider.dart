@@ -25,9 +25,10 @@ class HotelProvider {
   // upload new hotel by hotel owner
   Future uploadNewHotel(Hotel hotel) async {
     try {
-      final _hotelRef = _ref.collection('hotels');
+      final _hotelRef = _ref.collection('hotels').document();
+      hotel.id = _hotelRef.documentID;
       print('Success: Adding new hotel');
-      return await _hotelRef.add(hotel.toJson());
+      return await _hotelRef.setData(hotel.toJson());
     } catch (e) {
       print(e);
       print('Error!!!: Adding new hotel');
@@ -39,9 +40,10 @@ class HotelProvider {
   Future uploadNewRoom(
       final DocumentReference _hotelRef, final Hotel _room) async {
     try {
-      final _roomRef = _hotelRef.collection('rooms');
+      final _roomRef = _hotelRef.collection('rooms').document();
+      _room.id = _roomRef.documentID;
       print('Success: Uploading new room');
-      return await _roomRef.add(_room.toJson());
+      return await _roomRef.setData(_room.toJson());
     } catch (e) {
       print(e);
       print('Error!!!: Uploading new room');
@@ -64,14 +66,16 @@ class HotelProvider {
   }
 
   // update booking data
-  Future updateBookingData(final Map<String, dynamic> data, final String id) {
+  Future updateBookingData(
+      final Map<String, dynamic> data, final String id) async {
     try {
       final _bookingRef = _ref.collection('bookings').document(id);
-      print('Success: Updating hotel data $data');
-      return _bookingRef.updateData(data);
+      print('Success: Updating booking data $data');
+      await _bookingRef.updateData(data);
+      return 'Success';
     } catch (e) {
       print(e);
-      print('Error!!!: Updating hotel data $data');
+      print('Error!!!: Updating booking data $data');
       return null;
     }
   }
@@ -79,7 +83,7 @@ class HotelProvider {
   // hotels list from firestore
   List<Hotel> _hotelsFromFirestore(QuerySnapshot colSnap) {
     return colSnap.documents.map((docSnap) {
-      return Hotel.fromJson(docSnap.data, docSnap.documentID);
+      return Hotel.fromJson(docSnap.data);
     }).toList();
   }
 
@@ -100,13 +104,13 @@ class HotelProvider {
 
   // hotel from firebase
   Hotel _hotelFromFirebase(DocumentSnapshot docSnap) {
-    return Hotel.fromJson(docSnap.data, docSnap.documentID);
+    return Hotel.fromJson(docSnap.data);
   }
 
   // room from firebase
   List<Hotel> _roomFromFirebase(QuerySnapshot colSnap) {
     return colSnap.documents.map((docSnap) {
-      return Hotel.fromJson(docSnap.data, docSnap.documentID);
+      return Hotel.fromJson(docSnap.data);
     }).toList();
   }
 
@@ -120,7 +124,7 @@ class HotelProvider {
   // bookings from firebase
   List<ConfirmBooking> _bookingFromFirebase(QuerySnapshot colSnap) {
     return colSnap.documents
-        .map((doc) => ConfirmBooking.fromJson(doc.data, doc.documentID))
+        .map((doc) => ConfirmBooking.fromJson(doc.data))
         .toList();
   }
 

@@ -80,10 +80,10 @@ class _BookingsTabState extends State<BookingsTab>
               text: 'New',
             ),
             Tab(
-              text: 'Other',
+              text: 'Accepted',
             ),
             Tab(
-              text: 'Contacted',
+              text: 'Declined',
             ),
           ],
         ),
@@ -103,8 +103,8 @@ class _BookingsTabState extends State<BookingsTab>
   List<Widget> _getTabs(AppUser appUser, BookingTabVm vm) {
     return [
       NewBookingTab(vm.newBookings),
-      OtherBookingTab(vm.otherBookings),
-      ContactedBookingTab(vm.contactedBookings),
+      AcceptedBookingTab(vm.acceptedBookings),
+      DeclinedBookingTab(vm.declinedBookings),
     ];
   }
 }
