@@ -6,7 +6,6 @@ import 'package:motel/models/firebase/confirm_booking_model.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/notification_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
-import 'package:motel/services/firestore/hotel_provider.dart';
 import 'package:provider/provider.dart';
 
 class NotificationsListItem extends StatelessWidget {
@@ -25,17 +24,6 @@ class NotificationsListItem extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (_) => OpenBookingItemScreen(
-        //       _booking,
-        //       _appUser,
-        //       _hotel,
-        //       bookingType: bookingType,
-        //     ),
-        //   ),
-        // );
         if (!notification.isRead) {
           readNotif(_appUser.uid, notification.id);
         }
@@ -53,7 +41,7 @@ class NotificationsListItem extends StatelessWidget {
               SizedBox(
                 width: 10.0,
               ),
-              _detailsBuilder(notification.hotel, notification.user),
+              _detailsBuilder(notification.hotel, _appUser, notification.user),
             ],
           ),
         ),
@@ -115,7 +103,8 @@ class NotificationsListItem extends StatelessWidget {
               );
   }
 
-  Widget _detailsBuilder(final Hotel hotel, final AppUser user) {
+  Widget _detailsBuilder(
+      final Hotel hotel, final AppUser appUser, final AppUser user) {
     return Expanded(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -125,22 +114,14 @@ class NotificationsListItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  notification.type == NotificationType.accepted
-                      ? 'Congratulations, your booking of ${hotel.name} was accepted.'
-                      : notification.type == NotificationType.bookingReceived
-                          ? '${hotel.name} is booked by ${user.firstName} ${user.lastName}'
-                          : 'Sorry, your booking of ${hotel.name} was declined.',
+                  _getNotifTitle(hotel, appUser, user),
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 14.0,
                   ),
                 ),
                 Text(
-                  notification.type == NotificationType.accepted
-                      ? '${hotel.name} accepted your booking. Tap for more details.'
-                      : notification.type == NotificationType.bookingReceived
-                          ? '${user.firstName} ${user.lastName} just booked ${hotel.name}'
-                          : '${hotel.name} declined your booking. Tap to know why.',
+                  _getNotifDetails(hotel, appUser, user),
                   style: TextStyle(
                     fontSize: 12.0,
                     color: Colors.grey,
@@ -152,12 +133,81 @@ class NotificationsListItem extends StatelessWidget {
           SizedBox(
             width: 20.0,
           ),
-          Icon(
-            Icons.arrow_forward_ios,
-            size: 20.0,
-          ),
+          notification.admin
+              ? Icon(
+                  Icons.star,
+                  size: 20.0,
+                )
+              : Icon(
+                  Icons.arrow_forward_ios,
+                  size: 20.0,
+                ),
         ],
       ),
     );
+  }
+
+  String _getNotifTitle(Hotel hotel, AppUser appUser, AppUser user) {
+    if (notification.admin) {
+      switch (notification.type) {
+        case NotificationType.bookingReceived:
+          return '${hotel.name} received a booking';
+          break;
+        case NotificationType.accepted:
+          return "${hotel.name} accepted ${appUser.firstName} ${appUser.lastName}'s booking";
+          break;
+        case NotificationType.declined:
+          return "${hotel.name} declined ${appUser.firstName} ${appUser.lastName}'s booking";
+          break;
+        default:
+          return "${hotel.name} accepted ${appUser.firstName} ${appUser.lastName}'s booking";
+      }
+    } else {
+      switch (notification.type) {
+        case NotificationType.bookingReceived:
+          return 'Congratulations, ${hotel.name} is booked by ${user.firstName} ${user.lastName}';
+          break;
+        case NotificationType.accepted:
+          return 'Congratulations, your booking of ${hotel.name} was accepted.';
+          break;
+        case NotificationType.declined:
+          return 'Sorry, your booking of ${hotel.name} was declined.';
+          break;
+        default:
+          return 'Congratulations, your booking of ${hotel.name} was accepted.';
+      }
+    }
+  }
+
+  String _getNotifDetails(Hotel hotel, AppUser appUser, AppUser user) {
+    if (appUser.admin) {
+      switch (notification.type) {
+        case NotificationType.bookingReceived:
+          return '${appUser.firstName} ${appUser.lastName} booked ${hotel.name}';
+          break;
+        case NotificationType.accepted:
+          return "${hotel.name} decided to accept ${appUser.firstName} ${appUser.lastName}'s booking";
+          break;
+        case NotificationType.declined:
+          return "${hotel.name} decided to decline ${appUser.firstName} ${appUser.lastName}'s booking";
+          break;
+        default:
+          return "${hotel.name} decided to accept ${appUser.firstName} ${appUser.lastName}'s booking";
+      }
+    } else {
+      switch (notification.type) {
+        case NotificationType.bookingReceived:
+          return '${user.firstName} ${user.lastName} just booked ${hotel.name}';
+          break;
+        case NotificationType.accepted:
+          return '${hotel.name} accepted your booking. Tap for more details.';
+          break;
+        case NotificationType.declined:
+          return '${hotel.name} declined your booking. Tap to know why.';
+          break;
+        default:
+          return '${hotel.name} accepted your booking. Tap for more details.';
+      }
+    }
   }
 }

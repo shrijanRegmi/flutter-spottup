@@ -12,11 +12,13 @@ class OpenBookingItemScreen extends StatelessWidget {
   final AppUser appUser;
   final Hotel hotel;
   final BookingType bookingType;
+  final bool admin;
   OpenBookingItemScreen(
     this.booking,
     this.appUser,
     this.hotel, {
     this.bookingType,
+    this.admin = false,
   });
 
   @override
@@ -42,8 +44,10 @@ class OpenBookingItemScreen extends StatelessWidget {
                     SizedBox(
                       height: 10.0,
                     ),
-                    if (vm.acceptDeclineText == '') _acceptDeclineBuilder(vm),
-                    if (vm.acceptDeclineText == '') SizedBox(height: 20.0),
+                    if (vm.acceptDeclineText == '' && !admin)
+                      _acceptDeclineBuilder(vm),
+                    if (vm.acceptDeclineText == '' && !admin)
+                      SizedBox(height: 20.0),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),

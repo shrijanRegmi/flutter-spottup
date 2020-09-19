@@ -10,6 +10,7 @@ class AppNotification {
   final bool isRead;
   final int lastUpdated;
   final String bookingId;
+  final bool admin;
 
   AppNotification({
     this.id,
@@ -19,6 +20,7 @@ class AppNotification {
     this.isRead,
     this.lastUpdated,
     this.bookingId,
+    this.admin,
   });
 
   static AppNotification fromJson(final Map<String, dynamic> data) {
@@ -30,7 +32,8 @@ class AppNotification {
       lastUpdated:
           data['last_updated'] ?? DateTime.now().millisecondsSinceEpoch,
       type: _gettype(data['type'] ?? 0),
-      bookingId: data['booking_id']
+      bookingId: data['booking_id'],
+      admin: data['admin'] ?? false,
     );
   }
 }
