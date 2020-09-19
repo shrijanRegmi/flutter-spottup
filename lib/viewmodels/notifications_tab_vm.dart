@@ -14,6 +14,7 @@ class NotificationTabVm extends ChangeNotifier {
   NotificationTabVm(this.context);
 
   bool _isLoading = false;
+  final _ref = Firestore.instance;
 
   bool get isLoading => _isLoading;
   List<AppNotification> get notificationsList =>
@@ -40,11 +41,28 @@ class NotificationTabVm extends ChangeNotifier {
       AppNotification notification, List<ConfirmBooking> bookingsList) async {
     updateLoadingVal(true);
 
-    final _booking = bookingsList.firstWhere(
+    bool _bookingExists = false;
+    var _booking = bookingsList.firstWhere(
         (booking) => booking.bookingId == notification.bookingId,
         orElse: () => null);
 
-    if (_booking != null) {
+    if (_booking == null) {
+      final _bookingRef = _ref
+          .collection('bookings')
+          .where('id', isEqualTo: notification.bookingId)
+          .limit(1);
+
+      final _bookingSnap = await _bookingRef.getDocuments();
+
+      if (_bookingSnap.documents.isNotEmpty) {
+        _booking = ConfirmBooking.fromJson(_bookingSnap.documents.first.data);
+        _bookingExists = true;
+      }
+    } else {
+      _bookingExists = true;
+    }
+
+    if (_bookingExists) {
       final _userSnap = await _booking.userRef.get();
       final _hotelSnap = await _booking.hotelRef.get();
 
@@ -59,6 +77,7 @@ class NotificationTabVm extends ChangeNotifier {
               _booking,
               _appUser,
               _hotel,
+              admin: notification.admin,
             ),
           ),
         );
