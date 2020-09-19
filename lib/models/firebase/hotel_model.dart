@@ -3,7 +3,7 @@ import 'package:motel/enums/hotel_types.dart';
 import 'package:motel/models/app/hotel_features.dart';
 
 class Hotel {
-  final String id;
+  String id;
   final String name;
   final String dp;
   final String city;
@@ -12,7 +12,7 @@ class Hotel {
   final int price;
   final String summary;
   final List<dynamic> photos;
-  final List<dynamic> reviews;
+  final int reviews;
   final int rooms;
   final int adults;
   final int kids;
@@ -47,10 +47,10 @@ class Hotel {
     this.features,
   });
 
-  static Hotel fromJson(final Map<String, dynamic> data, final String id) {
+  static Hotel fromJson(final Map<String, dynamic> data) {
     if (data['type'] == 0) {
       return Hotel(
-        id: id ?? '',
+        id: data['id'] ?? '',
         name: data['name'] ?? '',
         dp: data['dp'],
         city: data['city'] ?? '',
@@ -59,7 +59,7 @@ class Hotel {
         price: data['price'] ?? 0,
         summary: data['summary'] ?? '',
         photos: data['photos'] ?? [],
-        reviews: data['reviews'] ?? [],
+        reviews: data['reviews'] ?? 0,
         rooms: data['rooms'] ?? 1,
         adults: data['adults'] ?? 0,
         kids: data['kids'] ?? 0,
@@ -72,7 +72,7 @@ class Hotel {
       );
     } else if (data['type'] == 1) {
       return Hotel(
-        id: id ?? '',
+        id: data['id'] ?? '',
         name: data['name'] ?? '',
         dp: data['dp'],
         city: data['city'] ?? '',
@@ -81,7 +81,7 @@ class Hotel {
         price: data['price'] ?? 0,
         summary: data['summary'] ?? '',
         photos: data['photos'] ?? [],
-        reviews: data['reviews'] ?? [],
+        reviews: data['reviews'] ?? 0,
         rooms: data['rooms'] ?? 1,
         adults: data['adults'] ?? 0,
         kids: data['kids'] ?? 0,
@@ -94,7 +94,7 @@ class Hotel {
       );
     } else if (data['type'] == 2) {
       return Hotel(
-        id: id ?? '',
+        id: data['id'] ?? '',
         name: data['name'] ?? '',
         dp: data['dp'],
         city: data['city'] ?? '',
@@ -103,7 +103,7 @@ class Hotel {
         price: data['price'] ?? 0,
         summary: data['summary'] ?? '',
         photos: data['photos'] ?? [],
-        reviews: data['reviews'] ?? [],
+        reviews: data['reviews'] ?? 0,
         rooms: data['rooms'] ?? 1,
         adults: data['adults'] ?? 0,
         kids: data['kids'] ?? 0,
@@ -116,7 +116,7 @@ class Hotel {
       );
     } else if (data['type'] == 3) {
       return Hotel(
-        id: id ?? '',
+        id: data['id'] ?? '',
         name: data['name'] ?? '',
         dp: data['dp'],
         city: data['city'] ?? '',
@@ -125,7 +125,7 @@ class Hotel {
         price: data['price'] ?? 0,
         summary: data['summary'] ?? '',
         photos: data['photos'] ?? [],
-        reviews: data['reviews'] ?? [],
+        reviews: data['reviews'] ?? 0,
         rooms: data['rooms'] ?? 1,
         adults: data['adults'] ?? 0,
         kids: data['kids'] ?? 0,
@@ -138,7 +138,7 @@ class Hotel {
       );
     }
     return Hotel(
-      id: id ?? '',
+      id: data['id'] ?? '',
       name: data['name'] ?? '',
       dp: data['dp'],
       city: data['city'] ?? '',
@@ -147,7 +147,7 @@ class Hotel {
       price: data['price'] ?? 0,
       summary: data['summary'] ?? '',
       photos: data['photos'] ?? [],
-      reviews: data['reviews'] ?? [],
+      reviews: data['reviews'] ?? 0,
       rooms: data['rooms'] ?? 1,
       adults: data['adults'] ?? 0,
       kids: data['kids'] ?? 0,

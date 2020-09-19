@@ -3,9 +3,9 @@ import 'package:motel/enums/booking_type.dart';
 import 'package:motel/models/firebase/confirm_booking_model.dart';
 import 'package:motel/views/widgets/booking_tab_widgets/booking_list_item.dart';
 
-class OtherBookingTab extends StatelessWidget {
+class AcceptedBookingTab extends StatelessWidget {
   final List<ConfirmBooking> bookings;
-  OtherBookingTab(this.bookings);
+  AcceptedBookingTab(this.bookings);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class OtherBookingTab extends StatelessWidget {
         : ListView.separated(
             itemCount: bookings.length,
             itemBuilder: (context, index) {
-              return BookingListItem(bookings[index], BookingType.other);
+              return BookingListItem(bookings[index], BookingType.accepted);
             },
             separatorBuilder: (context, index) {
               return Divider();
@@ -29,7 +29,7 @@ class OtherBookingTab extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: Text(
-              "You don't have any other bookings",
+              "You don't have any accepted bookings",
               style: TextStyle(
                 fontStyle: FontStyle.italic,
               ),

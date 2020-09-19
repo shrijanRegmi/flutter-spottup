@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -6,6 +5,7 @@ import 'package:lottie/lottie.dart';
 import 'package:motel/helpers/date_helper.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/services/auth/auth_provider.dart';
+import 'package:motel/services/firestore/firebase_messaging_provider.dart';
 import 'package:motel/viewmodels/profile_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 
@@ -27,7 +27,7 @@ class ProfileTab extends StatelessWidget {
                         SizedBox(
                           height: 20.0,
                         ),
-                        _appbarBuilder(context),
+                        _appbarBuilder(context, appUser),
                         _userImgBuilder(context, vm, appUser),
                         SizedBox(
                           height: 20.0,
@@ -59,13 +59,16 @@ class ProfileTab extends StatelessWidget {
     );
   }
 
-  Widget _appbarBuilder(BuildContext context) {
+  Widget _appbarBuilder(BuildContext context, AppUser appUser) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         IconButton(
           icon: Icon(Icons.exit_to_app),
-          onPressed: () => AuthProvider().logOut(),
+          onPressed: () async {
+            FirebaseMessagingProvider(uid: appUser.uid).removeDevice();
+            AuthProvider().logOut();
+          },
         ),
       ],
     );
