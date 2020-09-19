@@ -125,7 +125,7 @@ class NotificationTabVm extends ChangeNotifier {
       final _hotelSnap = await _booking.hotelRef.get();
 
       if (_userSnap.exists && _hotelSnap.exists) {
-        final _appUser = AppUser.fromJson(_userSnap.data);
+        // final _appUser = AppUser.fromJson(_userSnap.data);
         final _hotel = Hotel.fromJson(_hotelSnap.data);
 
         Navigator.push(
@@ -174,7 +174,7 @@ class NotificationTabVm extends ChangeNotifier {
       final _hotelSnap = await _booking.hotelRef.get();
 
       if (_userSnap.exists && _hotelSnap.exists) {
-        final _appUser = AppUser.fromJson(_userSnap.data);
+        // final _appUser = AppUser.fromJson(_userSnap.data);
         final _hotel = Hotel.fromJson(_hotelSnap.data);
 
         Navigator.push(

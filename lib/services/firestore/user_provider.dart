@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:motel/models/firebase/confirm_booking_model.dart';
 import 'package:motel/models/firebase/last_search_model.dart';
 import 'package:motel/models/firebase/notification_model.dart';
+import 'package:motel/models/firebase/payment_model.dart';
 import 'package:motel/models/firebase/upcomming_bookings_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
 
@@ -158,6 +159,11 @@ class UserProvider {
         .toList();
   }
 
+  // payment from firebase
+  Payment _paymentFromFirebase(DocumentSnapshot docSnap) {
+    return Payment.fromJson(docSnap.data);
+  }
+
   // stream of user
   Stream<AppUser> get appUser {
     return _ref
@@ -191,5 +197,14 @@ class UserProvider {
         .orderBy('last_updated', descending: true)
         .snapshots()
         .map(_notificationFromFirebase);
+  }
+
+  // stream of user
+  Stream<Payment> get paymentDetails {
+    return _ref
+        .collection('configs')
+        .document('payment')
+        .snapshots()
+        .map(_paymentFromFirebase);
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:motel/models/firebase/confirm_booking_model.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
+import 'package:motel/models/firebase/payment_model.dart';
 import 'package:motel/viewmodels/booking_accepted_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
@@ -17,6 +18,7 @@ class BookingAcceptedScreen extends StatelessWidget {
       vm: BookingAcceptedVm(context),
       builder: (context, vm, appUser) {
         return Scaffold(
+          key: vm.scaffoldKey,
           body: SafeArea(
             child: vm.isLoading
                 ? Center(
@@ -40,7 +42,7 @@ class BookingAcceptedScreen extends StatelessWidget {
                               SizedBox(
                                 height: 40.0,
                               ),
-                              _paymentDetails(),
+                              _paymentDetails(vm.paymentDetails, vm),
                               SizedBox(
                                 height: 40.0,
                               ),
@@ -92,7 +94,7 @@ class BookingAcceptedScreen extends StatelessWidget {
     );
   }
 
-  Widget _paymentDetails() {
+  Widget _paymentDetails(Payment payment, BookingAcceptedVm vm) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -102,14 +104,22 @@ class BookingAcceptedScreen extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(
-          height: 10.0,
-        ),
-        Text(
-          '1234r9 38r348 83 48 83843848',
-          style: TextStyle(
-            fontSize: 18.0,
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                '${payment.bankAcNum}',
+                style: TextStyle(
+                  fontSize: 18.0,
+                ),
+              ),
+            ),
+            IconButton(
+              onPressed: () => vm.copyToClipboard(payment.bankAcNum),
+              icon: Icon(Icons.content_copy),
+              iconSize: 20.0,
+            )
+          ],
         ),
         SizedBox(
           height: 20.0,
@@ -120,14 +130,22 @@ class BookingAcceptedScreen extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(
-          height: 10.0,
-        ),
-        Text(
-          '1234r9 38r348 83 48 83843848',
-          style: TextStyle(
-            fontSize: 18.0,
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                '${payment.easyPaisaNum}',
+                style: TextStyle(
+                  fontSize: 18.0,
+                ),
+              ),
+            ),
+            IconButton(
+              onPressed: () => vm.copyToClipboard(payment.easyPaisaNum),
+              icon: Icon(Icons.content_copy),
+              iconSize: 20.0,
+            )
+          ],
         ),
       ],
     );
