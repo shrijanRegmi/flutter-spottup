@@ -77,6 +77,28 @@ class FirebaseMessagingProvider {
     }
   }
 
+  Future removeDevice() async {
+    try {
+      final _deviceInfo = DeviceInfoPlugin();
+      final _androidInfo = await _deviceInfo.androidInfo;
+
+      final _deviceRef = _ref
+          .collection('users')
+          .document(uid)
+          .collection('devices')
+          .document(_androidInfo.androidId);
+
+      print(
+          'Success: Deleting device ${_androidInfo.androidId} info from firestore');
+      await _deviceRef.delete();
+      return 'Success';
+    } catch (e) {
+      print(e);
+      print('Error!!! Deleting device info from firestore');
+      return null;
+    }
+  }
+
   _openBookingScreen(final String bookingId) async {
     try {
       final _bookingRef =
