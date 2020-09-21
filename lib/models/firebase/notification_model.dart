@@ -49,6 +49,9 @@ NotificationType _gettype(final type) {
     case 2:
       return NotificationType.bookingReceived;
       break;
+    case 3:
+      return NotificationType.paymentReceived;
+      break;
     default:
       return NotificationType.accepted;
       break;
