@@ -87,7 +87,7 @@ class BookingAcceptedVm extends ChangeNotifier {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'We have received your screenshots with Motel app. Our customer service representative will contact you soon.',
+              'We have received your screenshots with Spott Up app. Our customer service representative will contact you soon.',
             ),
           ],
         ),
