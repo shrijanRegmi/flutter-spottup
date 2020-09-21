@@ -43,12 +43,6 @@ class _AddNewRoomState extends State<AddNewRoom> {
     return Scaffold(
       key: widget.vm.roomScaffoldKey,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: _isTyping
-          ? Container()
-          : RoundedBtn(
-              title: 'Confirm',
-              onPressed: () => widget.vm.addRoomList(context, _appUser.uid),
-            ),
       body: SafeArea(
         child: GestureDetector(
           onTap: () {
@@ -68,6 +62,14 @@ class _AddNewRoomState extends State<AddNewRoom> {
                   ),
                   AddHotelDetail(widget.vm, isRoom: true),
                   AddHotelPhotos(widget.vm, isRoom: true),
+                  RoundedBtn(
+                    title: 'Confirm',
+                    onPressed: () =>
+                        widget.vm.addRoomList(context, _appUser.uid),
+                  ),
+                  SizedBox(
+                    height: 30.0,
+                  ),
                 ],
               ),
             ),

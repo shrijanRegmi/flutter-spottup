@@ -28,7 +28,7 @@ class AddHotelRoom extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 60.0,
+          height: 30.0,
         ),
       ],
     );
