@@ -170,6 +170,9 @@ class NotificationsListItem extends StatelessWidget {
         case NotificationType.declined:
           return "${hotel.name} declined ${user.firstName} ${user.lastName}'s booking";
           break;
+        case NotificationType.paymentReceived:
+          return "Payment screenshots received from ${user.firstName} ${user.lastName}";
+          break;
         default:
           return "${hotel.name} accepted ${user.firstName} ${user.lastName}'s booking";
       }
@@ -183,6 +186,9 @@ class NotificationsListItem extends StatelessWidget {
           break;
         case NotificationType.declined:
           return 'Sorry, your booking of ${hotel.name} was declined.';
+          break;
+        case NotificationType.paymentReceived:
+          return "Payment screenshots received from ${user.firstName} ${user.lastName}";
           break;
         default:
           return 'Congratulations, your booking of ${hotel.name} was accepted.';
@@ -202,6 +208,9 @@ class NotificationsListItem extends StatelessWidget {
         case NotificationType.declined:
           return "${hotel.name} decided to decline ${user.firstName} ${user.lastName}'s booking";
           break;
+        case NotificationType.paymentReceived:
+          return "${user.firstName} ${user.lastName} submitted payment screenshots for ${hotel.name}";
+          break;
         default:
           return "${hotel.name} decided to accept ${user.firstName} ${user.lastName}'s booking";
       }
@@ -215,6 +224,9 @@ class NotificationsListItem extends StatelessWidget {
           break;
         case NotificationType.declined:
           return '${hotel.name} declined your booking. Tap to know why.';
+          break;
+        case NotificationType.paymentReceived:
+          return "${user.firstName} ${user.lastName} submitted payment screenshots for ${hotel.name}";
           break;
         default:
           return '${hotel.name} accepted your booking. Tap for more details.';
