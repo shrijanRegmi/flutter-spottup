@@ -71,7 +71,7 @@ class AppUser {
       firstName: data['first_name'] ?? '',
       lastName: data['last_name'] ?? '',
       email: data['email'] ?? '',
-      photoUrl: data['photo_url'],
+      photoUrl: data['photo_url'] != '' ? data['photo_url'] : null,
       phone: data['phone'] ?? 0,
       dob: data['dob'] ?? 0,
       address: data['address'] ?? 'N/A',
