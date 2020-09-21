@@ -27,7 +27,7 @@ class ProfileTab extends StatelessWidget {
                         SizedBox(
                           height: 20.0,
                         ),
-                        _appbarBuilder(context, appUser),
+                        _appbarBuilder(context, appUser, vm),
                         _userImgBuilder(context, vm, appUser),
                         SizedBox(
                           height: 20.0,
@@ -59,10 +59,29 @@ class ProfileTab extends StatelessWidget {
     );
   }
 
-  Widget _appbarBuilder(BuildContext context, AppUser appUser) {
+  Widget _appbarBuilder(BuildContext context, AppUser appUser, ProfileVm vm) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
+        // Padding(
+        //   padding: const EdgeInsets.only(left: 20.0),
+        //   child: MaterialButton(
+        //     textColor: Color(0xff45ad90),
+        //     child: Text(
+        //       'Invite Friends',
+        //       style: TextStyle(
+        //         fontWeight: FontWeight.bold,
+        //       ),
+        //     ),
+        //     shape: RoundedRectangleBorder(
+        //       side: BorderSide(
+        //         color: Color(0xff45ad90),
+        //       ),
+        //     ),
+        //     onPressed: vm.showInviteDialog,
+        //   ),
+        // ),
+        Container(),
         IconButton(
           icon: Icon(Icons.exit_to_app),
           onPressed: () async {
