@@ -53,16 +53,6 @@ class _AddNewHotelState extends State<AddNewHotel> {
       builder: (context, vm, appUser) {
         return Scaffold(
           key: vm.hotelScaffoldKey,
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: _isTyping || vm.isLoading
-              ? Container()
-              : RoundedBtn(
-                  title: 'Publish Hotel',
-                  onPressed: () {
-                    vm.uploadNewHotel(context, appUser.uid);
-                  },
-                ),
           body: SafeArea(
             child: GestureDetector(
               onTap: () {
@@ -107,6 +97,17 @@ class _AddNewHotelState extends State<AddNewHotel> {
                             AddHotelFeatures(vm),
                             AddHotelPhotos(vm),
                             AddHotelRoom(vm),
+                            _isTyping || vm.isLoading
+                                ? Container()
+                                : RoundedBtn(
+                                    title: 'Publish Hotel',
+                                    onPressed: () {
+                                      vm.uploadNewHotel(context, appUser.uid);
+                                    },
+                                  ),
+                            SizedBox(
+                              height: 30.0,
+                            ),
                           ],
                         ),
                       ),

@@ -23,7 +23,7 @@ class _AddHotelPhotosState extends State<AddHotelPhotos> {
         _addDpBuilder(context),
         _addPhotoBuilder(),
         SizedBox(
-          height: widget.isRoom ? 60.0 : 20.0,
+          height: 20.0,
         ),
       ],
     );
