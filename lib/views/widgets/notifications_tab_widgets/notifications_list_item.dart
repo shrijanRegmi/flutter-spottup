@@ -6,6 +6,7 @@ import 'package:motel/models/firebase/confirm_booking_model.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/notification_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
+import 'package:motel/views/screens/home/payment_screenshot_screen.dart';
 import 'package:provider/provider.dart';
 
 class NotificationsListItem extends StatelessWidget {
@@ -28,6 +29,16 @@ class NotificationsListItem extends StatelessWidget {
           readNotif(_appUser.uid, notification.id);
         }
         onPressedNotification(notification, _bookingsList);
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (_) => PaymentScreenshotScreen(
+        //       ConfirmBooking(),
+        //       Hotel(),
+        //       AppUser(),
+        //     ),
+        //   ),
+        // );
       },
       child: Container(
         color: notification.isRead

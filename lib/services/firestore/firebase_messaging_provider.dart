@@ -9,6 +9,7 @@ import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/views/screens/home/booking_accepted_screen.dart';
 import 'package:motel/views/screens/home/booking_declined_screen.dart';
 import 'package:motel/views/screens/home/open_booking_item_screen.dart';
+import 'package:motel/views/screens/home/payment_screenshot_screen.dart';
 
 class FirebaseMessagingProvider {
   final String uid;
@@ -32,6 +33,9 @@ class FirebaseMessagingProvider {
           case 'booking-accept-decline-screen':
             return _openBookingAcceptDeclineScreen(_id);
             break;
+          case 'payment-screenshot-received-screen':
+            return _openPaymentScreenshotScreen(_id);
+            break;
           default:
         }
         return null;
@@ -47,6 +51,9 @@ class FirebaseMessagingProvider {
             break;
           case 'booking-accept-decline-screen':
             return _openBookingAcceptDeclineScreen(_id);
+            break;
+          case 'payment-screenshot-received-screen':
+            return _openPaymentScreenshotScreen(_id);
             break;
           default:
         }
@@ -206,5 +213,52 @@ class FirebaseMessagingProvider {
         builder: (context) => BookingDeclinedScreen(booking, hotel),
       ),
     );
+  }
+
+  // navigate to payment screenshot screen
+  _openPaymentScreenshotScreen(final String bookingId) async {
+    try {
+      final _bookingRef =
+          _ref.collection('bookings').where('id', isEqualTo: bookingId);
+      final _bookingSnap = await _bookingRef.getDocuments();
+
+      ConfirmBooking _booking;
+
+      if (_bookingSnap.documents.isNotEmpty) {
+        _bookingSnap.documents.forEach((docSnap) {
+          if (docSnap.exists) {
+            _booking = ConfirmBooking.fromJson(docSnap.data);
+          }
+        });
+      }
+
+      if (_booking != null) {
+        final _userRef = _booking.userRef;
+        final _hotelRef = _booking.hotelRef;
+
+        final _userSnap = await _userRef.get();
+        final _hotelSnap = await _hotelRef.get();
+
+        if (_userSnap.exists && _hotelSnap.exists) {
+          final _appUser = AppUser.fromJson(_userSnap.data);
+          final _hotel = Hotel.fromJson(_hotelSnap.data);
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => PaymentScreenshotScreen(
+                _booking,
+                _hotel,
+                _appUser,
+              ),
+            ),
+          );
+        }
+        print('Success: Opening payment ss screen');
+      }
+    } catch (e) {
+      print(e);
+      print('Error!!! Opening payment ss screen');
+    }
   }
 }
