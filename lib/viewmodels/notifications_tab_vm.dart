@@ -9,6 +9,7 @@ import 'package:motel/services/firestore/user_provider.dart';
 import 'package:motel/views/screens/home/booking_accepted_screen.dart';
 import 'package:motel/views/screens/home/booking_declined_screen.dart';
 import 'package:motel/views/screens/home/open_booking_item_screen.dart';
+import 'package:motel/views/screens/home/payment_screenshot_screen.dart';
 import 'package:provider/provider.dart';
 
 class NotificationTabVm extends ChangeNotifier {
@@ -39,6 +40,9 @@ class NotificationTabVm extends ChangeNotifier {
         break;
       case NotificationType.accepted:
         navigateToBookingAcceptedScreen(notification, bookingsList);
+        break;
+      case NotificationType.paymentReceived:
+        navigateToPaymentScreenshotScreen(notification, bookingsList);
         break;
       default:
     }
@@ -183,6 +187,56 @@ class NotificationTabVm extends ChangeNotifier {
             builder: (context) => BookingAcceptedScreen(
               _booking,
               _hotel,
+            ),
+          ),
+        );
+      }
+    }
+
+    updateLoadingVal(false);
+  }
+
+  // goto payment screenshot screen
+  navigateToPaymentScreenshotScreen(
+      AppNotification notification, List<ConfirmBooking> bookingsList) async {
+    updateLoadingVal(true);
+
+    bool _bookingExists = false;
+    var _booking = bookingsList.firstWhere(
+        (booking) => booking.bookingId == notification.bookingId,
+        orElse: () => null);
+
+    if (_booking == null) {
+      final _bookingRef = _ref
+          .collection('bookings')
+          .where('id', isEqualTo: notification.bookingId)
+          .limit(1);
+
+      final _bookingSnap = await _bookingRef.getDocuments();
+
+      if (_bookingSnap.documents.isNotEmpty) {
+        _booking = ConfirmBooking.fromJson(_bookingSnap.documents.first.data);
+        _bookingExists = true;
+      }
+    } else {
+      _bookingExists = true;
+    }
+
+    if (_bookingExists) {
+      final _userSnap = await _booking.userRef.get();
+      final _hotelSnap = await _booking.hotelRef.get();
+
+      if (_userSnap.exists && _hotelSnap.exists) {
+        final _appUser = AppUser.fromJson(_userSnap.data);
+        final _hotel = Hotel.fromJson(_hotelSnap.data);
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PaymentScreenshotScreen(
+              _booking,
+              _hotel,
+              _appUser,
             ),
           ),
         );
