@@ -183,16 +183,16 @@ class NotificationsListItem extends StatelessWidget {
     if (appUser.admin) {
       switch (notification.type) {
         case NotificationType.bookingReceived:
-          return '${appUser.firstName} ${appUser.lastName} booked ${hotel.name}';
+          return '${user.firstName} ${user.lastName} booked ${hotel.name}';
           break;
         case NotificationType.accepted:
-          return "${hotel.name} decided to accept ${appUser.firstName} ${appUser.lastName}'s booking";
+          return "${hotel.name} decided to accept ${user.firstName} ${user.lastName}'s booking";
           break;
         case NotificationType.declined:
-          return "${hotel.name} decided to decline ${appUser.firstName} ${appUser.lastName}'s booking";
+          return "${hotel.name} decided to decline ${user.firstName} ${user.lastName}'s booking";
           break;
         default:
-          return "${hotel.name} decided to accept ${appUser.firstName} ${appUser.lastName}'s booking";
+          return "${hotel.name} decided to accept ${user.firstName} ${user.lastName}'s booking";
       }
     } else {
       switch (notification.type) {
