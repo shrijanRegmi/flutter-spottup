@@ -28,7 +28,8 @@ class HotelProvider {
       final _hotelRef = _ref.collection('hotels').document();
       hotel.id = _hotelRef.documentID;
       print('Success: Adding new hotel');
-      return await _hotelRef.setData(hotel.toJson());
+      await _hotelRef.setData(hotel.toJson());
+      return _hotelRef;
     } catch (e) {
       print(e);
       print('Error!!!: Adding new hotel');
@@ -43,7 +44,8 @@ class HotelProvider {
       final _roomRef = _hotelRef.collection('rooms').document();
       _room.id = _roomRef.documentID;
       print('Success: Uploading new room');
-      return await _roomRef.setData(_room.toJson());
+      await _roomRef.setData(_room.toJson());
+      return _roomRef;
     } catch (e) {
       print(e);
       print('Error!!!: Uploading new room');
