@@ -97,7 +97,7 @@ class _AddNewHotelState extends State<AddNewHotel> {
                             AddHotelFeatures(vm),
                             AddHotelPhotos(vm),
                             AddHotelRoom(vm),
-                            _isTyping || vm.isLoading
+                            vm.isLoading
                                 ? Container()
                                 : RoundedBtn(
                                     title: 'Publish Hotel',
