@@ -100,7 +100,7 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
                           horizontal: 20.0, vertical: 10.0),
                       child: Divider(),
                     ),
-                  HotelReviewsList(widget.hotel),
+                  if (!widget.isRoom) HotelReviewsList(widget.hotel),
                   SizedBox(
                     height: 50.0,
                   ),
