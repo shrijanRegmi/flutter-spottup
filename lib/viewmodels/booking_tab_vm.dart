@@ -60,7 +60,6 @@ class BookingTabVm extends ChangeNotifier {
         content: TextFormField(
           minLines: 1,
           maxLines: 3,
-          textCapitalization: TextCapitalization.words,
           decoration: InputDecoration(
             hintText: 'Type your reason...',
             focusedBorder: UnderlineInputBorder(
