@@ -46,64 +46,65 @@ class AddHotelRoom extends StatelessWidget {
 
   Widget _roomListBuilder() {
     final _list = [Hotel(), ...vm.rooms.reversed];
-    return Container(
-      height: 150.0,
-      child: ListView.builder(
-        itemCount: _list.length,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            return Padding(
-              padding: const EdgeInsets.only(right: 20.0, bottom: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  vm.clearControllers();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => AddNewRoom(vm),
-                    ),
-                  );
-                },
-                child: Container(
-                  width: 150.0,
-                  height: 100.0,
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    border: Border.all(
-                      color: Color(0xff45ad90),
-                      width: 2.0,
-                    ),
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.hotel,
-                          color: Color(0xff45ad90),
-                          size: 20.0,
-                        ),
-                      ],
-                    ),
-                  ),
+    return ListView.builder(
+      itemCount: _list.length,
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          return GestureDetector(
+            onTap: () {
+              vm.clearControllers();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => AddNewRoom(vm),
                 ),
+              );
+            },
+            child: Container(
+              height: 100.0,
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                border: Border.all(
+                  color: Color(0xff45ad90),
+                  width: 2.0,
+                ),
+                borderRadius: BorderRadius.circular(5.0),
               ),
-            );
-          }
-          return _imgListItemBuilder(_list[index], File(_list[index].dp));
-        },
-      ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    vm.rooms.length >= 1 ? 'Add another room' : 'Add a room',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff45ad90),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Icon(
+                    Icons.hotel,
+                    color: Color(0xff45ad90),
+                    size: 20.0,
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+        return _imgListItemBuilder(_list[index], File(_list[index].dp));
+      },
     );
   }
 
   Widget _imgListItemBuilder(final Hotel room, final _img) {
     return Padding(
-      padding: const EdgeInsets.only(right: 20.0, bottom: 20.0),
+      padding: const EdgeInsets.only(top: 20.0),
       child: Container(
-        width: 150.0,
-        height: 100.0,
+        height: 200.0,
         decoration: BoxDecoration(
           color: Colors.transparent,
           border: Border.all(
@@ -116,24 +117,47 @@ class AddHotelRoom extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        child: Align(
-          alignment: Alignment.topRight,
-          child: Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Container(
-              width: 40.0,
-              height: 50.0,
-              decoration: BoxDecoration(
-                color: Colors.black26,
-                borderRadius: BorderRadius.circular(10.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Container(
+                  width: 40.0,
+                  height: 50.0,
+                  decoration: BoxDecoration(
+                    color: Colors.black26,
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: IconButton(
+                      icon: Icon(Icons.delete),
+                      iconSize: 18.0,
+                      color: Colors.grey[100],
+                      onPressed: () => vm.removeRoom(room)),
+                ),
               ),
-              child: IconButton(
-                  icon: Icon(Icons.delete),
-                  iconSize: 18.0,
-                  color: Colors.grey[100],
-                  onPressed: () => vm.removeRoom(room)),
             ),
-          ),
+            Container(
+              height: 30.0,
+              decoration: BoxDecoration(
+                color: Colors.black38,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    room.name,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );
