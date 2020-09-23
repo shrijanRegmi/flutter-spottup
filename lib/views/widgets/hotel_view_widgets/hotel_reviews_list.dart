@@ -15,7 +15,7 @@ class HotelReviewsList extends StatelessWidget {
     return Column(
       children: <Widget>[
         LeftRightText(
-          leftText: 'Reviews (${hotel.reviews})',
+          leftText: 'Reviews',
           rightText: '',
           requiredIcon: false,
         ),
