@@ -163,6 +163,7 @@ class HotelProvider {
   Stream<List<PopularDestination>> get popularDestinations {
     return _ref
         .collection('popular_destinations')
+        .orderBy('id')
         .snapshots()
         .map(_popularDestinationsFromFirestore);
   }
