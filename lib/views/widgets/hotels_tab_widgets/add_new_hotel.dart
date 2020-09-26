@@ -48,6 +48,10 @@ class _AddNewHotelState extends State<AddNewHotel> {
         featuresList.forEach((feature) {
           feature.isSelected = false;
         });
+
+        if (widget.hotel != null) {
+          vm.initializeHotelValues(widget.hotel);
+        }
       },
       vm: AddNewHotelVm(),
       builder: (context, vm, appUser) {
@@ -73,7 +77,7 @@ class _AddNewHotelState extends State<AddNewHotel> {
                           ),
                           SizedBox(height: 10.0),
                           Text(
-                            'Uploading Hotel Photos',
+                            'Publishing your hotel',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
@@ -102,7 +106,15 @@ class _AddNewHotelState extends State<AddNewHotel> {
                                 : RoundedBtn(
                                     title: 'Publish Hotel',
                                     onPressed: () {
-                                      vm.uploadNewHotel(context, appUser.uid);
+                                      vm.isEditing
+                                          ? vm.updateExistingHotel(
+                                              context,
+                                              appUser.uid,
+                                              widget.hotel,
+                                            )
+                                          : vm.uploadNewHotel(
+                                              context, appUser.uid);
+                                      ;
                                     },
                                   ),
                             SizedBox(
@@ -123,7 +135,12 @@ class _AddNewHotelState extends State<AddNewHotel> {
     return IconButton(
       icon: Icon(Icons.arrow_back),
       onPressed: () {
-        Navigator.pop(context);
+        if (vm.isEditing) {
+          Navigator.pop(context);
+          Navigator.pop(context);
+        } else {
+          Navigator.pop(context);
+        }
       },
     );
   }

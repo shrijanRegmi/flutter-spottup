@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/viewmodels/add_new_hotel_vm.dart';
 import 'package:motel/views/widgets/add_new_hotel_widgets/add_hotel_details.dart';
@@ -11,7 +12,9 @@ import 'package:provider/provider.dart';
 
 class AddNewRoom extends StatefulWidget {
   final AddNewHotelVm vm;
-  AddNewRoom(this.vm);
+  final Hotel room;
+  final int pos;
+  AddNewRoom(this.vm, this.room, this.pos);
 
   @override
   _AddNewRoomState createState() => _AddNewRoomState();
@@ -24,6 +27,9 @@ class _AddNewRoomState extends State<AddNewRoom> {
   @override
   void initState() {
     super.initState();
+    if (widget.room != null) {
+      widget.vm.initializeRoomValues(widget.room);
+    }
     _subscription = KeyboardVisibility.onChange.listen((event) {
       setState(() {
         _isTyping = event;
@@ -64,8 +70,10 @@ class _AddNewRoomState extends State<AddNewRoom> {
                   AddHotelPhotos(widget.vm, isRoom: true),
                   RoundedBtn(
                     title: 'Confirm',
-                    onPressed: () =>
-                        widget.vm.addRoomList(context, _appUser.uid),
+                    onPressed: () => widget.vm.isEditing && widget.room != null
+                        ? widget.vm
+                            .updateRoomsList(context, widget.pos, widget.room)
+                        : widget.vm.addRoomList(context, _appUser.uid),
                   ),
                   SizedBox(
                     height: 30.0,
