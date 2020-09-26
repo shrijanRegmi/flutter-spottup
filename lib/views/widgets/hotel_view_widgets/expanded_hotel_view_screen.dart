@@ -9,6 +9,7 @@ import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 import 'package:motel/views/widgets/hotel_view_widgets/hotel_features_list.dart';
 import 'package:motel/views/widgets/hotel_view_widgets/hotel_reviews_list.dart';
 import 'package:motel/views/widgets/hotel_view_widgets/hotel_rooms_list.dart';
+import 'package:motel/views/widgets/hotels_tab_widgets/add_new_hotel.dart';
 import 'package:provider/provider.dart';
 
 import 'hotel_photos_list.dart';
@@ -123,7 +124,16 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             FloatingActionButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => AddNewHotel(
+                                      hotel: widget.hotel,
+                                    ),
+                                  ),
+                                );
+                              },
                               child: Center(
                                 child: Icon(Icons.edit),
                               ),

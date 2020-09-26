@@ -82,6 +82,43 @@ class HotelProvider {
     }
   }
 
+  // update hotel data
+  Future updateHotelData(final Map<String, dynamic> data) async {
+    try {
+      final _hotelRef = _ref.collection('hotels').document(hotelId);
+      await _hotelRef.updateData(data);
+
+      print('Success: Updating hotel data $data');
+      return _hotelRef;
+    } catch (e) {
+      print(e);
+      print('Error!!!: Updating hotel data $data');
+      return null;
+    }
+  }
+
+  // update room data
+  Future updateRoomData(final DocumentReference _hotelRef,
+      final Map<String, dynamic> _data, final String roomId) async {
+    try {
+      final _roomRef = _hotelRef.collection('rooms').document(roomId);
+      final _roomsSnap = await _roomRef.get();
+      print('Success: Updating room $_data');
+      if (_roomsSnap.exists) {
+        await _roomRef.updateData(_data);
+      } else {
+        _data.remove('id');
+        _data.addAll({'id': _roomRef.documentID});
+        await _roomRef.setData(_data);
+      }
+      return _roomRef;
+    } catch (e) {
+      print(e);
+      print('Error!!!: Updating room $_data');
+      return null;
+    }
+  }
+
   // hotels list from firestore
   List<Hotel> _hotelsFromFirestore(QuerySnapshot colSnap) {
     return colSnap.documents.map((docSnap) {
