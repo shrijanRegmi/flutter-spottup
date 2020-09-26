@@ -30,6 +30,7 @@ class AddNewHotelVm extends ChangeNotifier {
   GlobalKey<ScaffoldState> _hotelScaffoldKey = GlobalKey<ScaffoldState>();
   GlobalKey<ScaffoldState> _roomScaffoldKey = GlobalKey<ScaffoldState>();
   List<HotelFeatures> _selectedFeatures = [];
+  bool _isEditing = false;
 
   TextEditingController get nameController => _nameController;
   TextEditingController get cityController => _cityController;
@@ -52,6 +53,7 @@ class AddNewHotelVm extends ChangeNotifier {
   GlobalKey<ScaffoldState> get hotelScaffoldKey => _hotelScaffoldKey;
   GlobalKey<ScaffoldState> get roomScaffoldKey => _roomScaffoldKey;
   List<HotelFeatures> get selectedFeatures => _selectedFeatures;
+  bool get isEditing => _isEditing;
 
   // next btn pressed
   onNextPressed(bool newVal) {
@@ -155,6 +157,108 @@ class AddNewHotelVm extends ChangeNotifier {
     }
   }
 
+  // update hotel
+  updateExistingHotel(
+    final BuildContext context,
+    final String appUserId,
+    final Hotel hotel,
+  ) async {
+    if (_nameController.text.trim() != '' &&
+        _cityController.text.trim() != '' &&
+        _countryController.text.trim() != '' &&
+        _priceController.text.trim() != '' &&
+        _summaryController.text.trim() != '') {
+      if (_dp != null) {
+        _updateLoaderValue(true);
+        String _mDp = hotel.dp;
+        List<dynamic> _mPhotos = [];
+        List<File> _newFilePhotos = [];
+        List<String> _newStringPhotos = [];
+        List<HotelFeatures> _existingFeatures = [];
+
+        featuresList.forEach((element) {
+          if (element.isSelected) {
+            _existingFeatures.add(element);
+          }
+        });
+
+        if (!_dp.path.contains('.com') && hotel.dp != _dp.path) {
+          _mDp = await HotelStorage().uploadHotelDp(_dp);
+        }
+
+        _photos.forEach((photo) {
+          if (!photo.path.contains('.com')) {
+            _newFilePhotos.add(photo);
+          } else {
+            _newStringPhotos.add(photo.path);
+          }
+        });
+
+        if (_newFilePhotos.isNotEmpty) {
+          _mPhotos = await HotelStorage().uploadHotelPhotos(_newFilePhotos);
+        }
+
+        final _updatedHotel = Hotel(
+          id: hotel.id,
+          dp: _mDp,
+          photos: [..._newStringPhotos, ..._mPhotos],
+          ownerId: hotel.ownerId,
+          kids: hotel.kids,
+          adults: hotel.adults,
+          rooms: hotel.rooms,
+          features: _existingFeatures,
+          searchKey: hotel.searchKey,
+          name: _nameController.text.trim(),
+          city: _cityController.text.trim(),
+          country: _countryController.text.trim(),
+          price: int.parse(_priceController.text.trim()),
+          summary: _summaryController.text.trim(),
+        );
+
+        final _data = _updatedHotel.toJson();
+
+        _data.removeWhere((key, value) =>
+            value == hotel.searchKey ||
+            value == hotel.id ||
+            value == hotel.dp ||
+            value == hotel.photos ||
+            value == hotel.ownerId ||
+            value == hotel.kids ||
+            value == hotel.adults ||
+            value == hotel.rooms ||
+            value == hotel.photos ||
+            value == hotel.features ||
+            value == hotel.name ||
+            value == hotel.city ||
+            value == hotel.country ||
+            value == hotel.price ||
+            value == hotel.summary);
+
+        var _result =
+            await HotelProvider(hotelId: hotel.id).updateHotelData(_data);
+
+        if (_rooms.isNotEmpty) {
+          _result = await _updateRooms(_result);
+        }
+
+        if (_result == null) {
+          _updateLoaderValue(false);
+        } else {
+          Navigator.pop(context);
+          Navigator.pop(context);
+        }
+      } else {
+        _hotelScaffoldKey.currentState.showSnackBar(SnackBar(
+          content: Text('Please upload display picture.'),
+        ));
+      }
+    } else {
+      _hotelScaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text('Please fill up all the input fields.'),
+      ));
+    }
+  }
+
   // update value of loader
   _updateLoaderValue(final bool _newVal) {
     _isLoading = _newVal;
@@ -165,6 +269,56 @@ class AddNewHotelVm extends ChangeNotifier {
   _updateProgressVal(final String _newVal) {
     _progressText = _newVal;
     notifyListeners();
+  }
+
+  // update rooms
+  _updateRooms(final DocumentReference _hotelRef) async {
+    List<dynamic> _results;
+    for (final _room in _rooms) {
+      String _mRoomDp = _room.dp;
+      List<String> _mRoomPhotos = [];
+      List<String> _mStringRoomPhotos = [];
+      List<File> _mFileRoomPhotos = [];
+
+      if (!_room.dp.contains('.com')) {
+        _mRoomDp = await HotelStorage().uploadHotelDp(File(_room.dp));
+      }
+
+      _roomPhotos.forEach((roomPhoto) {
+        if (!roomPhoto.path.contains('.com')) {
+          _mFileRoomPhotos.add(roomPhoto);
+        } else {
+          _mStringRoomPhotos.add(roomPhoto.path);
+        }
+      });
+
+      if (_mFileRoomPhotos.isNotEmpty) {
+        _mRoomPhotos = await HotelStorage().uploadHotelPhotos(_mFileRoomPhotos);
+      }
+
+      final _resultedRoom = Hotel(
+        id: _room.id,
+        adults: _room.adults,
+        city: _room.city,
+        country: _room.country,
+        dp: _mRoomDp,
+        photos: [..._mStringRoomPhotos, ..._mRoomPhotos],
+        kids: _room.kids,
+        name: _room.name,
+        price: _room.price,
+        summary: _room.summary,
+        features: [],
+      );
+
+      final _data = _resultedRoom.toJson();
+
+      final _result =
+          await HotelProvider().updateRoomData(_hotelRef, _data, _room.id);
+
+      _results = [];
+      _results.add(_result);
+    }
+    return _results;
   }
 
   // upload rooms
@@ -200,7 +354,7 @@ class AddNewHotelVm extends ChangeNotifier {
     return _results;
   }
 
-  // update rooms list
+  // add rooms list
   addRoomList(final BuildContext context, final String appUserId) {
     if (_roomNameController.text.trim() != '' &&
         _roomAdultController.text.trim() != '' &&
@@ -222,6 +376,45 @@ class AddNewHotelVm extends ChangeNotifier {
         );
 
         _rooms.add(_room);
+        Navigator.pop(context);
+      } else {
+        _roomScaffoldKey.currentState.showSnackBar(SnackBar(
+          content: Text('Please upload display picture.'),
+        ));
+      }
+    } else {
+      _roomScaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text('Please fill up all the input fields.'),
+      ));
+    }
+    notifyListeners();
+  }
+
+  // update rooms list
+  updateRoomsList(
+      final BuildContext context, final int _pos, final Hotel room) {
+    if (_roomNameController.text.trim() != '' &&
+        _roomAdultController.text.trim() != '' &&
+        _roomKidController.text.trim() != '' &&
+        _roomPriceController.text.trim() != '' &&
+        _roomSummaryController.text.trim() != '') {
+      if (_roomDp != null) {
+        final _room = Hotel(
+          id: room.id,
+          name: _roomNameController.text.trim(),
+          price: int.parse(_roomPriceController.text.trim()),
+          summary: _roomSummaryController.text.trim(),
+          dp: _roomDp.path,
+          photos: _getStringFromFile(_roomPhotos),
+          ownerId: room.ownerId,
+          kids: int.parse(_roomKidController.text.trim()),
+          adults: int.parse(_roomAdultController.text.trim()),
+          city: _cityController.text.trim(),
+          country: _countryController.text.trim(),
+        );
+
+        _rooms.insert(_pos, _room);
+        _rooms.remove(room);
         Navigator.pop(context);
       } else {
         _roomScaffoldKey.currentState.showSnackBar(SnackBar(
@@ -288,5 +481,89 @@ class AddNewHotelVm extends ChangeNotifier {
   removeFeature(final HotelFeatures feature) {
     _selectedFeatures.remove(feature);
     notifyListeners();
+  }
+
+  // initialize all the hotel values
+  initializeHotelValues(final Hotel hotel) async {
+    _isEditing = true;
+
+    // general details
+    _nameController.text = hotel.name;
+    _cityController.text = hotel.city;
+    _countryController.text = hotel.country;
+    _priceController.text = hotel.price.toString();
+    _summaryController.text = hotel.summary;
+
+    // hotel features
+    List<String> _featuresListTitle = [];
+    List<String> _hotelFeaturesTitle = [];
+    List<int> _position = [];
+    featuresList.forEach((element) {
+      _featuresListTitle.add(element.title);
+    });
+    hotel.features.forEach((element) {
+      _hotelFeaturesTitle.add(element.title);
+    });
+    _featuresListTitle.forEach((element) {
+      if (_hotelFeaturesTitle.contains(element)) {
+        _position.add(_featuresListTitle.indexOf(element));
+      }
+    });
+    _position.forEach((element) {
+      featuresList[element].isSelected = true;
+    });
+
+    // rooms
+    final _ref = Firestore.instance;
+    final _roomsRef =
+        _ref.collection('hotels').document(hotel.id).collection('rooms');
+
+    final _roomsSnap = await _roomsRef.getDocuments();
+    if (_roomsSnap.documents.isNotEmpty) {
+      for (var _roomSnap in _roomsSnap.documents) {
+        final _room = Hotel.fromJson(_roomSnap.data);
+        _rooms.add(_room);
+      }
+    }
+
+    // images
+    _dp = File(hotel.dp);
+    _photos = _getFileFromString(List<String>.from(hotel.photos));
+
+    notifyListeners();
+  }
+
+  // initialize all the room values
+  initializeRoomValues(final Hotel room) async {
+    _isEditing = true;
+
+    // general details
+    _roomNameController.text = room.name;
+    _roomAdultController.text = room.adults.toString();
+    _roomKidController.text = room.kids.toString();
+    _roomPriceController.text = room.price.toString();
+    _roomSummaryController.text = room.summary;
+
+    // images
+    _roomDp = File(room.dp);
+    _roomPhotos = _getFileFromString(List<String>.from(room.photos));
+
+    notifyListeners();
+  }
+
+  _getFileFromString(final List<String> hotelPhotos) {
+    List<File> _list = [];
+    hotelPhotos.forEach((element) {
+      _list.add(File(element));
+    });
+    return _list;
+  }
+
+  _getStringFromFile(final List<File> hotelPhotos) {
+    List<String> _list = [];
+    hotelPhotos.forEach((element) {
+      _list.add(element.path);
+    });
+    return _list;
   }
 }

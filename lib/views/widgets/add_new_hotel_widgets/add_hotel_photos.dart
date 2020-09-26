@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:motel/viewmodels/add_new_hotel_vm.dart';
 
@@ -62,7 +63,11 @@ class _AddHotelPhotosState extends State<AddHotelPhotos> {
             borderRadius: BorderRadius.circular(5.0),
             image: _dp != null
                 ? DecorationImage(
-                    image: FileImage(_dp),
+                    image: _dp.path.contains('.com')
+                        ? CachedNetworkImageProvider(
+                            _dp.path,
+                          )
+                        : FileImage(_dp),
                     fit: BoxFit.cover,
                   )
                 : null,
@@ -181,7 +186,11 @@ class _AddHotelPhotosState extends State<AddHotelPhotos> {
             ),
             borderRadius: BorderRadius.circular(5.0),
             image: DecorationImage(
-              image: FileImage(_img),
+              image: _img.path.contains('.com')
+                  ? CachedNetworkImageProvider(
+                      _img.path,
+                    )
+                  : FileImage(_img),
               fit: BoxFit.cover,
             ),
           ),
