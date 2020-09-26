@@ -44,7 +44,7 @@ class Hotel {
     this.availableCheckOut,
     this.ownerId,
     this.searchKey,
-    this.features,
+    this.features = const [],
   });
 
   static Hotel fromJson(final Map<String, dynamic> data) {
