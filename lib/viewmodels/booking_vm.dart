@@ -22,6 +22,7 @@ class BookVm extends ChangeNotifier {
   List<SelectedRoom> _selectedRooms = [];
   TextEditingController _adultController = TextEditingController();
   TextEditingController _kidController = TextEditingController();
+  TextEditingController _roomController = TextEditingController();
   bool _isRoomSelected = false;
 
   DateTime get checkInDate => _checkInDate;
@@ -300,7 +301,7 @@ class BookVm extends ChangeNotifier {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Select number of adults and kids'),
+            Text('Select number of adults, kids and rooms'),
             TextField(
               decoration: InputDecoration(
                 hintText: 'Adults',
@@ -313,6 +314,13 @@ class BookVm extends ChangeNotifier {
                 hintText: 'Kids',
               ),
               controller: _kidController,
+              keyboardType: TextInputType.number,
+            ),
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'Rooms',
+              ),
+              controller: _roomController,
               keyboardType: TextInputType.number,
             ),
           ],
@@ -339,7 +347,9 @@ class BookVm extends ChangeNotifier {
             padding: const EdgeInsets.only(right: 10.0, bottom: 10.0),
             child: InkWell(
               onTap: () {
-                if (_adultController.text != '' || _kidController.text != '') {
+                if (_adultController.text != '' ||
+                    _kidController.text != '' ||
+                    _roomController.text.trim() != '') {
                   if (_selectedRooms
                       .where((element) => element.roomName == room.name)
                       .toList()
@@ -353,6 +363,9 @@ class BookVm extends ChangeNotifier {
                         kid: _kidController.text != ''
                             ? int.parse(_kidController.text.trim())
                             : 0,
+                        rooms: _roomController.text.trim() != ''
+                            ? int.parse(_roomController.text.trim())
+                            : 1,
                         price: room.price,
                       ),
                     );
@@ -360,6 +373,7 @@ class BookVm extends ChangeNotifier {
                   notifyListeners();
                   _adultController.clear();
                   _kidController.clear();
+                  _roomController.clear();
                   Navigator.pop(context);
                 }
               },
@@ -460,5 +474,6 @@ class SelectedRoom {
   final int adult;
   final int kid;
   final int price;
-  SelectedRoom({this.roomName, this.adult, this.kid, this.price});
+  final int rooms;
+  SelectedRoom({this.roomName, this.adult, this.kid, this.price, this.rooms});
 }

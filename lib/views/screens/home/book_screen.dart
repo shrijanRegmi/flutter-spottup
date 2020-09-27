@@ -457,7 +457,8 @@ class _BookScreenState extends State<BookScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text('${room.adult} Adult, ${room.kid} Kids'),
+                        Text(
+                            "${room.adult} Adult, ${room.kid} Kids - ${room.rooms} ${room.rooms != 1 ? 'Rooms' : 'Room'}"),
                       ],
                     ),
                   ),
@@ -662,5 +663,4 @@ class _BookScreenState extends State<BookScreen> {
       ),
     );
   }
-
 }
