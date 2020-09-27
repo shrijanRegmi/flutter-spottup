@@ -198,6 +198,7 @@ class UserProvider {
         .document(uid)
         .collection('notifications')
         .orderBy('last_updated', descending: true)
+        .limit(50)
         .snapshots()
         .map(_notificationFromFirebase);
   }
