@@ -109,6 +109,7 @@ class UserProvider {
         hotelRef: booking.hotelRef,
         checkIn: booking.checkInDate,
         checkOut: booking.checkOutDate,
+        issueDate: DateTime.now().millisecondsSinceEpoch,
       );
 
       _result = await _upcommingRef.add(_upcoming.toJson());
@@ -184,6 +185,8 @@ class UserProvider {
         .collection('users')
         .document(uid)
         .collection('upcomming')
+        .orderBy('issue_date', descending: true)
+        .limit(50)
         .snapshots()
         .map(_upcomingBookingFromFirebase);
   }
@@ -195,6 +198,7 @@ class UserProvider {
         .document(uid)
         .collection('notifications')
         .orderBy('last_updated', descending: true)
+        .limit(50)
         .snapshots()
         .map(_notificationFromFirebase);
   }
