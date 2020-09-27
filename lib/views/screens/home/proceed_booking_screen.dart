@@ -130,7 +130,7 @@ class ProceedBookingScreen extends StatelessWidget {
     List<Widget> _list = [];
     for (final room in rooms) {
       _list.add(
-        Text('${room.roomName}: ${room.adult} Adults, ${room.kid} Kids'),
+        Text('${room.roomName}: ${room.adult} Adults, ${room.kid} Kids - ${room.rooms} ${room.rooms != 1 ? 'Rooms' : 'Room'}'),
       );
     }
     return _list;
@@ -140,7 +140,7 @@ class ProceedBookingScreen extends StatelessWidget {
     List<String> _list = [];
     for (final room in rooms) {
       _list.add(
-        '${room.roomName}: ${room.adult} Adults, ${room.kid} Kids',
+        '${room.roomName}: ${room.adult} Adults, ${room.kid} Kids - ${room.rooms} ${room.rooms != 1 ? 'Rooms' : 'Room'}',
       );
     }
     return _list;
