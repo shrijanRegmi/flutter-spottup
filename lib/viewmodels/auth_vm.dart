@@ -99,6 +99,52 @@ class AuthVm extends ChangeNotifier {
     return _result;
   }
 
+  // reset password
+  resetPassword(BuildContext context) async {
+    if (_emailController.text.trim() != '') {
+      _updateProgressBar(true);
+
+      final _email = _emailController.text.trim();
+      _emailController.clear();
+      final _result = await AuthProvider().resetPassword(_email);
+      if (_result != null) {
+        Navigator.pop(context);
+        _showResetSuccessDialog(context);
+      }
+    }
+  }
+
+  // show reset dialog
+  _showResetSuccessDialog(BuildContext context) async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Reset Successful'),
+        content: Text(
+          'We have sent a password recovery link in your email. Please check your email',
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+            child: InkWell(
+              onTap: () => Navigator.pop(context),
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Text(
+                  'OK',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xff45ad90),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   // update progress bar
   _updateProgressBar(final bool newVal) {
     _showingProgressBar = newVal;
