@@ -3,6 +3,7 @@ import 'package:lottie/lottie.dart';
 import 'package:motel/viewmodels/auth_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/screens/auth/create_account_screen.dart';
+import 'package:motel/views/screens/auth/forget_password_screen.dart';
 import 'package:motel/views/widgets/auth_widgets/auth_field.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 
@@ -56,7 +57,11 @@ class LoginScreen extends StatelessWidget {
                                   _authContainerBuilder(
                                       vm.emailController, vm.passController),
                                   SizedBox(
-                                    height: 40.0,
+                                    height: 20.0,
+                                  ),
+                                  _forgotPasswordTextBuilder(context),
+                                  SizedBox(
+                                    height: 20.0,
                                   ),
                                   _loginBtnBuilder(
                                       vm.loginWithEmailAndPassword),
@@ -115,6 +120,35 @@ class LoginScreen extends StatelessWidget {
             fontWeight: FontWeight.w600,
             fontSize: 12.0,
             color: Colors.black38,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _forgotPasswordTextBuilder(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => ForgotPasswordScreen(),
+              ),
+            );
+          },
+          child: Container(
+            color: Colors.transparent,
+            child: Text(
+              'Forgot Password ?',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 14.0,
+                color: Colors.black38,
+              ),
+            ),
           ),
         ),
       ],

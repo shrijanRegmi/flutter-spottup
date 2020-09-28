@@ -117,6 +117,19 @@ class AuthProvider {
     return await _auth.signOut();
   }
 
+  // reset password
+  Future resetPassword(final String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      print('Success: Sending password reset email');
+      return 'Success';
+    } catch (e) {
+      print(e);
+      print('Error!!!: Sending password reset email');
+      return null;
+    }
+  }
+
   // user from firebase
   AppUser _userFromFirebase(FirebaseUser user) {
     return user != null ? AppUser(uid: user.uid) : null;
