@@ -15,7 +15,7 @@ class Wrapper extends StatelessWidget {
     final _appUser = Provider.of<AppUser>(context);
     return _appUser == null && appUser == null
         ? WelcomeScreen()
-        : _appUser?.accountType == AccountType.hotelOwner
+        : _appUser?.accountType == AccountType.hotelPartner
             ? OwnerHomeScreen(appUser.uid)
             : HomeScreen(appUser.uid);
   }

@@ -33,7 +33,7 @@ class AppUser {
   });
 
   static AppUser fromJson(final Map<String, dynamic> data) {
-    if (data['account_type'] == AccountType.hotelOwner.index) {
+    if (data['account_type'] == AccountType.hotelPartner.index) {
       return AppUser(
         uid: data['uid'] ?? '',
         firstName: data['first_name'] ?? '',
@@ -46,10 +46,10 @@ class AppUser {
         upcoming: data['upcoming'] ?? [],
         finished: data['finished'] ?? [],
         favourite: data['favourite'] ?? [],
-        accountType: AccountType.hotelOwner,
+        accountType: AccountType.hotelPartner,
         admin: data['admin'] ?? false,
       );
-    } else if (data['account_type'] == AccountType.hotelOwner.index) {
+    } else if (data['account_type'] == AccountType.hotelPartner.index) {
       return AppUser(
         uid: data['uid'] ?? '',
         firstName: data['first_name'] ?? '',
