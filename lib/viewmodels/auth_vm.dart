@@ -21,7 +21,9 @@ class AuthVm extends ChangeNotifier {
   bool get showingProgressBar => _showingProgressBar;
 
   // login with email and password
-  Future loginWithEmailAndPassword({final bool isOwner}) async {
+  Future loginWithEmailAndPassword({
+    final AccountType accountType,
+  }) async {
     _updateProgressBar(true);
     final _email = _emailController.text.trim();
     final _pass = _passController.text.trim();
@@ -32,7 +34,7 @@ class AuthVm extends ChangeNotifier {
       _result = await AuthProvider().loginWithEmailAndPassword(
         email: _email,
         password: _pass,
-        isOwner: isOwner,
+        accountType: accountType,
       );
     } else {
       _scaffoldKey.currentState.showSnackBar(SnackBar(
@@ -88,10 +90,13 @@ class AuthVm extends ChangeNotifier {
   }
 
   // sign up with google
-  Future googleSignUp(final bool isOwner) async {
+  Future googleSignUp(
+    final AccountType accountType,
+  ) async {
     _updateProgressBar(true);
 
-    final _result = await AuthProvider().signUpWithGoogle(isOwner: isOwner);
+    final _result =
+        await AuthProvider().signUpWithGoogle(accountType: accountType);
 
     if (_result == null) {
       _updateProgressBar(false);
@@ -103,5 +108,25 @@ class AuthVm extends ChangeNotifier {
   _updateProgressBar(final bool newVal) {
     _showingProgressBar = newVal;
     notifyListeners();
+  }
+
+  // get auth text
+  getAuthText(final AccountType accountType, {final String auth = 'Login'}) {
+    switch (accountType) {
+      case AccountType.general:
+        return '$auth';
+        break;
+      case AccountType.hotelPartner:
+        return '$auth - Hotel Partner';
+        break;
+      case AccountType.tourPartner:
+        return '$auth - Tour Partner';
+        break;
+      case AccountType.vehiclePartner:
+        return '$auth - Car/Bus Partner';
+        break;
+      default:
+        return '$auth';
+    }
   }
 }

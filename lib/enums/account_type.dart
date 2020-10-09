@@ -1,5 +1,7 @@
 enum AccountType {
   general,
-  hotelOwner,
+  hotelPartner,
   admin,
+  vehiclePartner,
+  tourPartner,
 }
