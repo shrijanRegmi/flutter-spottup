@@ -23,4 +23,22 @@ class VehicleProvider {
       return null;
     }
   }
+
+  // vehicles list from firestore
+  List<Vehicle> _vehiclesFromFirestore(QuerySnapshot colSnap) {
+    return colSnap.documents.map((docSnap) {
+      return Vehicle.fromJson(docSnap.data);
+    }).toList();
+  }
+
+  // stream of vehicles owned by owner
+  Stream<List<Vehicle>> get myVehicles {
+    return _ref
+        .collection('hotels')
+        .limit(50)
+        .where('owner_id', isEqualTo: appUser.uid)
+        .orderBy('updated_at', descending: true)
+        .snapshots()
+        .map(_vehiclesFromFirestore);
+  }
 }

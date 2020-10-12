@@ -23,4 +23,22 @@ class TourProvider {
       return null;
     }
   }
+
+  // tours list from firestore
+  List<Tour> _toursFromFirestore(QuerySnapshot colSnap) {
+    return colSnap.documents.map((docSnap) {
+      return Tour.fromJson(docSnap.data);
+    }).toList();
+  }
+
+  // stream of tours owned by owner
+  Stream<List<Tour>> get myTours {
+    return _ref
+        .collection('hotels')
+        .limit(50)
+        .where('owner_id', isEqualTo: appUser.uid)
+        .orderBy('updated_at', descending: true)
+        .snapshots()
+        .map(_toursFromFirestore);
+  }
 }

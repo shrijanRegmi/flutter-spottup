@@ -7,7 +7,10 @@ import 'package:motel/models/firebase/vehicle_model.dart';
 import 'package:motel/services/firestore/vehicle_provider.dart';
 import 'package:motel/services/storage/vehicle_storage_service.dart';
 
-class VehicleVm extends ChangeNotifier {
+class AddNewVehicleVm extends ChangeNotifier {
+  BuildContext context;
+  AddNewVehicleVm(this.context);
+
   TextEditingController _nameController = TextEditingController();
   TextEditingController _modelYearController = TextEditingController();
   TextEditingController _seatsController = TextEditingController();
@@ -70,8 +73,14 @@ class VehicleVm extends ChangeNotifier {
           photos: _mPhotos,
         );
 
-        await VehicleProvider(vehicle: _vehicle).publishVehicle();
-        _updateLoaderValue(false);
+        final _result =
+            await VehicleProvider(vehicle: _vehicle).publishVehicle();
+
+        if (_result == null) {
+          _updateLoaderValue(false);
+        } else {
+          Navigator.pop(context);
+        }
       } else {
         _scaffoldKey.currentState.showSnackBar(SnackBar(
           content: Text('Please upload display picture.'),
