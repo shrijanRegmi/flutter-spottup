@@ -80,6 +80,15 @@ class AddVehicleDetails extends StatelessWidget {
           textInputType: TextInputType.number,
           controller: vm.priceController,
         ),
+        SizedBox(
+          height: 30.0,
+        ),
+        NewHotelField(
+          hintText: 'Summary',
+          isExpanded: true,
+          controller: vm.summaryController,
+          requiredCapitalization: false,
+        ),
       ],
     );
   }

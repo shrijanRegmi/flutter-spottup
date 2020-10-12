@@ -7,6 +7,8 @@ class Vehicle {
   final List<String> photos;
   final String ownerId;
   final String dp;
+  final String summary;
+  final int updatedAt;
 
   Vehicle({
     this.id,
@@ -17,6 +19,8 @@ class Vehicle {
     this.photos,
     this.ownerId,
     this.dp,
+    this.summary,
+    this.updatedAt
   });
 
   Map<String, dynamic> toJson() {
@@ -29,6 +33,8 @@ class Vehicle {
       'photos': photos,
       'owner_id': ownerId,
       'dp': dp,
+      'summary': summary,
+      'updated_at': updatedAt,
     };
   }
 
@@ -42,6 +48,8 @@ class Vehicle {
       photos: List<String>.from(data['photos'] ?? []),
       ownerId: data['owner_id'],
       dp: data['dp'],
+      summary: data['summary'] ?? '',
+      updatedAt: data['updated_at'] ?? DateTime.now().millisecondsSinceEpoch,
     );
   }
 }

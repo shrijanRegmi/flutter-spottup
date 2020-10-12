@@ -13,6 +13,7 @@ class Tour {
   final String exclusions;
   final String ownerId;
   final String dp;
+  final int updatedAt;
 
   Tour({
     this.id,
@@ -29,6 +30,7 @@ class Tour {
     this.exclusions,
     this.ownerId,
     this.dp,
+    this.updatedAt,
   });
 
   Map<String, dynamic> toJson() {
@@ -47,6 +49,7 @@ class Tour {
       'exclusions': exclusions,
       'owner_id': ownerId,
       'dp': dp,
+      'updated_at': updatedAt,
     };
   }
 
@@ -58,14 +61,17 @@ class Tour {
       nights: data['nights'] ?? 0,
       price: data['price'] ?? 0,
       person: data['person'] ?? 0,
-      start: data['start'] ?? DateTime.now().millisecondsSinceEpoch,
-      end: data['end'] ?? DateTime.now().millisecondsSinceEpoch,
+      start: data['start'] ?? 0,
+      // start: data['start'] ?? DateTime.now().millisecondsSinceEpoch,
+      end: data['end'] ?? 0,
+      // end: data['end'] ?? DateTime.now().millisecondsSinceEpoch,
       photos: List<String>.from(data['photos'] ?? []),
       summary: data['summary'] ?? '',
       inclusions: data['inclusions'] ?? '',
       exclusions: data['exclusions'] ?? '',
       ownerId: data['owner_id'],
       dp: data['dp'],
+      updatedAt: data['updated_at'] ?? DateTime.now().millisecondsSinceEpoch,
     );
   }
 }

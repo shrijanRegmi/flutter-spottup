@@ -34,7 +34,7 @@ class TourProvider {
   // stream of tours owned by owner
   Stream<List<Tour>> get myTours {
     return _ref
-        .collection('hotels')
+        .collection('tours')
         .limit(50)
         .where('owner_id', isEqualTo: appUser.uid)
         .orderBy('updated_at', descending: true)

@@ -95,6 +95,7 @@ class AddNewTourVm extends ChangeNotifier {
           ownerId: appUser.uid,
           dp: _mDp,
           photos: _mPhotos,
+          updatedAt: DateTime.now().millisecondsSinceEpoch,
         );
 
         final _result = await TourProvider(tour: _tour).publishTour();

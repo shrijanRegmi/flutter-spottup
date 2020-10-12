@@ -7,12 +7,11 @@ import 'package:provider/provider.dart';
 class VehiclesTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final _hotels = Provider.of<List<Hotel>>(context) ?? [];
     return SingleChildScrollView(
       child: Column(
         children: [
           _addNewServiceBuilder(context),
-          PartnerVehiclesList(_hotels, isEditing: true),
+          PartnerVehiclesList(),
         ],
       ),
     );
