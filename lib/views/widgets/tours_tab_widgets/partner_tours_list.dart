@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:motel/models/firebase/hotel_model.dart';
+import 'package:motel/models/firebase/tour_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
-import 'package:motel/services/firestore/hotel_provider.dart';
+import 'package:motel/services/firestore/tour_provider.dart';
 import 'package:motel/views/widgets/common_widgets/left_right_text.dart';
-import 'package:motel/views/widgets/explore_widgets/best_deals_item.dart';
+import 'package:motel/views/widgets/tour_view_widgets/tour_view_list_item.dart';
 import 'package:provider/provider.dart';
 
 class PartnerToursList extends StatelessWidget {
-  final List<Hotel> hotelList;
-  final bool isEditing;
-  PartnerToursList(this.hotelList, {this.isEditing = false});
-
   @override
   Widget build(BuildContext context) {
     final _appUser = Provider.of<AppUser>(context);
@@ -24,12 +20,12 @@ class PartnerToursList extends StatelessWidget {
         SizedBox(
           height: 20.0,
         ),
-        StreamBuilder<List<Hotel>>(
-            stream: HotelProvider(uid: _appUser.uid).myHotels,
+        StreamBuilder<List<Tour>>(
+            stream: TourProvider(appUser: _appUser).myTours,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                final _hotels = snapshot.data;
-                return _hotels.isEmpty
+                final _tours = snapshot.data;
+                return _tours.isEmpty
                     ? Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 40.0, vertical: 50.0),
@@ -42,13 +38,12 @@ class PartnerToursList extends StatelessWidget {
                         ),
                       )
                     : ListView.builder(
-                        itemCount: _hotels.length,
+                        itemCount: _tours.length,
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
-                          return BestDealItem(
-                            bestDeal: _hotels[index],
-                            isEditing: isEditing,
+                          return TourViewListItem(
+                            tour: _tours[index],
                           );
                         },
                       );

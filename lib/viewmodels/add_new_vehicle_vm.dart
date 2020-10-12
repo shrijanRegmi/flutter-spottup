@@ -15,6 +15,7 @@ class AddNewVehicleVm extends ChangeNotifier {
   TextEditingController _modelYearController = TextEditingController();
   TextEditingController _seatsController = TextEditingController();
   TextEditingController _priceController = TextEditingController();
+  TextEditingController _summaryController = TextEditingController();
   List<File> _photos = [];
   bool _isLoading = false;
   File _dp;
@@ -28,6 +29,7 @@ class AddNewVehicleVm extends ChangeNotifier {
   bool get isLoading => _isLoading;
   File get dp => _dp;
   GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
+  TextEditingController get summaryController => _summaryController;
 
   // upload dp on pressing big icon
   uploadDp() async {
@@ -53,7 +55,8 @@ class AddNewVehicleVm extends ChangeNotifier {
     if (_nameController.text.trim() != '' &&
         _modelYearController.text.trim() != '' &&
         _seatsController.text.trim() != '' &&
-        _priceController.text.trim() != '') {
+        _priceController.text.trim() != '' &&
+        _summaryController.text.trim() != '') {
       if (_dp != null) {
         _updateLoaderValue(true);
 
@@ -71,6 +74,8 @@ class AddNewVehicleVm extends ChangeNotifier {
           ownerId: appUser.uid,
           dp: _mDp,
           photos: _mPhotos,
+          summary: _summaryController.text.trim(),
+          updatedAt: DateTime.now().millisecondsSinceEpoch,
         );
 
         final _result =

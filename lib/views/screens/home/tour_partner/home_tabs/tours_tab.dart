@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/views/widgets/tours_tab_widgets/add_new_tour.dart';
 import 'package:motel/views/widgets/tours_tab_widgets/partner_tours_list.dart';
-import 'package:provider/provider.dart';
 
 class ToursTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final _hotels = Provider.of<List<Hotel>>(context) ?? [];
     return SingleChildScrollView(
       child: Column(
         children: [
           _addNewTourBuilder(context),
-          PartnerToursList(_hotels, isEditing: true),
+          PartnerToursList(),
         ],
       ),
     );

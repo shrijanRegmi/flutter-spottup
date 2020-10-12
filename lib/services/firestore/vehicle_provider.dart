@@ -34,7 +34,7 @@ class VehicleProvider {
   // stream of vehicles owned by owner
   Stream<List<Vehicle>> get myVehicles {
     return _ref
-        .collection('hotels')
+        .collection('vehicles')
         .limit(50)
         .where('owner_id', isEqualTo: appUser.uid)
         .orderBy('updated_at', descending: true)
