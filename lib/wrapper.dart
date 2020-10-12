@@ -21,7 +21,6 @@ class Wrapper extends StatelessWidget {
   }
 
   Widget _getScreen(AccountType accountType, AppUser appUser) {
-    print('The account type is :::: $accountType');
     switch (accountType) {
       case AccountType.hotelPartner:
         return OwnerHomeScreen(appUser.uid);

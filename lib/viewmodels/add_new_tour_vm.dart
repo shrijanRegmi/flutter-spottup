@@ -7,7 +7,10 @@ import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/services/firestore/tour_provider.dart';
 import 'package:motel/services/storage/tour_storage_service.dart';
 
-class TourVm extends ChangeNotifier {
+class AddNewTourVm extends ChangeNotifier {
+  BuildContext context;
+  AddNewTourVm(this.context);
+
   TextEditingController _nameController = TextEditingController();
   TextEditingController _daysController = TextEditingController();
   TextEditingController _nightsController = TextEditingController();
@@ -94,8 +97,13 @@ class TourVm extends ChangeNotifier {
           photos: _mPhotos,
         );
 
-        await TourProvider(tour: _tour).publishTour();
-        _updateLoaderValue(false);
+        final _result = await TourProvider(tour: _tour).publishTour();
+
+        if (_result == null) {
+          _updateLoaderValue(false);
+        } else {
+          Navigator.pop(context);
+        }
       } else {
         _scaffoldKey.currentState.showSnackBar(SnackBar(
           content: Text('Please upload display picture.'),

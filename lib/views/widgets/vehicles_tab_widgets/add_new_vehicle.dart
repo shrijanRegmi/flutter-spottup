@@ -2,24 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:motel/models/app/hotel_features.dart';
 import 'package:motel/models/firebase/tour_model.dart';
-import 'package:motel/viewmodels/add_new_tour_vm.dart';
+import 'package:motel/viewmodels/add_new_vehicle_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
-import 'package:motel/views/widgets/add_new_tour_widgets/add_tour_details.dart';
-import 'package:motel/views/widgets/add_new_tour_widgets/add_tour_photos.dart';
+import 'package:motel/views/widgets/add_new_vehicle_widgets/add_vehicle_details.dart';
+import 'package:motel/views/widgets/add_new_vehicle_widgets/add_vehicle_photos.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 
-class AddNewTour extends StatefulWidget {
+class AddNewVehicle extends StatefulWidget {
   final Tour tour;
-  AddNewTour({this.tour});
+  AddNewVehicle({this.tour});
 
   @override
   _AddNewHotelState createState() => _AddNewHotelState();
 }
 
-class _AddNewHotelState extends State<AddNewTour> {
+class _AddNewHotelState extends State<AddNewVehicle> {
   @override
   Widget build(BuildContext context) {
-    return VmProvider<AddNewTourVm>(
+    return VmProvider<AddNewVehicleVm>(
       onInit: (vm) {
         featuresList.forEach((feature) {
           feature.isSelected = false;
@@ -29,7 +29,7 @@ class _AddNewHotelState extends State<AddNewTour> {
           // vm.initializeHotelValues(widget.tour);
         }
       },
-      vm: AddNewTourVm(context),
+      vm: AddNewVehicleVm(context),
       builder: (context, vm, appUser) {
         return Scaffold(
           // key: vm.hotelScaffoldKey,
@@ -53,7 +53,7 @@ class _AddNewHotelState extends State<AddNewTour> {
                           ),
                           SizedBox(height: 10.0),
                           Text(
-                            'Publishing your tour',
+                            'Publishing your service',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
@@ -73,14 +73,14 @@ class _AddNewHotelState extends State<AddNewTour> {
                             SizedBox(
                               height: 20.0,
                             ),
-                            AddTourDetails(vm),
-                            AddTourPhotos(vm),
+                            AddVehicleDetails(vm),
+                            AddVehiclePhotos(vm),
                             vm.isLoading
                                 ? Container()
                                 : RoundedBtn(
-                                    title: 'Publish Tour',
+                                    title: 'Publish Service',
                                     onPressed: () {
-                                      vm.publishTour(appUser);
+                                      vm.publishVehicle(appUser);
                                     },
                                   ),
                             SizedBox(
@@ -97,7 +97,7 @@ class _AddNewHotelState extends State<AddNewTour> {
     );
   }
 
-  Widget _appbarBuilder(BuildContext context, AddNewTourVm vm) {
+  Widget _appbarBuilder(BuildContext context, AddNewVehicleVm vm) {
     return IconButton(
       icon: Icon(Icons.arrow_back),
       onPressed: () {
@@ -110,7 +110,7 @@ class _AddNewHotelState extends State<AddNewTour> {
     return Padding(
       padding: const EdgeInsets.only(left: 20.0),
       child: Text(
-        'Add New Tour',
+        'Add New Vehicle',
         style: TextStyle(
           fontWeight: FontWeight.w600,
           fontSize: 22.0,

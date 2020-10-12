@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
-import 'package:motel/views/widgets/hotels_tab_widgets/add_new_hotel.dart';
+import 'package:motel/views/widgets/vehicles_tab_widgets/add_new_vehicle.dart';
 import 'package:motel/views/widgets/vehicles_tab_widgets/partner_vehicles_list.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +26,7 @@ class VehiclesTab extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => AddNewHotel(),
+              builder: (_) => AddNewVehicle(),
             ),
           );
         },
