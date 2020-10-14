@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/models/firebase/vehicle_model.dart';
 import 'package:motel/services/firestore/vehicle_provider.dart';

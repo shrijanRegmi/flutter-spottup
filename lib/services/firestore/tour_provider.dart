@@ -5,7 +5,12 @@ import 'package:motel/models/firebase/user_model.dart';
 class TourProvider {
   final Tour tour;
   final AppUser appUser;
-  TourProvider({this.tour, this.appUser});
+  final String searchKey;
+  TourProvider({
+    this.tour,
+    this.appUser,
+    this.searchKey,
+  });
 
   final _ref = Firestore.instance;
 
@@ -38,6 +43,35 @@ class TourProvider {
         .limit(50)
         .where('owner_id', isEqualTo: appUser.uid)
         .orderBy('updated_at', descending: true)
+        .snapshots()
+        .map(_toursFromFirestore);
+  }
+
+  // stream of best tours deals
+  Stream<List<Tour>> get limitedBestDeals {
+    return _ref
+        .collection('tours')
+        .limit(5)
+        .where('is_best_deal', isEqualTo: true)
+        .snapshots()
+        .map(_toursFromFirestore);
+  }
+
+  // stream of best tours deals
+  Stream<List<Tour>> get allBestDeals {
+    return _ref
+        .collection('tours')
+        .where('is_best_deal', isEqualTo: true)
+        .snapshots()
+        .map(_toursFromFirestore);
+  }
+
+  // stream of tours from search key
+  Stream<List<Tour>> get searchedToursFromKey {
+    return _ref
+        .collection('tours')
+        .limit(50)
+        .where('search_key', isEqualTo: searchKey)
         .snapshots()
         .map(_toursFromFirestore);
   }

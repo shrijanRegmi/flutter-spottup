@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:motel/services/firestore/hotel_provider.dart';
+import 'package:motel/models/firebase/tour_model.dart';
+import 'package:motel/services/firestore/tour_provider.dart';
 import 'package:motel/views/screens/home/view_all_screen.dart';
 import 'package:motel/views/widgets/common_widgets/left_right_text.dart';
-import 'package:motel/views/widgets/explore_widgets/best_deals_item.dart';
-import 'package:motel/models/firebase/hotel_model.dart';
+import 'package:motel/views/widgets/tour_view_widgets/tour_view_list_item.dart';
 
-class BestDeals extends StatelessWidget {
-  final List<Hotel> bestDeals;
-  final bool isEditing;
-  BestDeals(this.bestDeals, {this.isEditing = false});
+class BestTourDeals extends StatelessWidget {
+  final List<Tour> bestDeals;
+  BestTourDeals(this.bestDeals);
 
   @override
   Widget build(BuildContext context) {
@@ -16,17 +15,16 @@ class BestDeals extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         LeftRightText(
-          leftText: 'Best deal hotels',
+          leftText: 'Best tour services',
           onPressIcon: () {
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (_) => ViewAllScreen(
-                    title: 'Best deal hotels',
-                    stream: HotelProvider().allBestDeals,
+                    title: 'Best tour services',
+                    stream: TourProvider().allBestDeals,
                     listItem: (List list, int index) {
-                      return BestDealItem(
-                          bestDeal: list[index], isEditing: isEditing);
+                      return TourViewListItem(tour: list[index]);
                     }),
               ),
             );
@@ -43,7 +41,7 @@ class BestDeals extends StatelessWidget {
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
-        return BestDealItem(bestDeal: bestDeals[index]);
+        return TourViewListItem(tour: bestDeals[index]);
       },
     );
   }

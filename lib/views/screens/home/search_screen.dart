@@ -26,7 +26,7 @@ class SearchScreen extends StatelessWidget {
                         height: 10.0,
                       ),
                       _appbarBuilder(context),
-                      _searchTextBuilder(),
+                      _searchTextBuilder(vm),
                       SizedBox(
                         height: 10.0,
                       ),
@@ -57,15 +57,40 @@ class SearchScreen extends StatelessWidget {
     );
   }
 
-  Widget _searchTextBuilder() {
+  Widget _searchTextBuilder(final SearchVm vm) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Text(
-        'Search',
-        style: TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 22.0,
-        ),
+      child: Row(
+        children: [
+          Text(
+            'Search',
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 22.0,
+            ),
+          ),
+          SizedBox(
+            width: 10.0,
+          ),
+          DropdownButton(
+            items: vm.searchTypes
+                .map(
+                  (e) => DropdownMenuItem(
+                    value: e,
+                    child: Text(
+                      '$e',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20.0,
+                      ),
+                    ),
+                  ),
+                )
+                .toList(),
+            value: vm.selectedSearchType,
+            onChanged: vm.updateSelectedSearchType,
+          ),
+        ],
       ),
     );
   }

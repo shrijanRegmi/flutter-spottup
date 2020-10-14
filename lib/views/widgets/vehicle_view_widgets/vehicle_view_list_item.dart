@@ -60,9 +60,15 @@ class VehicleViewListItem extends StatelessWidget {
                 topLeft: Radius.circular(10.0),
                 bottomLeft: Radius.circular(10.0),
               ),
-              child: CachedNetworkImage(
-                imageUrl: vehicle.dp,
-                fit: BoxFit.fitHeight,
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: CachedNetworkImageProvider(
+                      vehicle.dp,
+                    ),
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
             ),
           ),
