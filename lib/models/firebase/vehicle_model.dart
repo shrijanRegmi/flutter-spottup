@@ -9,6 +9,7 @@ class Vehicle {
   final String dp;
   final String summary;
   final int updatedAt;
+  final String searchKey;
 
   Vehicle({
     this.id,
@@ -20,7 +21,8 @@ class Vehicle {
     this.ownerId,
     this.dp,
     this.summary,
-    this.updatedAt
+    this.updatedAt,
+    this.searchKey,
   });
 
   Map<String, dynamic> toJson() {
@@ -35,6 +37,7 @@ class Vehicle {
       'dp': dp,
       'summary': summary,
       'updated_at': updatedAt,
+      'search_key': name.substring(0, 1),
     };
   }
 
@@ -50,6 +53,7 @@ class Vehicle {
       dp: data['dp'],
       summary: data['summary'] ?? '',
       updatedAt: data['updated_at'] ?? DateTime.now().millisecondsSinceEpoch,
+      searchKey: data['search_key'] ?? '',
     );
   }
 }

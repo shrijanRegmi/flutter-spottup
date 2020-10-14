@@ -16,8 +16,6 @@ class AddNewTourVm extends ChangeNotifier {
   TextEditingController _nightsController = TextEditingController();
   TextEditingController _priceController = TextEditingController();
   TextEditingController _personController = TextEditingController();
-  TextEditingController _startController = TextEditingController();
-  TextEditingController _endController = TextEditingController();
   TextEditingController _summaryController = TextEditingController();
   TextEditingController _inclusionsController = TextEditingController();
   TextEditingController _exclusionsController = TextEditingController();
@@ -25,14 +23,14 @@ class AddNewTourVm extends ChangeNotifier {
   bool _isLoading = false;
   File _dp;
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  DateTime _start;
+  DateTime _end;
 
   TextEditingController get nameController => _nameController;
   TextEditingController get daysController => _daysController;
   TextEditingController get nightsController => _nightsController;
   TextEditingController get priceController => _priceController;
   TextEditingController get personController => _personController;
-  TextEditingController get startController => _startController;
-  TextEditingController get endController => _endController;
   TextEditingController get summaryController => _summaryController;
   TextEditingController get inclusionsController => _inclusionsController;
   TextEditingController get exclusionsController => _exclusionsController;
@@ -40,6 +38,36 @@ class AddNewTourVm extends ChangeNotifier {
   bool get isLoading => _isLoading;
   File get dp => _dp;
   GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
+  DateTime get start => _start;
+  DateTime get end => _end;
+
+  // show start tour dialog
+  Future showStartTourDialog() async {
+    final _pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _start ?? DateTime.now(),
+      firstDate: DateTime(2015, 8),
+      lastDate: DateTime(2100),
+    );
+    if (_pickedDate != null) {
+      _start = _pickedDate;
+      notifyListeners();
+    }
+  }
+
+  // show end tour dialog
+  Future showEndTourDialog() async {
+    final _pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _end ?? DateTime.now(),
+      firstDate: DateTime(2015, 8),
+      lastDate: DateTime(2100),
+    );
+    if (_pickedDate != null) {
+      _end = _pickedDate;
+      notifyListeners();
+    }
+  }
 
   // upload dp on pressing big icon
   uploadDp() async {
@@ -67,8 +95,8 @@ class AddNewTourVm extends ChangeNotifier {
         _nightsController.text.trim() != '' &&
         _priceController.text.trim() != '' &&
         _personController.text.trim() != '' &&
-        _startController.text.trim() != '' &&
-        _endController.text.trim() != '' &&
+        _start != null &&
+        _end != null &&
         _summaryController.text.trim() != '' &&
         _inclusionsController.text.trim() != '' &&
         _exclusionsController.text.trim() != '') {
@@ -87,8 +115,8 @@ class AddNewTourVm extends ChangeNotifier {
           nights: int.parse(_nightsController.text.trim()),
           price: int.parse(_priceController.text.trim()),
           person: int.parse(_personController.text.trim()),
-          start: int.parse(_startController.text.trim()),
-          end: int.parse(_endController.text.trim()),
+          start: _start.millisecondsSinceEpoch,
+          end: _end.millisecondsSinceEpoch,
           summary: _summaryController.text.trim(),
           inclusions: _inclusionsController.text.trim(),
           exclusions: _exclusionsController.text.trim(),

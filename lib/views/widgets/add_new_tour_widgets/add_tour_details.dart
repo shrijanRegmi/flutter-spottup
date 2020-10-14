@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:motel/helpers/date_helper.dart';
 import 'package:motel/viewmodels/add_new_tour_vm.dart';
 import 'package:motel/views/widgets/hotels_tab_widgets/new_hotel_field.dart';
 
@@ -52,6 +53,78 @@ class AddTourDetails extends StatelessWidget {
           height: 30.0,
         ),
         Row(
+          children: <Widget>[
+            Expanded(
+              child: Text(
+                'Tour start Date: ',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            vm.start == null
+                ? MaterialButton(
+                    child: Text('Select start date'),
+                    color: Color(0xff45ad90),
+                    minWidth: 180.0,
+                    textColor: Colors.white,
+                    onPressed: vm.showStartTourDialog,
+                  )
+                : GestureDetector(
+                    onTap: vm.showStartTourDialog,
+                    child: Text(
+                      DateHelper()
+                          .getFormattedDate(vm.start.millisecondsSinceEpoch),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+          ],
+        ),
+        SizedBox(
+          height: 30.0,
+        ),
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: Text(
+                'Tour end Date: ',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            vm.end == null
+                ? MaterialButton(
+                    child: Text('Select end date'),
+                    color: Color(0xff45ad90),
+                    minWidth: 180.0,
+                    textColor: Colors.white,
+                    onPressed: vm.showEndTourDialog,
+                  )
+                : GestureDetector(
+                    onTap: vm.showEndTourDialog,
+                    child: Text(
+                      DateHelper()
+                          .getFormattedDate(vm.end.millisecondsSinceEpoch),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+          ],
+        ),
+        SizedBox(
+          height: 30.0,
+        ),
+        Row(
           children: [
             Expanded(
               child: NewHotelField(
@@ -67,38 +140,6 @@ class AddTourDetails extends StatelessWidget {
               child: NewHotelField(
                 hintText: 'Number of nights',
                 controller: vm.nightsController,
-                textInputType: TextInputType.number,
-              ),
-            ),
-          ],
-        ),
-        SizedBox(
-          height: 30.0,
-        ),
-        NewHotelField(
-          hintText: 'Price',
-          textInputType: TextInputType.number,
-          controller: vm.priceController,
-        ),
-        SizedBox(
-          height: 30.0,
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: NewHotelField(
-                hintText: 'Start',
-                controller: vm.startController,
-                textInputType: TextInputType.number,
-              ),
-            ),
-            SizedBox(
-              width: 20.0,
-            ),
-            Expanded(
-              child: NewHotelField(
-                hintText: 'End',
-                controller: vm.endController,
                 textInputType: TextInputType.number,
               ),
             ),
@@ -138,6 +179,14 @@ class AddTourDetails extends StatelessWidget {
           isExpanded: true,
           controller: vm.exclusionsController,
           requiredCapitalization: false,
+        ),
+        SizedBox(
+          height: 30.0,
+        ),
+        NewHotelField(
+          hintText: 'Price',
+          textInputType: TextInputType.number,
+          controller: vm.priceController,
         ),
       ],
     );

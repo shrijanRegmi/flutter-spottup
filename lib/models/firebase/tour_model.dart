@@ -14,6 +14,7 @@ class Tour {
   final String ownerId;
   final String dp;
   final int updatedAt;
+  final String searchKey;
 
   Tour({
     this.id,
@@ -31,6 +32,7 @@ class Tour {
     this.ownerId,
     this.dp,
     this.updatedAt,
+    this.searchKey,
   });
 
   Map<String, dynamic> toJson() {
@@ -50,6 +52,7 @@ class Tour {
       'owner_id': ownerId,
       'dp': dp,
       'updated_at': updatedAt,
+      'search_key': name.substring(0, 1),
     };
   }
 
@@ -61,10 +64,8 @@ class Tour {
       nights: data['nights'] ?? 0,
       price: data['price'] ?? 0,
       person: data['person'] ?? 0,
-      start: data['start'] ?? 0,
-      // start: data['start'] ?? DateTime.now().millisecondsSinceEpoch,
-      end: data['end'] ?? 0,
-      // end: data['end'] ?? DateTime.now().millisecondsSinceEpoch,
+      start: data['start'] ?? DateTime.now().millisecondsSinceEpoch,
+      end: data['end'] ?? DateTime.now().millisecondsSinceEpoch,
       photos: List<String>.from(data['photos'] ?? []),
       summary: data['summary'] ?? '',
       inclusions: data['inclusions'] ?? '',
@@ -72,6 +73,7 @@ class Tour {
       ownerId: data['owner_id'],
       dp: data['dp'],
       updatedAt: data['updated_at'] ?? DateTime.now().millisecondsSinceEpoch,
+      searchKey: data['search_key'] ?? '',
     );
   }
 }
