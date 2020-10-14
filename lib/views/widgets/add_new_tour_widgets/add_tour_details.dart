@@ -157,6 +157,14 @@ class AddTourDetails extends StatelessWidget {
           height: 30.0,
         ),
         NewHotelField(
+          hintText: 'Price',
+          textInputType: TextInputType.number,
+          controller: vm.priceController,
+        ),
+        SizedBox(
+          height: 30.0,
+        ),
+        NewHotelField(
           hintText: 'Summary',
           isExpanded: true,
           controller: vm.summaryController,
@@ -179,14 +187,6 @@ class AddTourDetails extends StatelessWidget {
           isExpanded: true,
           controller: vm.exclusionsController,
           requiredCapitalization: false,
-        ),
-        SizedBox(
-          height: 30.0,
-        ),
-        NewHotelField(
-          hintText: 'Price',
-          textInputType: TextInputType.number,
-          controller: vm.priceController,
         ),
       ],
     );
