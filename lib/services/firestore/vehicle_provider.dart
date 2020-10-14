@@ -5,7 +5,8 @@ import 'package:motel/models/firebase/vehicle_model.dart';
 class VehicleProvider {
   final Vehicle vehicle;
   final AppUser appUser;
-  VehicleProvider({this.vehicle, this.appUser});
+  final String searchKey;
+  VehicleProvider({this.vehicle, this.appUser, this.searchKey});
 
   final _ref = Firestore.instance;
 
@@ -38,6 +39,35 @@ class VehicleProvider {
         .limit(50)
         .where('owner_id', isEqualTo: appUser.uid)
         .orderBy('updated_at', descending: true)
+        .snapshots()
+        .map(_vehiclesFromFirestore);
+  }
+
+  // stream of limited best deal vehicles
+  Stream<List<Vehicle>> get limitedBestDeals {
+    return _ref
+        .collection('vehicles')
+        .limit(5)
+        .where('is_best_deal', isEqualTo: true)
+        .snapshots()
+        .map(_vehiclesFromFirestore);
+  }
+
+  // stream of all best deal vehicles
+  Stream<List<Vehicle>> get allBestDeals {
+    return _ref
+        .collection('vehicles')
+        .where('is_best_deal', isEqualTo: true)
+        .snapshots()
+        .map(_vehiclesFromFirestore);
+  }
+
+  // stream of vehicles from search key
+  Stream<List<Vehicle>> get searchedVehiclesFromKey {
+    return _ref
+        .collection('vehicles')
+        .limit(50)
+        .where('search_key', isEqualTo: searchKey)
         .snapshots()
         .map(_vehiclesFromFirestore);
   }

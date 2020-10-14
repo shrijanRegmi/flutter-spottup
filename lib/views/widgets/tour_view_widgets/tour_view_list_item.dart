@@ -61,9 +61,15 @@ class TourViewListItem extends StatelessWidget {
                 topLeft: Radius.circular(10.0),
                 bottomLeft: Radius.circular(10.0),
               ),
-              child: CachedNetworkImage(
-                imageUrl: tour.dp,
-                fit: BoxFit.fitHeight,
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: CachedNetworkImageProvider(
+                      tour.dp,
+                    ),
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
             ),
           ),

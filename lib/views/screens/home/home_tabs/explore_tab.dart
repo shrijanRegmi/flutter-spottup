@@ -7,6 +7,8 @@ import 'package:motel/views/screens/home/search_result_screen.dart';
 import 'package:motel/views/screens/home/search_screen.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 import 'package:motel/views/widgets/explore_widgets/best_deals.dart';
+import 'package:motel/views/widgets/explore_widgets/best_deals_tours.dart';
+import 'package:motel/views/widgets/explore_widgets/best_deals_vehicles.dart';
 import 'package:motel/views/widgets/explore_widgets/popular_destination.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/viewmodels/explore_vm.dart';
@@ -65,7 +67,18 @@ class _ExploreTabState extends State<ExploreTab> {
                   SizedBox(
                     height: 40.0,
                   ),
-                  BestDeals(vm.hotelsList),
+                  if (vm.hotelsList.isNotEmpty) BestDeals(vm.hotelsList),
+                  if (vm.hotelsList.isNotEmpty)
+                    SizedBox(
+                      height: 30.0,
+                    ),
+                  if (vm.toursList.isNotEmpty) BestTourDeals(vm.toursList),
+                  if (vm.toursList.isNotEmpty)
+                    SizedBox(
+                      height: 30.0,
+                    ),
+                  if (vm.vehiclesList.isNotEmpty)
+                    BestVehicleDeals(vm.vehiclesList),
                 ],
               ),
             ),
