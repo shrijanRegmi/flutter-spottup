@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Tour {
   String id;
   final String name;
@@ -15,6 +17,7 @@ class Tour {
   final String dp;
   final int updatedAt;
   final String searchKey;
+  final String paymentAndCancellationPolicy;
 
   Tour({
     this.id,
@@ -33,6 +36,7 @@ class Tour {
     this.dp,
     this.updatedAt,
     this.searchKey,
+    this.paymentAndCancellationPolicy,
   });
 
   Map<String, dynamic> toJson() {
@@ -53,6 +57,7 @@ class Tour {
       'dp': dp,
       'updated_at': updatedAt,
       'search_key': name.substring(0, 1),
+      'payment_policy': paymentAndCancellationPolicy,
     };
   }
 
@@ -74,6 +79,12 @@ class Tour {
       dp: data['dp'],
       updatedAt: data['updated_at'] ?? DateTime.now().millisecondsSinceEpoch,
       searchKey: data['search_key'] ?? '',
+      paymentAndCancellationPolicy: data['payment_policy'] ?? '',
     );
+  }
+
+  DocumentReference toRef() {
+    final _ref = Firestore.instance;
+    return _ref.collection('tours').document(id);
   }
 }

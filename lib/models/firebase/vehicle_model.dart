@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Vehicle {
   String id;
   final String name;
@@ -55,5 +57,10 @@ class Vehicle {
       updatedAt: data['updated_at'] ?? DateTime.now().millisecondsSinceEpoch,
       searchKey: data['search_key'] ?? '',
     );
+  }
+
+  DocumentReference toRef() {
+    final _ref = Firestore.instance;
+    return _ref.collection('vehicles').document(id);
   }
 }
