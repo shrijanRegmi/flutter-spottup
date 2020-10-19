@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:motel/models/firebase/hotel_model.dart';
-import 'package:motel/views/widgets/search_widgets/search_result_list_item.dart';
+import 'package:motel/models/firebase/tour_model.dart';
+import 'package:motel/views/widgets/search_widgets/search_result_list_item_tour.dart';
 
-class SearchResultList extends StatelessWidget {
+class SearchResultListTour extends StatelessWidget {
   final Stream stream;
   final String value;
-  SearchResultList(this.stream, this.value);
+  SearchResultListTour(this.stream, this.value);
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<Hotel>>(
+    return StreamBuilder<List<Tour>>(
       stream: stream,
-      builder: (BuildContext context, AsyncSnapshot<List<Hotel>> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<List<Tour>> snapshot) {
         if (snapshot.hasData) {
-          final _hotels = snapshot.data;
+          final _tours = snapshot.data;
 
-          List<Hotel> _searchedHotel = _hotels.where((hotel) {
+          List<Tour> _searchedTour = _tours.where((hotel) {
             final _splittedHotel = hotel.name.toLowerCase().split(' ');
             final _splittedValue = value.toLowerCase().split(' ');
 
@@ -25,7 +25,7 @@ class SearchResultList extends StatelessWidget {
             return false;
           }).toList();
 
-          final _result = _searchedHotel.isEmpty ? _hotels : _searchedHotel;
+          final _result = _searchedTour.isEmpty ? _tours : _searchedTour;
           final _count = _result.length;
 
           return Column(
@@ -98,13 +98,13 @@ class SearchResultList extends StatelessWidget {
     );
   }
 
-  Widget _resultListBuilder(final List<Hotel> hotels) {
+  Widget _resultListBuilder(final List<Tour> tours) {
     return ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
-      itemCount: hotels.length,
+      itemCount: tours.length,
       itemBuilder: (context, index) {
-        return SearchResultListItem(hotels[index]);
+        return SearchResultListItemTour(tours[index]);
       },
     );
   }
