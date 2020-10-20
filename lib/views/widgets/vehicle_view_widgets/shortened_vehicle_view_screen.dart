@@ -5,6 +5,7 @@ import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/models/firebase/vehicle_model.dart';
 import 'package:motel/viewmodels/hotel_view_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
+import 'package:motel/views/screens/home/vehicle_book_screen.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 import 'package:motel/views/widgets/common_widgets/star_ratings.dart';
 import 'package:provider/provider.dart';
@@ -91,7 +92,7 @@ class ShortenedVehicleViewScreen extends StatelessWidget {
   Widget _bottomSection(BuildContext context, HotelViewVm vm) {
     return Column(
       children: <Widget>[
-        _detailSection(vm),
+        _detailSection(vm, context),
         _moreBtn(context),
         SizedBox(
           height: 30.0,
@@ -100,7 +101,7 @@ class ShortenedVehicleViewScreen extends StatelessWidget {
     );
   }
 
-  Widget _detailSection(HotelViewVm vm) {
+  Widget _detailSection(HotelViewVm vm, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Container(
@@ -182,7 +183,14 @@ class ShortenedVehicleViewScreen extends StatelessWidget {
               RoundedBtn(
                 title: 'Book now',
                 padding: 0.0,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => VehicleBookScreen(vehicle),
+                    ),
+                  );
+                },
               ),
             ],
           ),

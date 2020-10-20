@@ -160,12 +160,12 @@ class BookVm extends ChangeNotifier {
   }
 
   // confirm booking
-  confirmBooking(final ConfirmBooking booking, final AppUser appUser) async {
+  confirmBooking(final ConfirmHotelBooking booking, final AppUser appUser) async {
     _isProcessing = true;
     notifyListeners();
     try {
       // final _result = await FlutterEmailSender.send(_email);
-      await UserProvider(uid: appUser.uid).confirmBooking(booking);
+      await UserProvider(uid: appUser.uid).confirmHotelBooking(booking);
       _isProcessing = false;
       notifyListeners();
       Navigator.pop(context);

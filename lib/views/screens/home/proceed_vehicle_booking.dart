@@ -2,34 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:motel/helpers/date_helper.dart';
 import 'package:motel/models/firebase/confirm_booking_model.dart';
-import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
-import 'package:motel/viewmodels/booking_vm.dart';
+import 'package:motel/models/firebase/vehicle_model.dart';
+import 'package:motel/viewmodels/vehicle_book_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 
-class ProceedBookingScreen extends StatelessWidget {
-  final Hotel hotel;
-  final int days;
-  final int checkIn;
-  final int checkOut;
+class ProceedVehicleBookingScreen extends StatelessWidget {
+  final Vehicle vehicle;
   final String name;
   final String phone;
-  final List<SelectedRoom> rooms;
-  ProceedBookingScreen({
-    this.hotel,
-    this.days,
-    this.checkIn,
-    this.checkOut,
+  final int males;
+  final int females;
+  final int kids;
+  final int days;
+  ProceedVehicleBookingScreen({
+    this.vehicle,
     this.name,
     this.phone,
-    this.rooms,
+    this.males,
+    this.females,
+    this.kids,
+    this.days,
   });
 
   @override
   Widget build(BuildContext context) {
-    return VmProvider<BookVm>(
-      vm: BookVm(context: context),
+    return VmProvider<VehicleBookVm>(
+      vm: VehicleBookVm(context),
       builder: (context, vm, appUser) {
         return Scaffold(
           key: vm.scaffoldKey,
@@ -84,25 +84,20 @@ class ProceedBookingScreen extends StatelessWidget {
                                         onPressed: () {
                                           int _total = 0;
 
-                                          if (rooms.isNotEmpty) {
-                                            for (final room in rooms) {
-                                              _total += room.price;
-                                            }
-                                          } else {
-                                            _total = hotel.price * days;
-                                          }
+                                          _total = vehicle.price *
+                                              (males + females + kids);
 
-                                          final _booking = ConfirmHotelBooking(
-                                            hotelRef: hotel.toRef(),
+                                          final _booking = ConfirmVehicleBooking(
+                                            vehicleRef: vehicle.toRef(),
                                             userRef: appUser.toRef(),
-                                            checkInDate: checkIn,
-                                            checkOutDate: checkOut,
-                                            rooms: _getListString(),
                                             issueDate: DateTime.now()
                                                 .millisecondsSinceEpoch,
                                             total: _total,
-                                            nights: days,
-                                            ownerId: hotel.ownerId,
+                                            ownerId: vehicle.ownerId,
+                                            males: males,
+                                            females: females,
+                                            kids: kids,
+                                            days: days,
                                             isAccepted: false,
                                             isDeclined: false,
                                           );
@@ -124,26 +119,6 @@ class ProceedBookingScreen extends StatelessWidget {
         );
       },
     );
-  }
-
-  List<Widget> _getString() {
-    List<Widget> _list = [];
-    for (final room in rooms) {
-      _list.add(
-        Text('${room.roomName}: ${room.adult} Adults, ${room.kid} Kids - ${room.rooms} ${room.rooms != 1 ? 'Rooms' : 'Room'}'),
-      );
-    }
-    return _list;
-  }
-
-  List<String> _getListString() {
-    List<String> _list = [];
-    for (final room in rooms) {
-      _list.add(
-        '${room.roomName}: ${room.adult} Adults, ${room.kid} Kids - ${room.rooms} ${room.rooms != 1 ? 'Rooms' : 'Room'}',
-      );
-    }
-    return _list;
   }
 
   Widget _appbarBuilder(BuildContext context) {
@@ -204,70 +179,79 @@ class ProceedBookingScreen extends StatelessWidget {
   }
 
   Widget _hotelDetailBuilder() {
-    final _formattedCheckInDate = DateHelper().getFormattedDate(checkIn);
-    final _formattedCheckOutDate = DateHelper().getFormattedDate(checkOut);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          'Hotel Name: ',
+          'Car/Bus Service Name: ',
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 16.0,
           ),
         ),
         Text(
-          hotel.name,
+          vehicle.name,
         ),
-        if (rooms.isNotEmpty)
-          SizedBox(
-            height: 20.0,
-          ),
-        if (rooms.isNotEmpty)
-          Text(
-            'Rooms: ',
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 16.0,
-            ),
-          ),
-        ..._getString(),
         SizedBox(
           height: 20.0,
         ),
         Text(
-          'Hotel Id: ',
+          'Number of males: ',
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 16.0,
           ),
         ),
-        Text(hotel.id),
+        Text(
+          '$males',
+        ),
         SizedBox(
           height: 20.0,
         ),
         Text(
-          'Check In - Check Out',
+          'Number of females: ',
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 16.0,
           ),
         ),
-        Text('$_formattedCheckInDate - $_formattedCheckOutDate'),
+        Text(
+          '$females',
+        ),
+        SizedBox(
+          height: 20.0,
+        ),
+        Text(
+          'Number of kids: ',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 16.0,
+          ),
+        ),
+        Text(
+          '$kids',
+        ),
+        SizedBox(
+          height: 20.0,
+        ),
+        Text(
+          'Service Id: ',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 16.0,
+          ),
+        ),
+        Text(vehicle.id),
+        SizedBox(
+          height: 20.0,
+        ),
       ],
     );
   }
 
   Widget _totalPriceBuilder() {
-    int _price = 0;
-    if (rooms.isNotEmpty) {
-      for (final room in rooms) {
-        _price += room.price;
-      }
-    } else {
-      _price = hotel.price;
-    }
-    final _total = _price * days;
+    final _total = vehicle.price * days;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -290,7 +274,7 @@ class ProceedBookingScreen extends StatelessWidget {
               ),
             ),
             Text(
-              'for $days night',
+              'for $days days',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 color: Colors.black26,

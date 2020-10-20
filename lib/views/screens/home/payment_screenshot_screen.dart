@@ -7,7 +7,7 @@ import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/views/widgets/hotel_view_widgets/hotel_photos_item.dart';
 
 class PaymentScreenshotScreen extends StatelessWidget {
-  final ConfirmBooking booking;
+  final ConfirmHotelBooking booking;
   final Hotel hotel;
   final AppUser user;
   PaymentScreenshotScreen(this.booking, this.hotel, this.user);

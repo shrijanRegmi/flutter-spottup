@@ -42,7 +42,7 @@ class WrapperBuilder extends StatelessWidget {
           StreamProvider<List<PopularDestination>>.value(
             value: HotelProvider().popularDestinations,
           ),
-          StreamProvider<List<ConfirmBooking>>.value(
+          StreamProvider<List<ConfirmHotelBooking>>.value(
             value: HotelProvider(uid: _appUser.uid).bookingsList,
           ),
           StreamProvider<List<AppNotification>>.value(

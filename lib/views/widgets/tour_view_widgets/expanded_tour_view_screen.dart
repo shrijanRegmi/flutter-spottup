@@ -6,6 +6,7 @@ import 'package:motel/models/firebase/tour_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/viewmodels/hotel_view_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
+import 'package:motel/views/screens/home/tour_book_screen.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 import 'package:motel/views/widgets/hotel_view_widgets/hotel_photos_list.dart';
 import 'package:provider/provider.dart';
@@ -111,7 +112,14 @@ class _ExpandedTourViewScreenState extends State<ExpandedTourViewScreen> {
                   child: RoundedBtn(
                     title: 'Book now',
                     padding: 0.0,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => TourBookScreen(widget.tour),
+                        ),
+                      );
+                    },
                   ),
                 )
               : null,
