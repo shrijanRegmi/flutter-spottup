@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:motel/enums/account_type.dart';
 import 'package:motel/helpers/date_helper.dart';
 import 'package:motel/models/firebase/tour_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
@@ -41,7 +42,7 @@ class ShortenedTourViewScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               _btnSection(context, vm, appUser),
-              _bottomSection(context, vm),
+              _bottomSection(appUser, context, vm),
             ],
           ),
         );
@@ -70,20 +71,21 @@ class ShortenedTourViewScreen extends StatelessWidget {
                 backgroundColor: Colors.black87,
                 heroTag: 'backBtn',
               ),
-              FloatingActionButton(
-                onPressed: () {
-                  vm.updateFavourite(!vm.isFavourite);
-                  vm.sendFavourite(tour.id, appUser);
-                },
-                child: Center(
-                  child: Icon(
-                    vm.isFavourite ? Icons.favorite : Icons.favorite_border,
-                    color: Color(0xff45ad90),
+              if (appUser.accountType != AccountType.tourPartner)
+                FloatingActionButton(
+                  onPressed: () {
+                    vm.updateFavourite(!vm.isFavourite);
+                    vm.sendFavourite(tour.id, appUser);
+                  },
+                  child: Center(
+                    child: Icon(
+                      vm.isFavourite ? Icons.favorite : Icons.favorite_border,
+                      color: Color(0xff45ad90),
+                    ),
                   ),
+                  backgroundColor: Colors.white,
+                  heroTag: 'favBtn',
                 ),
-                backgroundColor: Colors.white,
-                heroTag: 'favBtn',
-              ),
             ],
           ),
         ),
@@ -91,10 +93,11 @@ class ShortenedTourViewScreen extends StatelessWidget {
     );
   }
 
-  Widget _bottomSection(BuildContext context, HotelViewVm vm) {
+  Widget _bottomSection(
+      final AppUser appUser, BuildContext context, HotelViewVm vm) {
     return Column(
       children: <Widget>[
-        _detailSection(vm, context),
+        _detailSection(appUser, vm, context),
         _moreBtn(context),
         SizedBox(
           height: 30.0,
@@ -103,7 +106,8 @@ class ShortenedTourViewScreen extends StatelessWidget {
     );
   }
 
-  Widget _detailSection(HotelViewVm vm, BuildContext context) {
+  Widget _detailSection(
+      final AppUser _appUser, HotelViewVm vm, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Container(
@@ -182,18 +186,19 @@ class ShortenedTourViewScreen extends StatelessWidget {
               SizedBox(
                 height: 20.0,
               ),
-              RoundedBtn(
-                title: 'Book now',
-                padding: 0.0,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => TourBookScreen(tour),
-                    ),
-                  );
-                },
-              ),
+              if (_appUser.accountType != AccountType.tourPartner)
+                RoundedBtn(
+                  title: 'Book now',
+                  padding: 0.0,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => TourBookScreen(tour),
+                      ),
+                    );
+                  },
+                ),
             ],
           ),
         ),

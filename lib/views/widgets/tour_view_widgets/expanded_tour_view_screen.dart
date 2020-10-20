@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:motel/enums/account_type.dart';
 import 'package:motel/helpers/date_helper.dart';
 import 'package:motel/models/firebase/tour_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
@@ -63,12 +64,33 @@ class _ExpandedTourViewScreenState extends State<ExpandedTourViewScreen> {
                         horizontal: 20.0, vertical: 10.0),
                     child: Divider(),
                   ),
-                  _summaryBuilder(),
+                  _pickUpDateTimeBuilder(),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20.0, vertical: 10.0),
                     child: Divider(),
                   ),
+                  _summaryBuilder(),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 10.0),
+                    child: Divider(),
+                  ),
+                  if (widget.tour.photos.isNotEmpty)
+                    HotelPhotosList(widget.tour.photos),
+                  if (widget.tour.photos.isNotEmpty)
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                  if (widget.tour.photos.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 10.0),
+                      child: Divider(),
+                    ),
                   _inclusionBuilder(),
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -87,18 +109,6 @@ class _ExpandedTourViewScreenState extends State<ExpandedTourViewScreen> {
                         horizontal: 20.0, vertical: 10.0),
                     child: Divider(),
                   ),
-                  if (widget.tour.photos.isNotEmpty)
-                    HotelPhotosList(widget.tour.photos),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  if (widget.tour.photos.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 10.0),
-                      child: Divider(),
-                    ),
-                  // HotelReviewsList(widget.tour),
                   SizedBox(
                     height: 50.0,
                   ),
@@ -106,7 +116,8 @@ class _ExpandedTourViewScreenState extends State<ExpandedTourViewScreen> {
               ),
             ),
           ),
-          floatingActionButton: !_isKeyboardVisible
+          floatingActionButton: !_isKeyboardVisible &&
+                  _appUser.accountType != AccountType.tourPartner
               ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: RoundedBtn(
@@ -147,7 +158,8 @@ class _ExpandedTourViewScreenState extends State<ExpandedTourViewScreen> {
     );
   }
 
-  Widget _btnSection(BuildContext context, HotelViewVm vm, AppUser appUser) {
+  Widget _btnSection(BuildContext context,
+      HotelViewVm vm, AppUser appUser) {
     final _size = 50.0;
     return Column(
       children: <Widget>[
@@ -175,24 +187,25 @@ class _ExpandedTourViewScreenState extends State<ExpandedTourViewScreen> {
                   heroTag: 'backBtn2',
                 ),
               ),
-              Container(
-                width: _size,
-                height: _size,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    vm.updateFavourite(!vm.isFavourite);
-                    vm.sendFavourite(widget.tour.id, appUser);
-                  },
-                  child: Center(
-                    child: Icon(
-                      vm.isFavourite ? Icons.favorite : Icons.favorite_border,
-                      color: Color(0xff45ad90),
+              if (appUser.accountType != AccountType.tourPartner)
+                Container(
+                  width: _size,
+                  height: _size,
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      vm.updateFavourite(!vm.isFavourite);
+                      vm.sendFavourite(widget.tour.id, appUser);
+                    },
+                    child: Center(
+                      child: Icon(
+                        vm.isFavourite ? Icons.favorite : Icons.favorite_border,
+                        color: Color(0xff45ad90),
+                      ),
                     ),
+                    backgroundColor: Colors.white,
+                    heroTag: 'favBtn2',
                   ),
-                  backgroundColor: Colors.white,
-                  heroTag: 'favBtn2',
                 ),
-              ),
             ],
           ),
         ),
@@ -290,6 +303,33 @@ class _ExpandedTourViewScreenState extends State<ExpandedTourViewScreen> {
           ),
           Text(
             widget.tour.summary,
+            style: TextStyle(
+              color: Colors.black38,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _pickUpDateTimeBuilder() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Pick up date and time',
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 16.0,
+            ),
+          ),
+          SizedBox(
+            height: 10.0,
+          ),
+          Text(
+            '${DateHelper().getFormattedDate(widget.tour.pickUpDate).trim()}, At ${widget.tour.pickUpTime}',
             style: TextStyle(
               color: Colors.black38,
             ),

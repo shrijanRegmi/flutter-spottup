@@ -18,6 +18,8 @@ class Tour {
   final int updatedAt;
   final String searchKey;
   final String paymentAndCancellationPolicy;
+  final int pickUpDate;
+  final String pickUpTime;
 
   Tour({
     this.id,
@@ -37,6 +39,8 @@ class Tour {
     this.updatedAt,
     this.searchKey,
     this.paymentAndCancellationPolicy,
+    this.pickUpDate,
+    this.pickUpTime,
   });
 
   Map<String, dynamic> toJson() {
@@ -58,6 +62,8 @@ class Tour {
       'updated_at': updatedAt,
       'search_key': name.substring(0, 1),
       'payment_policy': paymentAndCancellationPolicy,
+      'pick_up_date': pickUpDate,
+      'pick_up_time': pickUpTime,
     };
   }
 
@@ -80,6 +86,8 @@ class Tour {
       updatedAt: data['updated_at'] ?? DateTime.now().millisecondsSinceEpoch,
       searchKey: data['search_key'] ?? '',
       paymentAndCancellationPolicy: data['payment_policy'] ?? '',
+      pickUpDate: data['pick_up_date'],
+      pickUpTime: data['pick_up_time'],
     );
   }
 

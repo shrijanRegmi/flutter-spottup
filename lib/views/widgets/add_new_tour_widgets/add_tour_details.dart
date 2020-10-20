@@ -21,7 +21,7 @@ class AddTourDetails extends StatelessWidget {
               SizedBox(
                 height: 20.0,
               ),
-              _inputFieldContainer(vm),
+              _inputFieldContainer(vm, context),
             ],
           ),
         ),
@@ -42,7 +42,7 @@ class AddTourDetails extends StatelessWidget {
     );
   }
 
-  Widget _inputFieldContainer(AddNewTourVm vm) {
+  Widget _inputFieldContainer(AddNewTourVm vm, BuildContext context) {
     return Column(
       children: [
         NewHotelField(
@@ -56,7 +56,7 @@ class AddTourDetails extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: Text(
-                'Tour start Date: ',
+                'Tour start date: ',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
@@ -92,7 +92,7 @@ class AddTourDetails extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: Text(
-                'Tour end Date: ',
+                'Tour end date: ',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
@@ -114,6 +114,77 @@ class AddTourDetails extends StatelessWidget {
                     child: Text(
                       DateHelper()
                           .getFormattedDate(vm.end.millisecondsSinceEpoch),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+          ],
+        ),
+        SizedBox(
+          height: 30.0,
+        ),
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: Text(
+                'Pick up date: ',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            vm.pickUpDate == null
+                ? MaterialButton(
+                    child: Text('Select pick up date'),
+                    color: Color(0xff45ad90),
+                    minWidth: 180.0,
+                    textColor: Colors.white,
+                    onPressed: vm.showPickUpDateDialog,
+                  )
+                : GestureDetector(
+                    onTap: vm.showPickUpDateDialog,
+                    child: Text(
+                      DateHelper().getFormattedDate(
+                          vm.pickUpDate.millisecondsSinceEpoch),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+          ],
+        ),
+        SizedBox(
+          height: 30.0,
+        ),
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: Text(
+                'Pick up time: ',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            vm.pickUpTime == null
+                ? MaterialButton(
+                    child: Text('Select pick up time'),
+                    color: Color(0xff45ad90),
+                    minWidth: 180.0,
+                    textColor: Colors.white,
+                    onPressed: vm.showPickUpTimeDialog,
+                  )
+                : GestureDetector(
+                    onTap: vm.showPickUpTimeDialog,
+                    child: Text(
+                      '${vm.pickUpTime.format(context)}',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),

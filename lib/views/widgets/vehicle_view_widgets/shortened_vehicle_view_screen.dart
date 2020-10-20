@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:motel/enums/account_type.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/models/firebase/vehicle_model.dart';
 import 'package:motel/viewmodels/hotel_view_vm.dart';
@@ -39,7 +40,7 @@ class ShortenedVehicleViewScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               _btnSection(context, vm, appUser),
-              _bottomSection(context, vm),
+              _bottomSection(appUser, context, vm),
             ],
           ),
         );
@@ -68,20 +69,21 @@ class ShortenedVehicleViewScreen extends StatelessWidget {
                 backgroundColor: Colors.black87,
                 heroTag: 'backBtn',
               ),
-              FloatingActionButton(
-                onPressed: () {
-                  vm.updateFavourite(!vm.isFavourite);
-                  vm.sendFavourite(vehicle.id, appUser);
-                },
-                child: Center(
-                  child: Icon(
-                    vm.isFavourite ? Icons.favorite : Icons.favorite_border,
-                    color: Color(0xff45ad90),
+              if (appUser.accountType != AccountType.vehiclePartner)
+                FloatingActionButton(
+                  onPressed: () {
+                    vm.updateFavourite(!vm.isFavourite);
+                    vm.sendFavourite(vehicle.id, appUser);
+                  },
+                  child: Center(
+                    child: Icon(
+                      vm.isFavourite ? Icons.favorite : Icons.favorite_border,
+                      color: Color(0xff45ad90),
+                    ),
                   ),
+                  backgroundColor: Colors.white,
+                  heroTag: 'favBtn',
                 ),
-                backgroundColor: Colors.white,
-                heroTag: 'favBtn',
-              ),
             ],
           ),
         ),
@@ -89,10 +91,11 @@ class ShortenedVehicleViewScreen extends StatelessWidget {
     );
   }
 
-  Widget _bottomSection(BuildContext context, HotelViewVm vm) {
+  Widget _bottomSection(
+      final AppUser appUser, BuildContext context, HotelViewVm vm) {
     return Column(
       children: <Widget>[
-        _detailSection(vm, context),
+        _detailSection(vm, context, appUser),
         _moreBtn(context),
         SizedBox(
           height: 30.0,
@@ -101,7 +104,8 @@ class ShortenedVehicleViewScreen extends StatelessWidget {
     );
   }
 
-  Widget _detailSection(HotelViewVm vm, BuildContext context) {
+  Widget _detailSection(
+      HotelViewVm vm, BuildContext context, final AppUser appUser) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Container(
@@ -180,18 +184,19 @@ class ShortenedVehicleViewScreen extends StatelessWidget {
               SizedBox(
                 height: 20.0,
               ),
-              RoundedBtn(
-                title: 'Book now',
-                padding: 0.0,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => VehicleBookScreen(vehicle),
-                    ),
-                  );
-                },
-              ),
+              if (appUser.accountType != AccountType.vehiclePartner)
+                RoundedBtn(
+                  title: 'Book now',
+                  padding: 0.0,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => VehicleBookScreen(vehicle),
+                      ),
+                    );
+                  },
+                ),
             ],
           ),
         ),
