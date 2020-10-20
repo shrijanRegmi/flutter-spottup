@@ -105,7 +105,7 @@ class VehicleBookVm extends ChangeNotifier {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-                'We have received your booking with Motel app. Our customer service representative will contact you soon.'),
+                'We have received your booking with Spott Up app. Our customer service representative will contact you soon.'),
           ],
         ),
         actions: [
