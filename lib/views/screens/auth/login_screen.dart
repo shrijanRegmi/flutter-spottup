@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:motel/enums/account_type.dart';
 import 'package:motel/viewmodels/auth_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/screens/auth/create_account_screen.dart';
@@ -8,8 +9,8 @@ import 'package:motel/views/widgets/auth_widgets/auth_field.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 
 class LoginScreen extends StatelessWidget {
-  final bool isOwner;
-  LoginScreen({this.isOwner = false});
+  final AccountType accountType;
+  LoginScreen({this.accountType = AccountType.general});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,7 @@ class LoginScreen extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  _loginTextBuilder(),
+                                  _loginTextBuilder(vm),
                                   SizedBox(
                                     height: 30.0,
                                   ),
@@ -68,8 +69,10 @@ class LoginScreen extends StatelessWidget {
                                   SizedBox(
                                     height: 50.0,
                                   ),
-                                  if (isOwner) _signUpTextBuilder(context),
-                                  if (isOwner) SizedBox(height: 20.0),
+                                  if (accountType != AccountType.general)
+                                    _signUpTextBuilder(context),
+                                  if (accountType != AccountType.general)
+                                    SizedBox(height: 20.0),
                                 ],
                               ),
                             )
@@ -91,9 +94,9 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _loginTextBuilder() {
+  Widget _loginTextBuilder(AuthVm vm) {
     return Text(
-      isOwner ? 'Login - Hotel Owner' : 'Login',
+      vm.getAuthText(accountType),
       style: TextStyle(
         fontWeight: FontWeight.w600,
         fontSize: 22.0,
@@ -106,7 +109,7 @@ class LoginScreen extends StatelessWidget {
       title: 'Google',
       color: Color(0xfffde4343),
       padding: 0.0,
-      onPressed: () => googleSignUp(isOwner),
+      onPressed: () => googleSignUp(accountType),
     );
   }
 
@@ -162,7 +165,7 @@ class LoginScreen extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (_) => CreateAccountScreen(
-              isOwner: true,
+              accountType: accountType,
             ),
           ),
         );
@@ -214,7 +217,7 @@ class LoginScreen extends StatelessWidget {
     return RoundedBtn(
       title: 'Login',
       padding: 0.0,
-      onPressed: () => loginUser(isOwner: isOwner),
+      onPressed: () => loginUser(accountType: accountType),
     );
   }
 }

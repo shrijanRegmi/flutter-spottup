@@ -11,7 +11,7 @@ import 'package:motel/services/firestore/user_provider.dart';
 import 'package:motel/views/screens/home/open_booking_item_screen.dart';
 
 class BookingListItem extends StatelessWidget {
-  final ConfirmBooking _booking;
+  final ConfirmHotelBooking _booking;
   final BookingType bookingType;
   BookingListItem(this._booking, this.bookingType);
 

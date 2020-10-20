@@ -6,12 +6,14 @@ class NewHotelField extends StatelessWidget {
   final TextInputType textInputType;
   final bool isExpanded;
   final bool requiredCapitalization;
+  final Function(String) onChanged;
   NewHotelField({
     this.hintText,
     this.controller,
     this.textInputType = TextInputType.text,
     this.isExpanded = false,
     this.requiredCapitalization = true,
+    this.onChanged,
   });
 
   @override
@@ -25,6 +27,7 @@ class NewHotelField extends StatelessWidget {
         textCapitalization: requiredCapitalization
             ? TextCapitalization.words
             : TextCapitalization.sentences,
+        onChanged: onChanged,
         decoration: InputDecoration(
           labelText: hintText,
           border: OutlineInputBorder(),

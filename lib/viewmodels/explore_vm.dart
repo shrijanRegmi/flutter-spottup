@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/popular_destination_model.dart';
 import 'package:motel/models/firebase/top_three_model.dart';
+import 'package:motel/models/firebase/tour_model.dart';
+import 'package:motel/models/firebase/vehicle_model.dart';
 import 'package:provider/provider.dart';
 
 class ExploreVm extends ChangeNotifier {
@@ -9,6 +11,8 @@ class ExploreVm extends ChangeNotifier {
   ExploreVm({@required this.context});
 
   List<Hotel> get hotelsList => Provider.of<List<Hotel>>(context) ?? [];
+  List<Tour> get toursList => Provider.of<List<Tour>>(context) ?? [];
+  List<Vehicle> get vehiclesList => Provider.of<List<Vehicle>>(context) ?? [];
   List<TopThree> get topThree => Provider.of<List<TopThree>>(context) ?? [];
   List<PopularDestination> get popularDestinations =>
       Provider.of<List<PopularDestination>>(context) ?? [];

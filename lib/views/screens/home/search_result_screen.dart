@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:motel/enums/account_type.dart';
 import 'package:motel/services/firestore/hotel_provider.dart';
 import 'package:motel/viewmodels/search_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
-import 'package:motel/views/widgets/search_widgets/search_result_list.dart';
+import 'package:motel/views/widgets/search_widgets/search_result_list_hotel.dart';
+import 'package:motel/views/widgets/search_widgets/search_result_list_tour.dart';
+import 'package:motel/views/widgets/search_widgets/search_result_list_vehicle.dart';
 
 class SearchResultScreen extends StatelessWidget {
+  final AccountType type;
   final Stream stream;
   final String city;
-  SearchResultScreen(this.stream, this.city);
+  SearchResultScreen(this.stream, this.city, this.type);
 
   @override
   Widget build(BuildContext context) {
@@ -48,10 +52,7 @@ class SearchResultScreen extends StatelessWidget {
                       height: 20.0,
                     ),
                     _searchBuilder(context, vm),
-                    SearchResultList(
-                      stream,
-                      _value,
-                    ),
+                    _getList(_value),
                   ],
                 ),
               ),
@@ -60,6 +61,34 @@ class SearchResultScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  Widget _getList(final String _value) {
+    switch (type) {
+      case AccountType.hotelPartner:
+        return SearchResultList(
+          stream,
+          _value,
+        );
+        break;
+      case AccountType.tourPartner:
+        return SearchResultListTour(
+          stream,
+          _value,
+        );
+        break;
+      case AccountType.vehiclePartner:
+        return SearchResultListVehicle(
+          stream,
+          _value,
+        );
+        break;
+      default:
+        return SearchResultList(
+          stream,
+          _value,
+        );
+    }
   }
 
   Widget _searchBuilder(BuildContext context, SearchVm vm) {
@@ -122,6 +151,7 @@ class SearchResultScreen extends StatelessWidget {
                             .toUpperCase(),
                       ).searchedHotelsFromKey,
                       vm.searchResultController.text.trim(),
+                      type,
                     ),
                   ),
                 );
@@ -136,5 +166,4 @@ class SearchResultScreen extends StatelessWidget {
       ),
     );
   }
-
 }

@@ -4,7 +4,7 @@ import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 
 class BookingDeclinedScreen extends StatelessWidget {
-  final ConfirmBooking booking;
+  final ConfirmHotelBooking booking;
   final Hotel hotel;
   BookingDeclinedScreen(this.booking, this.hotel);
 

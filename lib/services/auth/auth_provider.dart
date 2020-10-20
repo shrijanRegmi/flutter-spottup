@@ -39,7 +39,7 @@ class AuthProvider {
   Future loginWithEmailAndPassword({
     final String email,
     final String password,
-    final bool isOwner,
+    final AccountType accountType,
   }) async {
     try {
       final _result = await _auth.signInWithEmailAndPassword(
@@ -48,8 +48,7 @@ class AuthProvider {
       final _userRef = _ref.collection('users').document(_result.user.uid);
 
       await _userRef.updateData({
-        'account_type':
-            isOwner ? AccountType.hotelOwner.index : AccountType.general.index
+        'account_type': accountType.index,
       });
 
       _userFromFirebase(_result.user);
@@ -64,7 +63,7 @@ class AuthProvider {
 
   // sign up with google
   Future signUpWithGoogle({
-    final bool isOwner,
+    final AccountType accountType,
   }) async {
     try {
       final _account = await _googleSignIn.signIn();
@@ -80,7 +79,7 @@ class AuthProvider {
         lastName: _user.displayName.split(' ')[1],
         email: _user.email,
         uid: _result.user.uid,
-        accountType: isOwner ? AccountType.hotelOwner : AccountType.general,
+        accountType: accountType,
       );
 
       final _ref = Firestore.instance;
