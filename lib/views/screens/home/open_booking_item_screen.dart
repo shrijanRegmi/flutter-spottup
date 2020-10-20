@@ -8,7 +8,7 @@ import 'package:motel/viewmodels/booking_tab_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 
 class OpenBookingItemScreen extends StatelessWidget {
-  final ConfirmBooking booking;
+  final ConfirmHotelBooking booking;
   final AppUser appUser;
   final Hotel hotel;
   final BookingType bookingType;

@@ -4,7 +4,7 @@ import 'package:motel/models/firebase/confirm_booking_model.dart';
 import 'package:motel/views/widgets/booking_tab_widgets/booking_list_item.dart';
 
 class AcceptedBookingTab extends StatelessWidget {
-  final List<ConfirmBooking> bookings;
+  final List<ConfirmHotelBooking> bookings;
   AcceptedBookingTab(this.bookings);
 
   @override

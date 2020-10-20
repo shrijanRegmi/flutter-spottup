@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 class NotificationsListItem extends StatelessWidget {
   final AppNotification notification;
   final Function(
-          AppNotification notification, List<ConfirmBooking> bookingsList)
+          AppNotification notification, List<ConfirmHotelBooking> bookingsList)
       onPressedNotification;
   final Function(String uid, String notifId) readNotif;
   NotificationsListItem(
@@ -20,7 +20,7 @@ class NotificationsListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _appUser = Provider.of<AppUser>(context);
-    final _bookingsList = Provider.of<List<ConfirmBooking>>(context) ?? [];
+    final _bookingsList = Provider.of<List<ConfirmHotelBooking>>(context) ?? [];
 
     return GestureDetector(
       onTap: () {
@@ -32,7 +32,7 @@ class NotificationsListItem extends StatelessWidget {
         //   context,
         //   MaterialPageRoute(
         //     builder: (_) => PaymentScreenshotScreen(
-        //       ConfirmBooking(),
+        //       ConfirmHotelBooking(),
         //       Hotel(),
         //       AppUser(),
         //     ),

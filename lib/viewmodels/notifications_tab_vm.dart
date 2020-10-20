@@ -30,7 +30,7 @@ class NotificationTabVm extends ChangeNotifier {
 
   // screen navigation on btn pressed
   onNotifPressed(
-      AppNotification notification, List<ConfirmBooking> bookingsList) async {
+      AppNotification notification, List<ConfirmHotelBooking> bookingsList) async {
     switch (notification.type) {
       case NotificationType.bookingReceived:
         navigateToBookingOpenScreen(notification, bookingsList);
@@ -50,7 +50,7 @@ class NotificationTabVm extends ChangeNotifier {
 
   // goto booking open screen
   navigateToBookingOpenScreen(
-      AppNotification notification, List<ConfirmBooking> bookingsList) async {
+      AppNotification notification, List<ConfirmHotelBooking> bookingsList) async {
     updateLoadingVal(true);
 
     bool _bookingExists = false;
@@ -67,7 +67,7 @@ class NotificationTabVm extends ChangeNotifier {
       final _bookingSnap = await _bookingRef.getDocuments();
 
       if (_bookingSnap.documents.isNotEmpty) {
-        _booking = ConfirmBooking.fromJson(_bookingSnap.documents.first.data);
+        _booking = ConfirmHotelBooking.fromJson(_bookingSnap.documents.first.data);
         _bookingExists = true;
       }
     } else {
@@ -100,7 +100,7 @@ class NotificationTabVm extends ChangeNotifier {
 
   // goto declined screen
   navigateToBookingDeclinedScreen(
-      AppNotification notification, List<ConfirmBooking> bookingsList) async {
+      AppNotification notification, List<ConfirmHotelBooking> bookingsList) async {
     updateLoadingVal(true);
 
     bool _bookingExists = false;
@@ -117,7 +117,7 @@ class NotificationTabVm extends ChangeNotifier {
       final _bookingSnap = await _bookingRef.getDocuments();
 
       if (_bookingSnap.documents.isNotEmpty) {
-        _booking = ConfirmBooking.fromJson(_bookingSnap.documents.first.data);
+        _booking = ConfirmHotelBooking.fromJson(_bookingSnap.documents.first.data);
         _bookingExists = true;
       }
     } else {
@@ -149,7 +149,7 @@ class NotificationTabVm extends ChangeNotifier {
 
   // goto accepted screen
   navigateToBookingAcceptedScreen(
-      AppNotification notification, List<ConfirmBooking> bookingsList) async {
+      AppNotification notification, List<ConfirmHotelBooking> bookingsList) async {
     updateLoadingVal(true);
 
     bool _bookingExists = false;
@@ -166,7 +166,7 @@ class NotificationTabVm extends ChangeNotifier {
       final _bookingSnap = await _bookingRef.getDocuments();
 
       if (_bookingSnap.documents.isNotEmpty) {
-        _booking = ConfirmBooking.fromJson(_bookingSnap.documents.first.data);
+        _booking = ConfirmHotelBooking.fromJson(_bookingSnap.documents.first.data);
         _bookingExists = true;
       }
     } else {
@@ -198,7 +198,7 @@ class NotificationTabVm extends ChangeNotifier {
 
   // goto payment screenshot screen
   navigateToPaymentScreenshotScreen(
-      AppNotification notification, List<ConfirmBooking> bookingsList) async {
+      AppNotification notification, List<ConfirmHotelBooking> bookingsList) async {
     updateLoadingVal(true);
 
     bool _bookingExists = false;
@@ -215,7 +215,7 @@ class NotificationTabVm extends ChangeNotifier {
       final _bookingSnap = await _bookingRef.getDocuments();
 
       if (_bookingSnap.documents.isNotEmpty) {
-        _booking = ConfirmBooking.fromJson(_bookingSnap.documents.first.data);
+        _booking = ConfirmHotelBooking.fromJson(_bookingSnap.documents.first.data);
         _bookingExists = true;
       }
     } else {
