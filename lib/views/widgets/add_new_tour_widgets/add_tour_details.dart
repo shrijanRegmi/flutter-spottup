@@ -188,6 +188,15 @@ class AddTourDetails extends StatelessWidget {
           controller: vm.exclusionsController,
           requiredCapitalization: false,
         ),
+        SizedBox(
+          height: 30.0,
+        ),
+        NewHotelField(
+          hintText: 'Payment and Cancellation Policy',
+          isExpanded: true,
+          controller: vm.paymentPolicyController,
+          requiredCapitalization: false,
+        ),
       ],
     );
   }
