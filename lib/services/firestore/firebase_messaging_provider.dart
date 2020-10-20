@@ -112,12 +112,12 @@ class FirebaseMessagingProvider {
           _ref.collection('bookings').where('id', isEqualTo: bookingId);
       final _bookingSnap = await _bookingRef.getDocuments();
 
-      ConfirmHotelBooking _booking;
+      ConfirmBooking _booking;
 
       if (_bookingSnap.documents.isNotEmpty) {
         _bookingSnap.documents.forEach((docSnap) {
           if (docSnap.exists) {
-            _booking = ConfirmHotelBooking.fromJson(docSnap.data);
+            _booking = ConfirmBooking.fromJson(docSnap.data);
           }
         });
       }
@@ -160,12 +160,12 @@ class FirebaseMessagingProvider {
           _ref.collection('bookings').where('id', isEqualTo: bookingId);
       final _bookingSnap = await _bookingRef.getDocuments();
 
-      ConfirmHotelBooking _booking;
+      ConfirmBooking _booking;
 
       if (_bookingSnap.documents.isNotEmpty) {
         _bookingSnap.documents.forEach((docSnap) {
           if (docSnap.exists) {
-            _booking = ConfirmHotelBooking.fromJson(docSnap.data);
+            _booking = ConfirmBooking.fromJson(docSnap.data);
           }
         });
       }
@@ -196,7 +196,7 @@ class FirebaseMessagingProvider {
   }
 
   // navigate to booking accept screen
-  _openBookingAcceptScreen(final ConfirmHotelBooking booking, final Hotel hotel) {
+  _openBookingAcceptScreen(final ConfirmBooking booking, final Hotel hotel) {
     return Navigator.push(
       context,
       MaterialPageRoute(
@@ -206,7 +206,7 @@ class FirebaseMessagingProvider {
   }
 
   // navigate to booking decline screen
-  _openBookingDeclineScreen(final ConfirmHotelBooking booking, final Hotel hotel) {
+  _openBookingDeclineScreen(final ConfirmBooking booking, final Hotel hotel) {
     return Navigator.push(
       context,
       MaterialPageRoute(
@@ -222,12 +222,12 @@ class FirebaseMessagingProvider {
           _ref.collection('bookings').where('id', isEqualTo: bookingId);
       final _bookingSnap = await _bookingRef.getDocuments();
 
-      ConfirmHotelBooking _booking;
+      ConfirmBooking _booking;
 
       if (_bookingSnap.documents.isNotEmpty) {
         _bookingSnap.documents.forEach((docSnap) {
           if (docSnap.exists) {
-            _booking = ConfirmHotelBooking.fromJson(docSnap.data);
+            _booking = ConfirmBooking.fromJson(docSnap.data);
           }
         });
       }

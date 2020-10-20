@@ -1,6 +1,53 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:motel/enums/booking_for_type.dart';
 
-class ConfirmHotelBooking {
+class ConfirmBooking {
+  String bookingId;
+  final DocumentReference userRef;
+  final DocumentReference hotelRef;
+  final int issueDate;
+  final int total;
+  final String ownerId;
+  final bool isAccepted;
+  final bool isDeclined;
+  final String declineText;
+  final List<dynamic> screenshots;
+  final int checkInDate;
+  final int checkOutDate;
+  final List<dynamic> rooms;
+  final int nights;
+  final BookingForType type;
+
+  ConfirmBooking({
+    this.bookingId,
+    this.userRef,
+    this.issueDate,
+    this.hotelRef,
+    this.total,
+    this.ownerId,
+    this.isAccepted,
+    this.isDeclined,
+    this.declineText,
+    this.screenshots,
+    this.checkInDate,
+    this.checkOutDate,
+    this.rooms,
+    this.nights,
+    this.type,
+  });
+
+  static ConfirmBooking fromJson(final Map<String, dynamic> data) {
+    if (data['type'] == 1) {
+      return ConfirmTourBooking.fromJson(data);
+    }
+    if (data['type'] == 2) {
+      return ConfirmVehicleBooking.fromJson(data);
+    }
+    return ConfirmHotelBooking.fromJson(data);
+  }
+}
+
+class ConfirmHotelBooking extends ConfirmBooking {
   String bookingId;
   final DocumentReference hotelRef;
   final DocumentReference userRef;
@@ -47,6 +94,7 @@ class ConfirmHotelBooking {
       'owner_id': ownerId,
       'is_seen': isAccepted,
       'is_contacted': isDeclined,
+      'type': 0,
     };
   }
 
@@ -70,7 +118,7 @@ class ConfirmHotelBooking {
   }
 }
 
-class ConfirmTourBooking {
+class ConfirmTourBooking extends ConfirmBooking {
   String bookingId;
   final DocumentReference tourRef;
   final DocumentReference userRef;
@@ -114,6 +162,7 @@ class ConfirmTourBooking {
       'owner_id': ownerId,
       'is_seen': isAccepted,
       'is_contacted': isDeclined,
+      'type': 1,
     };
   }
 
@@ -136,7 +185,7 @@ class ConfirmTourBooking {
   }
 }
 
-class ConfirmVehicleBooking {
+class ConfirmVehicleBooking extends ConfirmBooking {
   String bookingId;
   final DocumentReference vehicleRef;
   final DocumentReference userRef;
@@ -183,6 +232,7 @@ class ConfirmVehicleBooking {
       'owner_id': ownerId,
       'is_seen': isAccepted,
       'is_contacted': isDeclined,
+      'type': 2,
     };
   }
 
