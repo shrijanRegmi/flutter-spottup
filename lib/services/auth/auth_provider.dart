@@ -94,9 +94,7 @@ class AuthProvider {
         print('Success: Signing up user with name ${_user.displayName}');
       } else {
         await _userRef.updateData({
-          'account_type': isOwner
-              ? AccountType.hotelOwner.index
-              : AccountType.general.index,
+          'account_type': accountType,
         });
         _userFromFirebase(_user);
         print('Success: Logging in user with name ${_user.displayName}');
