@@ -13,25 +13,25 @@ class BookingTabVm extends ChangeNotifier {
   String get acceptDeclineText => _acceptDeclineText;
 
   // all bookings
-  List<ConfirmHotelBooking> get _bookingList =>
-      Provider.of<List<ConfirmHotelBooking>>(context) ?? [];
+  List<ConfirmBooking> get _bookingList =>
+      Provider.of<List<ConfirmBooking>>(context) ?? [];
 
   // only new bookings
-  List<ConfirmHotelBooking> get newBookings {
+  List<ConfirmBooking> get newBookings {
     return _bookingList
         .where((booking) => !booking.isAccepted && !booking.isDeclined)
         .toList();
   }
 
   // only other bookings
-  List<ConfirmHotelBooking> get acceptedBookings {
+  List<ConfirmBooking> get acceptedBookings {
     return _bookingList
         .where((booking) => booking.isAccepted && !booking.isDeclined)
         .toList();
   }
 
   // only contacted bookings
-  List<ConfirmHotelBooking> get declinedBookings {
+  List<ConfirmBooking> get declinedBookings {
     return _bookingList
         .where((booking) => booking.isDeclined && !booking.isAccepted)
         .toList();
