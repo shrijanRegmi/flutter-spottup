@@ -94,7 +94,7 @@ class AuthProvider {
         print('Success: Signing up user with name ${_user.displayName}');
       } else {
         await _userRef.updateData({
-          'account_type': accountType,
+          'account_type': accountType.index,
         });
         _userFromFirebase(_user);
         print('Success: Logging in user with name ${_user.displayName}');
