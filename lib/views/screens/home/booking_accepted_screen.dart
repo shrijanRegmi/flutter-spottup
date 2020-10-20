@@ -8,7 +8,7 @@ import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 
 class BookingAcceptedScreen extends StatelessWidget {
-  final ConfirmBooking booking;
+  final ConfirmHotelBooking booking;
   final Hotel hotel;
   final bool admin;
   BookingAcceptedScreen(this.booking, this.hotel, {this.admin = false});

@@ -61,9 +61,15 @@ class BestDealItem extends StatelessWidget {
                 topLeft: Radius.circular(10.0),
                 bottomLeft: Radius.circular(10.0),
               ),
-              child: CachedNetworkImage(
-                imageUrl: bestDeal.dp,
-                fit: BoxFit.fitHeight,
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: CachedNetworkImageProvider(
+                      bestDeal.dp,
+                    ),
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
             ),
           ),

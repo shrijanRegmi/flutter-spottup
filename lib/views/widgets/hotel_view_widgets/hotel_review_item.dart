@@ -14,8 +14,8 @@ class HotelReviewItem extends StatefulWidget {
 }
 
 class _HotelReviewItemState extends State<HotelReviewItem> {
-  bool _isReplying = false;
-  FocusNode _focusNode = FocusNode();
+  // bool _isReplying = false;
+  // FocusNode _focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -129,72 +129,72 @@ class _HotelReviewItemState extends State<HotelReviewItem> {
     );
   }
 
-  Widget _replyBtnBuilder() {
-    return !_isReplying
-        ? Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _isReplying = true;
-                    _focusNode.requestFocus();
-                  });
-                },
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      'Reply',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 12.0,
-                        color: Color(0xff45ad90),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 5.0,
-                    ),
-                    Icon(
-                      Icons.arrow_forward,
-                      color: Color(0xff45ad90),
-                      size: 14.0,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          )
-        : Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: TextFormField(
-                      style: TextStyle(
-                        fontSize: 14.0,
-                      ),
-                      minLines: 1,
-                      maxLines: 4,
-                      focusNode: _focusNode,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Reply here...',
-                        suffixIcon: IconButton(
-                          icon: Icon(Icons.send),
-                          color: Color(0xff45ad90),
-                          onPressed: () {},
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-  }
+  // Widget _replyBtnBuilder() {
+  //   return !_isReplying
+  //       ? Row(
+  //           mainAxisAlignment: MainAxisAlignment.end,
+  //           children: <Widget>[
+  //             GestureDetector(
+  //               onTap: () {
+  //                 setState(() {
+  //                   _isReplying = true;
+  //                   _focusNode.requestFocus();
+  //                 });
+  //               },
+  //               child: Row(
+  //                 children: <Widget>[
+  //                   Text(
+  //                     'Reply',
+  //                     style: TextStyle(
+  //                       fontWeight: FontWeight.w600,
+  //                       fontSize: 12.0,
+  //                       color: Color(0xff45ad90),
+  //                     ),
+  //                   ),
+  //                   SizedBox(
+  //                     width: 5.0,
+  //                   ),
+  //                   Icon(
+  //                     Icons.arrow_forward,
+  //                     color: Color(0xff45ad90),
+  //                     size: 14.0,
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //           ],
+  //         )
+  //       : Container(
+  //           decoration: BoxDecoration(
+  //             color: Colors.white,
+  //             borderRadius: BorderRadius.circular(10.0),
+  //           ),
+  //           child: Padding(
+  //             padding: const EdgeInsets.symmetric(horizontal: 10.0),
+  //             child: Row(
+  //               children: <Widget>[
+  //                 Expanded(
+  //                   child: TextFormField(
+  //                     style: TextStyle(
+  //                       fontSize: 14.0,
+  //                     ),
+  //                     minLines: 1,
+  //                     maxLines: 4,
+  //                     focusNode: _focusNode,
+  //                     decoration: InputDecoration(
+  //                       border: InputBorder.none,
+  //                       hintText: 'Reply here...',
+  //                       suffixIcon: IconButton(
+  //                         icon: Icon(Icons.send),
+  //                         color: Color(0xff45ad90),
+  //                         onPressed: () {},
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         );
+  // }
 }

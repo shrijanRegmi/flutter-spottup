@@ -1,7 +1,4 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:lottie/lottie.dart';
 import 'package:motel/models/app/hotel_features.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
@@ -22,25 +19,6 @@ class AddNewHotel extends StatefulWidget {
 }
 
 class _AddNewHotelState extends State<AddNewHotel> {
-  bool _isTyping = false;
-  StreamSubscription _subscription;
-
-  @override
-  void initState() {
-    super.initState();
-    _subscription = KeyboardVisibility.onChange.listen((event) {
-      setState(() {
-        _isTyping = event;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _subscription?.cancel();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return VmProvider<AddNewHotelVm>(
@@ -114,7 +92,6 @@ class _AddNewHotelState extends State<AddNewHotel> {
                                             )
                                           : vm.uploadNewHotel(
                                               context, appUser.uid);
-                                      ;
                                     },
                                   ),
                             SizedBox(

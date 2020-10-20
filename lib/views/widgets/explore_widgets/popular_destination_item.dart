@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:motel/enums/account_type.dart';
 import 'package:motel/models/firebase/popular_destination_model.dart';
 import 'package:motel/services/firestore/hotel_provider.dart';
 import 'package:motel/views/screens/home/search_result_screen.dart';
@@ -14,10 +15,12 @@ class PopularDestinationItem extends StatelessWidget {
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => SearchResultScreen(
-              HotelProvider(
-                city: popularDestination.name,
-              ).searchedHotelsFromCity,
-              popularDestination.name),
+            HotelProvider(
+              city: popularDestination.name,
+            ).searchedHotelsFromCity,
+            popularDestination.name,
+            AccountType.hotelPartner,
+          ),
         ),
       ),
       child: Padding(

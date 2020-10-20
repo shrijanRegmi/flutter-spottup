@@ -1,7 +1,4 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/viewmodels/add_new_hotel_vm.dart';
@@ -21,28 +18,6 @@ class AddNewRoom extends StatefulWidget {
 }
 
 class _AddNewRoomState extends State<AddNewRoom> {
-  bool _isTyping = false;
-  StreamSubscription _subscription;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.room != null) {
-      widget.vm.initializeRoomValues(widget.room);
-    }
-    _subscription = KeyboardVisibility.onChange.listen((event) {
-      setState(() {
-        _isTyping = event;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _subscription?.cancel();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final _appUser = Provider.of<AppUser>(context);

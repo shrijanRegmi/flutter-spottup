@@ -96,7 +96,7 @@ class UserProvider {
   }
 
   // confirm hotel booking
-  Future confirmBooking(final ConfirmBooking booking) async {
+  Future confirmHotelBooking(final ConfirmHotelBooking booking) async {
     try {
       final _bookingRef = _ref.collection('bookings').document();
       final _upcommingRef =
@@ -114,6 +114,37 @@ class UserProvider {
 
       _result = await _upcommingRef.add(_upcoming.toJson());
 
+      print('Success: Sending booking details to firestore');
+      return _result;
+    } catch (e) {
+      print(e);
+      print('Error!!!: Sending booking details to firestore');
+      return null;
+    }
+  }
+
+  Future confirmTourBooking(final ConfirmTourBooking booking) async {
+    try {
+      final _bookingRef = _ref.collection('bookings').document();
+      booking.bookingId = _bookingRef.documentID;
+
+      var _result = await _bookingRef.setData(booking.toJson());
+      print('Success: Sending booking details to firestore');
+      return _result;
+    } catch (e) {
+      print(e);
+      print('Error!!!: Sending booking details to firestore');
+      return null;
+    }
+  }
+
+  Future confirmVehicleBooking(final ConfirmVehicleBooking booking) async {
+    try {
+      final _bookingRef = _ref.collection('bookings').document();
+
+      booking.bookingId = _bookingRef.documentID;
+
+      var _result = await _bookingRef.setData(booking.toJson());
       print('Success: Sending booking details to firestore');
       return _result;
     } catch (e) {

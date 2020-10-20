@@ -92,7 +92,7 @@ class ProceedBookingScreen extends StatelessWidget {
                                             _total = hotel.price * days;
                                           }
 
-                                          final _booking = ConfirmBooking(
+                                          final _booking = ConfirmHotelBooking(
                                             hotelRef: hotel.toRef(),
                                             userRef: appUser.toRef(),
                                             checkInDate: checkIn,

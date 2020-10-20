@@ -16,13 +16,13 @@ class BestDeals extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         LeftRightText(
-          leftText: 'Best deals',
+          leftText: 'Best deal hotels',
           onPressIcon: () {
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (_) => ViewAllScreen(
-                    title: 'Best deals',
+                    title: 'Best deal hotels',
                     stream: HotelProvider().allBestDeals,
                     listItem: (List list, int index) {
                       return BestDealItem(

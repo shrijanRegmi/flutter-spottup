@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:motel/views/screens/auth/create_account_screen.dart';
 import 'package:motel/views/screens/auth/login_screen.dart';
+import 'package:motel/views/screens/auth/partner_login_screen.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 
 class GetStartedScreen extends StatelessWidget {
@@ -18,7 +19,14 @@ class GetStartedScreen extends StatelessWidget {
               Column(
                 children: [
                   _btnBuilder(context),
-                  _hotelOwnerAccountChoose(context),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  _partnerLoginText(),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  _partnerBtnBuilder(context),
                   SizedBox(
                     height: 20.0,
                   ),
@@ -69,70 +77,66 @@ class GetStartedScreen extends StatelessWidget {
   }
 
   Widget _btnBuilder(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 40.0),
-      child: Column(
-        children: <Widget>[
-          RoundedBtn(
-            title: 'Login',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => LoginScreen(),
-                ),
-              );
-            },
-          ),
-          SizedBox(
-            height: 10.0,
-          ),
-          RoundedBtn(
-            title: 'Create Account',
-            color: Colors.white,
-            textColor: Color(0xff292626),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => CreateAccountScreen(),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
+    return Column(
+      children: <Widget>[
+        RoundedBtn(
+          title: 'Login',
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => LoginScreen(),
+              ),
+            );
+          },
+        ),
+        SizedBox(
+          height: 10.0,
+        ),
+        RoundedBtn(
+          title: 'Create Account',
+          color: Colors.white,
+          textColor: Color(0xff292626),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => CreateAccountScreen(),
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 
-  Widget _hotelOwnerAccountChoose(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
+  Widget _partnerLoginText() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          'or login as partner',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 12.0,
+            color: Colors.black38,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _partnerBtnBuilder(BuildContext context) {
+    return RoundedBtn(
+      title: 'Partner Login',
+      onPressed: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => LoginScreen(
-              isOwner: true,
-            ),
+            builder: (_) => PartnerLoginScreen(),
           ),
         );
       },
-      child: Container(
-        color: Colors.transparent,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Are you a hotel owner ? Login here',
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 12.0,
-                color: Colors.black38,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

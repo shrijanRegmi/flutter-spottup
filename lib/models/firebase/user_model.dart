@@ -33,39 +33,6 @@ class AppUser {
   });
 
   static AppUser fromJson(final Map<String, dynamic> data) {
-    if (data['account_type'] == AccountType.hotelOwner.index) {
-      return AppUser(
-        uid: data['uid'] ?? '',
-        firstName: data['first_name'] ?? '',
-        lastName: data['last_name'] ?? '',
-        email: data['email'] ?? '',
-        photoUrl: data['photo_url'],
-        phone: data['phone'] ?? 0,
-        dob: data['dob'] ?? 0,
-        address: data['address'] ?? 'N/A',
-        upcoming: data['upcoming'] ?? [],
-        finished: data['finished'] ?? [],
-        favourite: data['favourite'] ?? [],
-        accountType: AccountType.hotelOwner,
-        admin: data['admin'] ?? false,
-      );
-    } else if (data['account_type'] == AccountType.hotelOwner.index) {
-      return AppUser(
-        uid: data['uid'] ?? '',
-        firstName: data['first_name'] ?? '',
-        lastName: data['last_name'] ?? '',
-        email: data['email'] ?? '',
-        photoUrl: data['photo_url'],
-        phone: data['phone'] ?? 0,
-        dob: data['dob'] ?? 0,
-        address: data['address'] ?? 'N/A',
-        upcoming: data['upcoming'] ?? [],
-        finished: data['finished'] ?? [],
-        favourite: data['favourite'] ?? [],
-        accountType: AccountType.admin,
-        admin: data['admin'] ?? false,
-      );
-    }
     return AppUser(
       uid: data['uid'] ?? '',
       firstName: data['first_name'] ?? '',
@@ -78,7 +45,7 @@ class AppUser {
       upcoming: data['upcoming'] ?? [],
       finished: data['finished'] ?? [],
       favourite: data['favourite'] ?? [],
-      accountType: AccountType.general,
+      accountType: AccountType.values[data['account_type'] ?? 0],
       admin: data['admin'] ?? false,
     );
   }
