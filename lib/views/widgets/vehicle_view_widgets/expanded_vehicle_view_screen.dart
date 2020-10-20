@@ -80,7 +80,7 @@ class _ExpandedVehicleViewScreenState extends State<ExpandedVehicleViewScreen> {
                           horizontal: 20.0, vertical: 10.0),
                       child: Divider(),
                     ),
-                  // HotelReviewsList(widget.vehicle),
+                  ..._whoWillPayBuilder(),
                   SizedBox(
                     height: 50.0,
                   ),
@@ -274,5 +274,44 @@ class _ExpandedVehicleViewScreenState extends State<ExpandedVehicleViewScreen> {
         ],
       ),
     );
+  }
+
+  List<Widget> _whoWillPayBuilder() {
+    final _whoWillPay = widget.vehicle.whoWillPay ?? [];
+    List<Widget> _list = [];
+    for (int i = 0; i < _whoWillPay.length; i++) {
+      _list.add(Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '${i + 1}. ${_whoWillPay[i]['title']}',
+              style: TextStyle(
+                color: Colors.black38,
+              ),
+            ),
+            Row(
+              children: [
+                Icon(
+                  Icons.check,
+                  color: Colors.green,
+                ),
+                SizedBox(
+                  width: 10.0,
+                ),
+                Text(
+                  '${_whoWillPay[i]['value']}',
+                  style: TextStyle(
+                    color: Colors.black38,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ));
+    }
+    return _list;
   }
 }
