@@ -161,9 +161,9 @@ class HotelProvider {
   }
 
   // bookings from firebase
-  List<ConfirmHotelBooking> _bookingFromFirebase(QuerySnapshot colSnap) {
+  List<ConfirmBooking> _bookingFromFirebase(QuerySnapshot colSnap) {
     return colSnap.documents
-        .map((doc) => ConfirmHotelBooking.fromJson(doc.data))
+        .map((doc) => ConfirmBooking.fromJson(doc.data))
         .toList();
   }
 
@@ -273,7 +273,7 @@ class HotelProvider {
   }
 
   // stream of bookings
-  Stream<List<ConfirmHotelBooking>> get bookingsList {
+  Stream<List<ConfirmBooking>> get bookingsList {
     return _ref
         .collection('bookings')
         .where('owner_id', isEqualTo: uid)
