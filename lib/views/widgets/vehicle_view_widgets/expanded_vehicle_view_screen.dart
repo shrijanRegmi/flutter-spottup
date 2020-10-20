@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:motel/enums/account_type.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/models/firebase/vehicle_model.dart';
 import 'package:motel/viewmodels/hotel_view_vm.dart';
@@ -87,7 +88,8 @@ class _ExpandedVehicleViewScreenState extends State<ExpandedVehicleViewScreen> {
               ),
             ),
           ),
-          floatingActionButton: !_isKeyboardVisible
+          floatingActionButton: !_isKeyboardVisible &&
+                  appUser.accountType != AccountType.vehiclePartner
               ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: RoundedBtn(
@@ -149,24 +151,25 @@ class _ExpandedVehicleViewScreenState extends State<ExpandedVehicleViewScreen> {
                   heroTag: 'backBtn2',
                 ),
               ),
-              Container(
-                width: _size,
-                height: _size,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    vm.updateFavourite(!vm.isFavourite);
-                    vm.sendFavourite(widget.vehicle.id, appUser);
-                  },
-                  child: Center(
-                    child: Icon(
-                      vm.isFavourite ? Icons.favorite : Icons.favorite_border,
-                      color: Color(0xff45ad90),
+              if (appUser.accountType != AccountType.vehiclePartner)
+                Container(
+                  width: _size,
+                  height: _size,
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      vm.updateFavourite(!vm.isFavourite);
+                      vm.sendFavourite(widget.vehicle.id, appUser);
+                    },
+                    child: Center(
+                      child: Icon(
+                        vm.isFavourite ? Icons.favorite : Icons.favorite_border,
+                        color: Color(0xff45ad90),
+                      ),
                     ),
+                    backgroundColor: Colors.white,
+                    heroTag: 'favBtn2',
                   ),
-                  backgroundColor: Colors.white,
-                  heroTag: 'favBtn2',
                 ),
-              ),
             ],
           ),
         ),

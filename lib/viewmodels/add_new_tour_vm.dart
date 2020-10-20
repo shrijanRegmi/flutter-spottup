@@ -26,6 +26,8 @@ class AddNewTourVm extends ChangeNotifier {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   DateTime _start;
   DateTime _end;
+  DateTime _pickUpDate;
+  TimeOfDay _pickUpTime;
 
   TextEditingController get nameController => _nameController;
   TextEditingController get daysController => _daysController;
@@ -42,6 +44,8 @@ class AddNewTourVm extends ChangeNotifier {
   GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
   DateTime get start => _start;
   DateTime get end => _end;
+  DateTime get pickUpDate => _pickUpDate;
+  TimeOfDay get pickUpTime => _pickUpTime;
 
   // show start tour dialog
   Future showStartTourDialog() async {
@@ -67,6 +71,32 @@ class AddNewTourVm extends ChangeNotifier {
     );
     if (_pickedDate != null) {
       _end = _pickedDate;
+      notifyListeners();
+    }
+  }
+
+  // show pick up date dialog
+  Future showPickUpDateDialog() async {
+    final _pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _pickUpDate ?? DateTime.now(),
+      firstDate: DateTime(2015, 8),
+      lastDate: DateTime(2100),
+    );
+    if (_pickedDate != null) {
+      _pickUpDate = _pickedDate;
+      notifyListeners();
+    }
+  }
+
+  // show pick up time dialog
+  Future showPickUpTimeDialog() async {
+    final _pickedDate = await showTimePicker(
+      context: context,
+      initialTime: _pickUpTime ?? TimeOfDay.now(),
+    );
+    if (_pickedDate != null) {
+      _pickUpTime = _pickedDate;
       notifyListeners();
     }
   }
@@ -99,6 +129,8 @@ class AddNewTourVm extends ChangeNotifier {
         _personController.text.trim() != '' &&
         _start != null &&
         _end != null &&
+        _pickUpDate != null &&
+        _pickUpTime != null &&
         _summaryController.text.trim() != '' &&
         _inclusionsController.text.trim() != '' &&
         _exclusionsController.text.trim() != '' &&
@@ -128,6 +160,8 @@ class AddNewTourVm extends ChangeNotifier {
           photos: _mPhotos,
           updatedAt: DateTime.now().millisecondsSinceEpoch,
           paymentAndCancellationPolicy: _paymentPolicyController.text.trim(),
+          pickUpDate: _pickUpDate.millisecondsSinceEpoch,
+          pickUpTime: _pickUpTime.format(context),
         );
 
         final _result = await TourProvider(tour: _tour).publishTour();
@@ -144,7 +178,7 @@ class AddNewTourVm extends ChangeNotifier {
       }
     } else {
       _scaffoldKey.currentState.showSnackBar(SnackBar(
-        content: Text('Please fill up all the input fields.'),
+        content: Text('Please fill up all the input fields and select all the date/time.'),
       ));
     }
   }
