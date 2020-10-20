@@ -19,6 +19,7 @@ class AddNewTourVm extends ChangeNotifier {
   TextEditingController _summaryController = TextEditingController();
   TextEditingController _inclusionsController = TextEditingController();
   TextEditingController _exclusionsController = TextEditingController();
+  TextEditingController _paymentPolicyController = TextEditingController();
   List<File> _photos = [];
   bool _isLoading = false;
   File _dp;
@@ -34,6 +35,7 @@ class AddNewTourVm extends ChangeNotifier {
   TextEditingController get summaryController => _summaryController;
   TextEditingController get inclusionsController => _inclusionsController;
   TextEditingController get exclusionsController => _exclusionsController;
+  TextEditingController get paymentPolicyController => _paymentPolicyController;
   List<File> get photos => _photos;
   bool get isLoading => _isLoading;
   File get dp => _dp;
@@ -99,7 +101,8 @@ class AddNewTourVm extends ChangeNotifier {
         _end != null &&
         _summaryController.text.trim() != '' &&
         _inclusionsController.text.trim() != '' &&
-        _exclusionsController.text.trim() != '') {
+        _exclusionsController.text.trim() != '' &&
+        _paymentPolicyController.text.trim() != '') {
       if (_dp != null) {
         _updateLoaderValue(true);
 
@@ -124,6 +127,7 @@ class AddNewTourVm extends ChangeNotifier {
           dp: _mDp,
           photos: _mPhotos,
           updatedAt: DateTime.now().millisecondsSinceEpoch,
+          paymentAndCancellationPolicy: _paymentPolicyController.text.trim(),
         );
 
         final _result = await TourProvider(tour: _tour).publishTour();

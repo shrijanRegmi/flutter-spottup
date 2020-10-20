@@ -80,6 +80,12 @@ class _ExpandedTourViewScreenState extends State<ExpandedTourViewScreen> {
                         horizontal: 20.0, vertical: 10.0),
                     child: Divider(),
                   ),
+                  _paymentAndCancellationPolicy(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 10.0),
+                    child: Divider(),
+                  ),
                   if (widget.tour.photos.isNotEmpty)
                     HotelPhotosList(widget.tour.photos),
                   SizedBox(
@@ -330,6 +336,33 @@ class _ExpandedTourViewScreenState extends State<ExpandedTourViewScreen> {
           ),
           Text(
             widget.tour.exclusions,
+            style: TextStyle(
+              color: Colors.black38,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _paymentAndCancellationPolicy() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Payment and Cancellation Policy',
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 16.0,
+            ),
+          ),
+          SizedBox(
+            height: 10.0,
+          ),
+          Text(
+            widget.tour.paymentAndCancellationPolicy,
             style: TextStyle(
               color: Colors.black38,
             ),
