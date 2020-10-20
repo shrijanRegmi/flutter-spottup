@@ -12,6 +12,7 @@ class Vehicle {
   final String summary;
   final int updatedAt;
   final String searchKey;
+  final List<Map<String, dynamic>> whoWillPay;
 
   Vehicle({
     this.id,
@@ -25,6 +26,7 @@ class Vehicle {
     this.summary,
     this.updatedAt,
     this.searchKey,
+    this.whoWillPay,
   });
 
   Map<String, dynamic> toJson() {
@@ -40,6 +42,7 @@ class Vehicle {
       'summary': summary,
       'updated_at': updatedAt,
       'search_key': name.substring(0, 1),
+      'who_will_pay': whoWillPay,
     };
   }
 
@@ -56,6 +59,7 @@ class Vehicle {
       summary: data['summary'] ?? '',
       updatedAt: data['updated_at'] ?? DateTime.now().millisecondsSinceEpoch,
       searchKey: data['search_key'] ?? '',
+      whoWillPay: List<Map<String, dynamic>>.from(data['who_will_pay'] ?? []),
     );
   }
 
