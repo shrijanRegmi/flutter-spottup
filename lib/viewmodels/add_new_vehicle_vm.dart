@@ -20,6 +20,12 @@ class AddNewVehicleVm extends ChangeNotifier {
   bool _isLoading = false;
   File _dp;
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  Map<String, dynamic> _result1 = {};
+  Map<String, dynamic> _result2 = {};
+  Map<String, dynamic> _result3 = {};
+  Map<String, dynamic> _result4 = {};
+  Map<String, dynamic> _result5 = {};
+  Map<String, dynamic> _result6 = {};
 
   TextEditingController get nameController => _nameController;
   TextEditingController get modelYearController => _modelYearController;
@@ -76,6 +82,14 @@ class AddNewVehicleVm extends ChangeNotifier {
           photos: _mPhotos,
           summary: _summaryController.text.trim(),
           updatedAt: DateTime.now().millisecondsSinceEpoch,
+          whoWillPay: [
+            _result1,
+            _result2,
+            _result3,
+            _result4,
+            _result5,
+            _result6
+          ],
         );
 
         final _result =
@@ -96,6 +110,42 @@ class AddNewVehicleVm extends ChangeNotifier {
         content: Text('Please fill up all the input fields.'),
       ));
     }
+  }
+
+  // update value of result
+  updateResult1(final Map<String, dynamic> _result) {
+    _result1 = _result;
+    notifyListeners();
+  }
+
+  // update value of result
+  updateResult2(final Map<String, dynamic> _result) {
+    _result2 = _result;
+    notifyListeners();
+  }
+
+  // update value of result
+  updateResult3(final Map<String, dynamic> _result) {
+    _result3 = _result;
+    notifyListeners();
+  }
+
+  // update value of result
+  updateResult4(final Map<String, dynamic> _result) {
+    _result4 = _result;
+    notifyListeners();
+  }
+  
+  // update value of result
+  updateResult5(final Map<String, dynamic> _result) {
+    _result5 = _result;
+    notifyListeners();
+  }
+
+  // update value of result
+  updateResult6(final Map<String, dynamic> _result) {
+    _result6 = _result;
+    notifyListeners();
   }
 
   // update value of loader
