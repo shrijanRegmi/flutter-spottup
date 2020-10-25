@@ -221,7 +221,7 @@ class _AddVehicleDetailsState extends State<AddVehicleDetails> {
               'value': 'Company',
             };
 
-            widget.vm.updateResult2(_result);
+            widget.vm.updateResult3(_result);
           },
           title: Text('Company'),
         ),
@@ -237,7 +237,7 @@ class _AddVehicleDetailsState extends State<AddVehicleDetails> {
               'value': 'Client',
             };
 
-            widget.vm.updateResult2(_result);
+            widget.vm.updateResult3(_result);
           },
           title: Text('Client'),
         ),
