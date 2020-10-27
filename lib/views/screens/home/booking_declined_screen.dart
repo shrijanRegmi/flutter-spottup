@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:motel/models/firebase/confirm_booking_model.dart';
-import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 
 class BookingDeclinedScreen extends StatelessWidget {
-  final ConfirmHotelBooking booking;
-  final Hotel hotel;
+  final ConfirmBooking booking;
+  final hotel;
   BookingDeclinedScreen(this.booking, this.hotel);
 
   @override

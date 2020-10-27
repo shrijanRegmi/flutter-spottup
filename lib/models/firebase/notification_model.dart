@@ -31,7 +31,7 @@ class AppNotification {
   static AppNotification fromJson(final Map<String, dynamic> data) {
     return AppNotification(
       id: data['id'],
-      service: _getService(data['type'] ?? 0, data),
+      service: _getService(data['booking_for'] ?? 0, data),
       user: AppUser.fromJson(data['user_data']),
       isRead: data['is_read'] ?? false,
       lastUpdated:
@@ -82,16 +82,15 @@ BookingForType _getBookingFortype(final type) {
 }
 
 _getService(final type, final data) {
-  print(data);
   switch (type) {
     case 0:
       return Hotel.fromJson(data['hotel_data']);
       break;
     case 1:
-      return Tour.fromJson(data['hotel_data']);
+      return Tour.fromJson(data['tour_data']);
       break;
     case 2:
-      return Vehicle.fromJson(data['hotel_data']);
+      return Vehicle.fromJson(data['vehicle_data']);
       break;
     default:
       return Hotel.fromJson(data['hotel_data']);

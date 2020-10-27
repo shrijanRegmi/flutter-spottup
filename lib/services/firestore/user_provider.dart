@@ -172,6 +172,18 @@ class UserProvider {
     }
   }
 
+  // remove user notification count
+  removeNotifCount() async {
+    try {
+      final _userRef = appUserRef;
+      await _userRef.updateData({'notif_count': 0});
+      print('Success: removing notif count of user $uid');
+    } catch (e) {
+      print(e);
+      print('Error!!!: removing notif count of user $uid');
+    }
+  }
+
   // user from firebase
   AppUser _appUserFromFirebase(DocumentSnapshot userSnap) {
     return AppUser.fromJson(userSnap.data);

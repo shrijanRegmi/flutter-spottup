@@ -62,7 +62,7 @@ class SearchResultListTour extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            '$count hotels found',
+            '$count tours found',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 12.0,

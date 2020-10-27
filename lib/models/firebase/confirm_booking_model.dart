@@ -5,6 +5,8 @@ class ConfirmBooking {
   String bookingId;
   final DocumentReference userRef;
   final DocumentReference hotelRef;
+  final DocumentReference tourRef;
+  final DocumentReference vehicleRef;
   final int issueDate;
   final int total;
   final String ownerId;
@@ -23,6 +25,8 @@ class ConfirmBooking {
     this.userRef,
     this.issueDate,
     this.hotelRef,
+    this.tourRef,
+    this.vehicleRef,
     this.total,
     this.ownerId,
     this.isAccepted,
@@ -62,6 +66,7 @@ class ConfirmHotelBooking extends ConfirmBooking {
   final bool isDeclined;
   final String declineText;
   final List<dynamic> screenshots;
+  final BookingForType type;
 
   ConfirmHotelBooking({
     this.bookingId,
@@ -78,6 +83,7 @@ class ConfirmHotelBooking extends ConfirmBooking {
     this.isDeclined,
     this.declineText,
     this.screenshots,
+    this.type,
   });
 
   Map<String, dynamic> toJson() {
@@ -114,6 +120,7 @@ class ConfirmHotelBooking extends ConfirmBooking {
       isDeclined: data['is_declined'] ?? false,
       declineText: data['decline_text'] ?? '',
       screenshots: data['screenshots'] ?? [],
+      type: BookingForType.hotel,
     );
   }
 }
@@ -132,6 +139,7 @@ class ConfirmTourBooking extends ConfirmBooking {
   final bool isDeclined;
   final String declineText;
   final List<dynamic> screenshots;
+  final BookingForType type;
 
   ConfirmTourBooking({
     this.bookingId,
@@ -147,6 +155,7 @@ class ConfirmTourBooking extends ConfirmBooking {
     this.isDeclined,
     this.declineText,
     this.screenshots,
+    this.type,
   });
 
   Map<String, dynamic> toJson() {
@@ -181,6 +190,7 @@ class ConfirmTourBooking extends ConfirmBooking {
       isDeclined: data['is_declined'] ?? false,
       declineText: data['decline_text'] ?? '',
       screenshots: data['screenshots'] ?? [],
+      type: BookingForType.tour,
     );
   }
 }
@@ -200,6 +210,7 @@ class ConfirmVehicleBooking extends ConfirmBooking {
   final bool isDeclined;
   final String declineText;
   final List<dynamic> screenshots;
+  final BookingForType type;
 
   ConfirmVehicleBooking({
     this.bookingId,
@@ -216,6 +227,7 @@ class ConfirmVehicleBooking extends ConfirmBooking {
     this.isDeclined,
     this.declineText,
     this.screenshots,
+    this.type,
   });
 
   Map<String, dynamic> toJson() {
@@ -252,6 +264,7 @@ class ConfirmVehicleBooking extends ConfirmBooking {
       isDeclined: data['is_declined'] ?? false,
       declineText: data['decline_text'] ?? '',
       screenshots: data['screenshots'] ?? [],
+      type: BookingForType.vehicle,
     );
   }
 }

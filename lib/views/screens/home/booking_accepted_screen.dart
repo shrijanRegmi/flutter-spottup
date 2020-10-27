@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:motel/models/firebase/confirm_booking_model.dart';
-import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/payment_model.dart';
 import 'package:motel/viewmodels/booking_accepted_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 
 class BookingAcceptedScreen extends StatelessWidget {
-  final ConfirmHotelBooking booking;
-  final Hotel hotel;
+  final ConfirmBooking booking;
+  final hotel;
   final bool admin;
   BookingAcceptedScreen(this.booking, this.hotel, {this.admin = false});
 
