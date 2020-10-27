@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:motel/enums/account_type.dart';
-import 'package:motel/services/firestore/hotel_provider.dart';
 import 'package:motel/viewmodels/search_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/widgets/search_widgets/search_result_list_hotel.dart';
@@ -15,6 +14,8 @@ class SearchResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('The values are::::: $type $stream $city');
+    
     return VmProvider<SearchVm>(
       vm: SearchVm(context: context),
       onInit: (vm) {
@@ -138,23 +139,17 @@ class SearchResultScreen extends StatelessWidget {
             height: 45.0,
             child: FloatingActionButton(
               onPressed: () {
-                Navigator.pop(context);
-                print(vm.searchResultController.text.trim());
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SearchResultScreen(
-                      HotelProvider(
-                        searchKey: vm.searchResultController.text
-                            .trim()
-                            .substring(0, 1)
-                            .toUpperCase(),
-                      ).searchedHotelsFromKey,
-                      vm.searchResultController.text.trim(),
-                      type,
+                final _city = vm.searchResultController.text.trim();
+
+                if (_city != '') {
+                  Navigator.pop(context);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          SearchResultScreen(stream, _city, type),
                     ),
-                  ),
-                );
+                  );
+                }
               },
               backgroundColor: Color(0xff45ad90),
               child: Icon(
