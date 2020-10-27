@@ -24,7 +24,7 @@ class PopularDestinations extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Text(
-        'Popular destinations',
+        'Popular destinations for hotels',
         style: TextStyle(
           fontWeight: FontWeight.w600,
           fontSize: 16.0,

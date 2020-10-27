@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:motel/enums/account_type.dart';
+import 'package:motel/enums/booking_for_type.dart';
 import 'package:motel/services/firestore/hotel_provider.dart';
 import 'package:motel/views/screens/home/search_result_screen.dart';
 import 'package:motel/views/screens/home/search_screen.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
+import 'package:motel/views/widgets/common_widgets/service_selector.dart';
 import 'package:motel/views/widgets/explore_widgets/best_deals.dart';
 import 'package:motel/views/widgets/explore_widgets/best_deals_tours.dart';
 import 'package:motel/views/widgets/explore_widgets/best_deals_vehicles.dart';
@@ -68,17 +70,28 @@ class _ExploreTabState extends State<ExploreTab> {
                   SizedBox(
                     height: 40.0,
                   ),
-                  if (vm.hotelsList.isNotEmpty) BestDeals(vm.hotelsList),
-                  if (vm.hotelsList.isNotEmpty)
+                  ServiceSelector(onSelected: vm.updateServiceValue),
+                  SizedBox(
+                    height: 40.0,
+                  ),
+                  if (vm.hotelsList.isNotEmpty &&
+                      vm.service == BookingForType.hotel)
+                    BestDeals(vm.hotelsList),
+                  if (vm.hotelsList.isNotEmpty &&
+                      vm.service == BookingForType.hotel)
                     SizedBox(
                       height: 30.0,
                     ),
-                  if (vm.toursList.isNotEmpty) BestTourDeals(vm.toursList),
-                  if (vm.toursList.isNotEmpty)
+                  if (vm.toursList.isNotEmpty &&
+                      vm.service == BookingForType.tour)
+                    BestTourDeals(vm.toursList),
+                  if (vm.toursList.isNotEmpty &&
+                      vm.service == BookingForType.tour)
                     SizedBox(
                       height: 30.0,
                     ),
-                  if (vm.vehiclesList.isNotEmpty)
+                  if (vm.vehiclesList.isNotEmpty &&
+                      vm.service == BookingForType.vehicle)
                     BestVehicleDeals(vm.vehiclesList),
                 ],
               ),
