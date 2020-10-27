@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:motel/enums/booking_for_type.dart';
 import 'package:motel/viewmodels/search_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
+import 'package:motel/views/widgets/common_widgets/service_selector.dart';
 import 'package:motel/views/widgets/search_widgets/last_searches_list.dart';
 
 class SearchScreen extends StatelessWidget {
@@ -26,17 +28,32 @@ class SearchScreen extends StatelessWidget {
                         height: 10.0,
                       ),
                       _appbarBuilder(context),
-                      _searchTextBuilder(vm),
+                      _searchTextBuilder(),
                       SizedBox(
                         height: 10.0,
                       ),
                       _searchBuilder(context, vm),
                       SizedBox(
-                        height: 20.0,
+                        height: 30.0,
                       ),
                       // HotelTypesList(),
+                      ServiceSelector(onSelected: (BookingForType service) {
+                        switch (service) {
+                          case BookingForType.hotel:
+                            vm.updateSelectedSearchType('Hotels');
+                            break;
+                          case BookingForType.tour:
+                            vm.updateSelectedSearchType('Tours');
+                            break;
+                          case BookingForType.tour:
+                            vm.updateSelectedSearchType('Bus/Car');
+                            break;
+                          default:
+                            vm.updateSelectedSearchType('Hotels');
+                        }
+                      }),
                       SizedBox(
-                        height: 20.0,
+                        height: 30.0,
                       ),
                       LastSearchesList(),
                     ],
@@ -57,7 +74,7 @@ class SearchScreen extends StatelessWidget {
     );
   }
 
-  Widget _searchTextBuilder(final SearchVm vm) {
+  Widget _searchTextBuilder() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Row(
@@ -68,27 +85,6 @@ class SearchScreen extends StatelessWidget {
               fontWeight: FontWeight.w600,
               fontSize: 22.0,
             ),
-          ),
-          SizedBox(
-            width: 10.0,
-          ),
-          DropdownButton(
-            items: vm.searchTypes
-                .map(
-                  (e) => DropdownMenuItem(
-                    value: e,
-                    child: Text(
-                      '$e',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20.0,
-                      ),
-                    ),
-                  ),
-                )
-                .toList(),
-            value: vm.selectedSearchType,
-            onChanged: vm.updateSelectedSearchType,
           ),
         ],
       ),

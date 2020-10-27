@@ -63,7 +63,7 @@ class SearchResultListVehicle extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            '$count hotels found',
+            '$count bus/car service found',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 12.0,
