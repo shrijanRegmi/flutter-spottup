@@ -15,6 +15,7 @@ class AppUser {
   final List<dynamic> favourite;
   final AccountType accountType;
   final bool admin;
+  final int notifCount;
 
   AppUser({
     this.uid,
@@ -30,6 +31,7 @@ class AppUser {
     this.favourite,
     this.accountType,
     this.admin,
+    this.notifCount,
   });
 
   static AppUser fromJson(final Map<String, dynamic> data) {
@@ -47,6 +49,7 @@ class AppUser {
       favourite: data['favourite'] ?? [],
       accountType: AccountType.values[data['account_type'] ?? 0],
       admin: data['admin'] ?? false,
+      notifCount: data['notif_count'] ?? 0,
     );
   }
 
