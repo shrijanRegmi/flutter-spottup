@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:motel/enums/account_type.dart';
-import 'package:motel/services/firestore/hotel_provider.dart';
-import 'package:motel/services/firestore/tour_provider.dart';
-import 'package:motel/services/firestore/vehicle_provider.dart';
 import 'package:motel/viewmodels/search_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/widgets/search_widgets/search_result_list_hotel.dart';
