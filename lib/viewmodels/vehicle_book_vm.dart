@@ -86,10 +86,12 @@ class VehicleBookVm extends ChangeNotifier {
       builder: (context) => AlertDialog(
         title: Row(
           children: [
-            Text(
-              'Thank You',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
+            Expanded(
+              child: Text(
+                'Thank You for booking bus/car service',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             SizedBox(
@@ -105,7 +107,8 @@ class VehicleBookVm extends ChangeNotifier {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-                'We have received your booking with Spott Up app. Our customer service representative will contact you soon.'),
+              'You will receive confirmation of booking in the app notification tab shortly. Please check the notification tab in an hour.',
+            ),
           ],
         ),
         actions: [
