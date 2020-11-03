@@ -6,6 +6,7 @@ import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/models/firebase/vehicle_model.dart';
 import 'package:motel/viewmodels/hotel_view_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
+import 'package:motel/views/screens/home/vehicle_book_screen.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 import 'package:motel/views/widgets/hotel_view_widgets/hotel_photos_list.dart';
 import 'package:provider/provider.dart';
@@ -95,7 +96,14 @@ class _ExpandedVehicleViewScreenState extends State<ExpandedVehicleViewScreen> {
                   child: RoundedBtn(
                     title: 'Book now',
                     padding: 0.0,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => VehicleBookScreen(widget.vehicle),
+                        ),
+                      );
+                    },
                   ),
                 )
               : null,

@@ -33,6 +33,7 @@ class _AddNewRoomState extends State<AddNewRoom> {
             color: Colors.transparent,
             height: MediaQuery.of(context).size.height,
             child: SingleChildScrollView(
+              controller: widget.vm.scrollController,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -48,7 +49,8 @@ class _AddNewRoomState extends State<AddNewRoom> {
                     onPressed: () => widget.vm.isEditing && widget.room != null
                         ? widget.vm
                             .updateRoomsList(context, widget.pos, widget.room)
-                        : widget.vm.addRoomList(context, _appUser.uid),
+                        : widget.vm
+                            .addRoomList(context, _appUser.uid, widget.vm),
                   ),
                   SizedBox(
                     height: 30.0,
