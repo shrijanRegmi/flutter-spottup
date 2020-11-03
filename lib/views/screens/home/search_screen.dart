@@ -45,7 +45,7 @@ class SearchScreen extends StatelessWidget {
                           case BookingForType.tour:
                             vm.updateSelectedSearchType('Tours');
                             break;
-                          case BookingForType.tour:
+                          case BookingForType.vehicle:
                             vm.updateSelectedSearchType('Bus/Car');
                             break;
                           default:

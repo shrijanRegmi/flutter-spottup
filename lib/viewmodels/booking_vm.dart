@@ -160,7 +160,8 @@ class BookVm extends ChangeNotifier {
   }
 
   // confirm booking
-  confirmBooking(final ConfirmHotelBooking booking, final AppUser appUser) async {
+  confirmBooking(
+      final ConfirmHotelBooking booking, final AppUser appUser) async {
     _isProcessing = true;
     notifyListeners();
     try {
@@ -422,10 +423,12 @@ class BookVm extends ChangeNotifier {
       builder: (context) => AlertDialog(
         title: Row(
           children: [
-            Text(
-              'Thank You',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
+            Expanded(
+              child: Text(
+                'Thank You for booking hotel',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             SizedBox(
@@ -441,7 +444,7 @@ class BookVm extends ChangeNotifier {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-                'We have received your booking with Spott Up app. Our customer service representative will contact you soon.'),
+                'You will receive confirmation of booking in the app notification tab shortly. Please check the notification tab in an hour.'),
           ],
         ),
         actions: [
