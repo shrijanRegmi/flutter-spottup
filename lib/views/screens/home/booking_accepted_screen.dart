@@ -90,7 +90,7 @@ class BookingAcceptedScreen extends StatelessWidget {
 
   Widget _detailsBuilder() {
     return Text(
-      'Congratulations, we decided to accept the booking. Here are bank details and easy paisa details that you need to process. Please upload the screenshot of the payment after processing it. Have a great day.',
+      'Congratulations, we decided to accept the booking. Here are bank details and easy paisa details that you need to process. Please make 30% advance payment and upload the screenshot of the payment after processing it. Have a great day.',
     );
   }
 

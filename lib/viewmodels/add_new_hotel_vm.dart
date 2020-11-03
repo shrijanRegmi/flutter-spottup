@@ -7,6 +7,7 @@ import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/services/firestore/hotel_provider.dart';
 import 'package:motel/services/storage/hotel_storage_service.dart';
 import 'package:motel/models/app/hotel_features.dart';
+import 'package:motel/views/widgets/hotels_tab_widgets/add_new_room.dart';
 
 class AddNewHotelVm extends ChangeNotifier {
   bool _isNextPressed = false;
@@ -31,6 +32,7 @@ class AddNewHotelVm extends ChangeNotifier {
   GlobalKey<ScaffoldState> _roomScaffoldKey = GlobalKey<ScaffoldState>();
   List<HotelFeatures> _selectedFeatures = [];
   bool _isEditing = false;
+  ScrollController _scrollController = ScrollController();
 
   TextEditingController get nameController => _nameController;
   TextEditingController get cityController => _cityController;
@@ -54,6 +56,7 @@ class AddNewHotelVm extends ChangeNotifier {
   GlobalKey<ScaffoldState> get roomScaffoldKey => _roomScaffoldKey;
   List<HotelFeatures> get selectedFeatures => _selectedFeatures;
   bool get isEditing => _isEditing;
+  ScrollController get scrollController => _scrollController;
 
   // next btn pressed
   onNextPressed(bool newVal) {
@@ -355,7 +358,8 @@ class AddNewHotelVm extends ChangeNotifier {
   }
 
   // add rooms list
-  addRoomList(final BuildContext context, final String appUserId) {
+  addRoomList(final BuildContext context, final String appUserId,
+      final AddNewHotelVm vm) async {
     if (_roomNameController.text.trim() != '' &&
         _roomAdultController.text.trim() != '' &&
         _roomKidController.text.trim() != '' &&
@@ -377,6 +381,15 @@ class AddNewHotelVm extends ChangeNotifier {
 
         _rooms.add(_room);
         Navigator.pop(context);
+        vm.clearControllers();
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => AddNewRoom(vm, null, 0),
+          ),
+        );
+        _scrollController.animateTo(0,
+            duration: Duration(milliseconds: 500), curve: Curves.ease);
       } else {
         _roomScaffoldKey.currentState.showSnackBar(SnackBar(
           content: Text('Please upload display picture.'),
