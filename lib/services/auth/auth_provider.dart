@@ -26,12 +26,12 @@ class AuthProvider {
       _userFromFirebase(_result.user);
       print(
           'Success: Creating user with name ${appUser.firstName} ${appUser.lastName}');
-      return _result;
+      return null;
     } catch (e) {
       print(e);
       print(
           'Error!!!: Creating user with name ${appUser.firstName} ${appUser.lastName}');
-      return null;
+      return e;
     }
   }
 
@@ -53,11 +53,11 @@ class AuthProvider {
 
       _userFromFirebase(_result.user);
       print('Success: Logging in user with email $email');
-      return _result;
+      return null;
     } catch (e) {
       print(e);
       print('Error!!!: Logging in user with email $email');
-      return null;
+      return e;
     }
   }
 
