@@ -24,18 +24,21 @@ class AuthVm extends ChangeNotifier {
   Future loginWithEmailAndPassword({
     final AccountType accountType,
   }) async {
-    _updateProgressBar(true);
     final _email = _emailController.text.trim();
     final _pass = _passController.text.trim();
 
     var _result;
 
     if (_email != '' && _pass != '') {
+      _updateProgressBar(true);
       _result = await AuthProvider().loginWithEmailAndPassword(
         email: _email,
         password: _pass,
         accountType: accountType,
       );
+      if (_result != null) {
+        _showErrorMessage(_result.code);
+      }
     } else {
       _scaffoldKey.currentState.showSnackBar(SnackBar(
         content: Text(
@@ -43,7 +46,7 @@ class AuthVm extends ChangeNotifier {
         ),
       ));
     }
-    if (_result == null) {
+    if (_result != null) {
       _updateProgressBar(false);
     }
   }
@@ -79,6 +82,10 @@ class AuthVm extends ChangeNotifier {
         appUser: _appUser,
         password: _pass,
       );
+
+      if (_result != null) {
+        _showErrorMessage(_result.code);
+      }
     } else {
       _scaffoldKey.currentState.showSnackBar(SnackBar(
         content: Text(
@@ -86,7 +93,8 @@ class AuthVm extends ChangeNotifier {
         ),
       ));
     }
-    if (_result == null) {
+
+    if (_result != null) {
       _updateProgressBar(false);
     }
   }
@@ -176,5 +184,38 @@ class AuthVm extends ChangeNotifier {
       default:
         return '$auth';
     }
+  }
+
+  _showErrorMessage(final error) {
+    print(error);
+    String _errorText = '';
+    switch (error) {
+      case 'ERROR_EMAIL_ALREADY_IN_USE':
+        _errorText =
+            'Email already in use. Please use a different email or login with that email.';
+        break;
+      case 'ERROR_INVALID_EMAIL':
+        _errorText = 'The email you provided is not valid.';
+        break;
+      case 'ERROR_WEAK_PASSWORD':
+        _errorText = 'The password you provided is too weak.';
+        break;
+      case 'ERROR_USER_NOT_FOUND':
+        _errorText =
+            'User with that email not found. Please create an account with that email first.';
+        break;
+      case 'ERROR_WRONG_PASSWORD':
+        _errorText =
+            'The password you provided is not correct';
+        break;
+      default:
+        _errorText = 'Unexpected error occured! Please try again.';
+    }
+
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text(
+        '$_errorText',
+      ),
+    ));
   }
 }
