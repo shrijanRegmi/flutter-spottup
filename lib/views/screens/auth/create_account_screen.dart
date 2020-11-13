@@ -58,7 +58,8 @@ class CreateAccountScreen extends StatelessWidget {
                                     height: 20.0,
                                   ),
                                   _singUpBtnBuilder(
-                                      vm.signUpWithEmailAndPassword),
+                                    vm.signUpWithEmailAndPassword,
+                                  ),
                                   SizedBox(
                                     height: 20.0,
                                   ),
@@ -102,7 +103,7 @@ class CreateAccountScreen extends StatelessWidget {
       title: 'Google',
       color: Color(0xfffde4343),
       padding: 0.0,
-      onPressed: () => googleSignUp(accountType: accountType),
+      onPressed: () => googleSignUp(accountType),
     );
   }
 
@@ -173,7 +174,7 @@ class CreateAccountScreen extends StatelessWidget {
     return RoundedBtn(
       title: 'Sign Up',
       padding: 0.0,
-      onPressed: signUpUser,
+      onPressed: () => signUpUser(accountType),
     );
   }
 
