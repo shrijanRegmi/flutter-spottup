@@ -49,7 +49,9 @@ class AuthVm extends ChangeNotifier {
   }
 
   // sign up with email and password
-  Future signUpWithEmailAndPassword() async {
+  Future signUpWithEmailAndPassword(
+    final AccountType accountType,
+  ) async {
     _updateProgressBar(true);
 
     final _email = _emailController.text.trim();
@@ -70,7 +72,7 @@ class AuthVm extends ChangeNotifier {
         lastName: _lastName,
         phone: int.parse(_phone),
         email: _email,
-        accountType: AccountType.general,
+        accountType: accountType,
       );
 
       _result = await AuthProvider().signUpWithEmailAndPassword(
