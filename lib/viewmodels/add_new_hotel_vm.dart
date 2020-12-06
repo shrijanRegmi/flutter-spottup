@@ -123,7 +123,7 @@ class AddNewHotelVm extends ChangeNotifier {
             name: _nameController.text.trim(),
             city: _cityController.text.trim(),
             country: _countryController.text.trim(),
-            price: int.parse(_priceController.text.trim()),
+            price: int.parse(_priceController.text.replaceAll(',', '').trim()),
             summary: _summaryController.text.trim(),
             dp: _mDp,
             photos: _mPhotos ?? [],

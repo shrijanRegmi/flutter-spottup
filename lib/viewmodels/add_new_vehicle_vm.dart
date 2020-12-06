@@ -76,7 +76,7 @@ class AddNewVehicleVm extends ChangeNotifier {
           name: _nameController.text.trim(),
           modelYear: int.parse(_modelYearController.text.trim()),
           seats: int.parse(_seatsController.text.trim()),
-          price: int.parse(_priceController.text.trim()),
+          price: int.parse(_priceController.text.replaceAll(',', '').trim()),
           ownerId: appUser.uid,
           dp: _mDp,
           photos: _mPhotos,
