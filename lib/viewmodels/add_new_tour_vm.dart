@@ -178,7 +178,74 @@ class AddNewTourVm extends ChangeNotifier {
       }
     } else {
       _scaffoldKey.currentState.showSnackBar(SnackBar(
-        content: Text('Please fill up all the input fields and select all the date/time.'),
+        content: Text(
+            'Please fill up all the input fields and select all the date/time.'),
+      ));
+    }
+  }
+
+  // update tour
+  updateTour(final AppUser appUser, final String existingTourId) async {
+    if (_nameController.text.trim() != '' &&
+        _daysController.text.trim() != '' &&
+        _nightsController.text.trim() != '' &&
+        _priceController.text.trim() != '' &&
+        _personController.text.trim() != '' &&
+        _start != null &&
+        _end != null &&
+        _pickUpDate != null &&
+        _pickUpTime != null &&
+        _summaryController.text.trim() != '' &&
+        _inclusionsController.text.trim() != '' &&
+        _exclusionsController.text.trim() != '' &&
+        _paymentPolicyController.text.trim() != '') {
+      if (_dp != null) {
+        _updateLoaderValue(true);
+
+        String _mDp = '';
+        List<String> _mPhotos = [];
+
+        _mDp = await TourStorage().uploadTourDp(_dp);
+        _mPhotos = await TourStorage().uploadTourPhotos(_photos);
+
+        final _tour = Tour(
+          name: _nameController.text.trim(),
+          days: int.parse(_daysController.text.trim()),
+          nights: int.parse(_nightsController.text.trim()),
+          price: int.parse(_priceController.text.trim()),
+          person: int.parse(_personController.text.trim()),
+          start: _start.millisecondsSinceEpoch,
+          end: _end.millisecondsSinceEpoch,
+          summary: _summaryController.text.trim(),
+          inclusions: _inclusionsController.text.trim(),
+          exclusions: _exclusionsController.text.trim(),
+          ownerId: appUser.uid,
+          dp: _mDp,
+          photos: _mPhotos,
+          updatedAt: DateTime.now().millisecondsSinceEpoch,
+          paymentAndCancellationPolicy: _paymentPolicyController.text.trim(),
+          pickUpDate: _pickUpDate.millisecondsSinceEpoch,
+          pickUpTime: _pickUpTime.format(context),
+          id: existingTourId,
+        );
+
+        final _result = await TourProvider(tour: _tour).updateTour();
+
+        if (_result == null) {
+          _updateLoaderValue(false);
+        } else {
+          Navigator.pop(context);
+          Navigator.pop(context);
+        }
+      } else {
+        _scaffoldKey.currentState.showSnackBar(SnackBar(
+          content: Text('Please upload display picture.'),
+        ));
+      }
+    } else {
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text(
+            'Please fill up all the input fields and select all the date/time.'),
       ));
     }
   }
@@ -187,5 +254,25 @@ class AddNewTourVm extends ChangeNotifier {
   _updateLoaderValue(final bool _newVal) {
     _isLoading = _newVal;
     notifyListeners();
+  }
+
+  // initialize tour values
+  initializeTourValues(final Tour tour) {
+    _nameController.text = tour.name;
+    _daysController.text = tour.days.toString();
+    _nightsController.text = tour.nights.toString();
+    _personController.text = tour.person.toString();
+    _priceController.text = tour.price.toString();
+    _summaryController.text = tour.summary;
+    _inclusionsController.text = tour.inclusions;
+    _exclusionsController.text = tour.exclusions;
+    _paymentPolicyController.text = tour.paymentAndCancellationPolicy;
+
+    _start = DateTime.fromMillisecondsSinceEpoch(tour.start);
+    _end = DateTime.fromMillisecondsSinceEpoch(tour.end);
+    _pickUpDate = DateTime.fromMillisecondsSinceEpoch(tour.pickUpDate);
+    _pickUpTime = TimeOfDay(
+        hour: int.parse(tour.pickUpTime.split(":")[0]),
+        minute: int.parse(tour.pickUpTime.split(":")[1]));
   }
 }

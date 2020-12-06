@@ -29,6 +29,34 @@ class TourProvider {
     }
   }
 
+  // update tour
+  Future updateTour() async {
+    try {
+      final _tourRef = tour.toRef();
+      await _tourRef.updateData(tour.toJson());
+      print('Success: Updating tour details ${tour.id}');
+      return 'Success';
+    } catch (e) {
+      print(e);
+      print('Error!!!: Updating tour details ${tour.id}');
+      return null;
+    }
+  }
+
+  // delete tour
+  Future deleteTour(final String tourId) async {
+    try {
+      final _tourRef = _ref.collection('tours').document(tourId);
+      await _tourRef.delete();
+      print('Success: Deleting tour $tourId');
+      return 'Success';
+    } catch (e) {
+      print(e);
+      print('Error: Deleting tour $tourId');
+      return null;
+    }
+  }
+
   // tours list from firestore
   List<Tour> _toursFromFirestore(QuerySnapshot colSnap) {
     return colSnap.documents.map((docSnap) {

@@ -9,7 +9,7 @@ class ToursTab extends StatelessWidget {
       child: Column(
         children: [
           _addNewTourBuilder(context),
-          PartnerToursList(),
+          PartnerToursList(isEditing: true),
         ],
       ),
     );

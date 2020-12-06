@@ -3,6 +3,7 @@ import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/room_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/services/firestore/hotel_provider.dart';
+import 'package:motel/services/firestore/tour_provider.dart';
 import 'package:motel/services/firestore/user_provider.dart';
 import 'package:motel/views/screens/home/book_screen.dart';
 
@@ -77,6 +78,16 @@ class HotelViewVm extends ChangeNotifier {
   // delete hotel
   deleteHotel(final String _hotelId) async {
     final _result = await HotelProvider().deleteHotel(_hotelId);
+    if (_result != null) {
+      Navigator.pop(context);
+    }
+    return _result;
+  }
+
+  // delete tour
+  deleteTour(final String tourId) async {
+    final _result = await TourProvider().deleteTour(tourId);
+    print('The result is:::: $_result');
     if (_result != null) {
       Navigator.pop(context);
     }

@@ -10,14 +10,17 @@ import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/screens/home/tour_book_screen.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 import 'package:motel/views/widgets/hotel_view_widgets/hotel_photos_list.dart';
+import 'package:motel/views/widgets/tours_tab_widgets/add_new_tour.dart';
 import 'package:provider/provider.dart';
 
 class ExpandedTourViewScreen extends StatefulWidget {
   final PageController pageController;
   final Tour tour;
+  final bool isEditing;
   ExpandedTourViewScreen({
     this.pageController,
     this.tour,
+    this.isEditing = false,
   });
 
   @override
@@ -133,7 +136,44 @@ class _ExpandedTourViewScreenState extends State<ExpandedTourViewScreen> {
                     },
                   ),
                 )
-              : null,
+              : widget.isEditing
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        FloatingActionButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => AddNewTour(
+                                  tour: widget.tour,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Center(
+                            child: Icon(Icons.edit),
+                          ),
+                          backgroundColor: Color(0xff45ad90),
+                          heroTag: 'edit',
+                        ),
+                        SizedBox(
+                          width: 20.0,
+                        ),
+                        FloatingActionButton(
+                          onPressed: () => vm.deleteTour(widget.tour.id),
+                          child: Center(
+                            child: Icon(Icons.delete),
+                          ),
+                          backgroundColor: Color(0xff45ad90),
+                          heroTag: 'delete',
+                        ),
+                        SizedBox(
+                          width: 20.0,
+                        ),
+                      ],
+                    )
+                  : null,
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
         );
@@ -158,8 +198,7 @@ class _ExpandedTourViewScreenState extends State<ExpandedTourViewScreen> {
     );
   }
 
-  Widget _btnSection(BuildContext context,
-      HotelViewVm vm, AppUser appUser) {
+  Widget _btnSection(BuildContext context, HotelViewVm vm, AppUser appUser) {
     final _size = 50.0;
     return Column(
       children: <Widget>[

@@ -7,7 +7,8 @@ class TourViewScreen extends StatefulWidget {
   @override
   _TourViewScreenState createState() => _TourViewScreenState();
   final Tour tour;
-  TourViewScreen({this.tour});
+  final bool isEditing;
+  TourViewScreen({this.tour, this.isEditing = false});
 }
 
 class _TourViewScreenState extends State<TourViewScreen> {
@@ -34,6 +35,7 @@ class _TourViewScreenState extends State<TourViewScreen> {
           ExpandedTourViewScreen(
             pageController: _pageController,
             tour: widget.tour,
+            isEditing: widget.isEditing,
           ),
         ],
       ),
