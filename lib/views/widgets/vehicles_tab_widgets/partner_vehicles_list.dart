@@ -7,6 +7,9 @@ import 'package:motel/views/widgets/vehicle_view_widgets/vehicle_view_list_item.
 import 'package:provider/provider.dart';
 
 class PartnerVehiclesList extends StatelessWidget {
+  final bool isEditing;
+  PartnerVehiclesList({this.isEditing = false});
+  
   @override
   Widget build(BuildContext context) {
     final _appUser = Provider.of<AppUser>(context);
@@ -44,6 +47,7 @@ class PartnerVehiclesList extends StatelessWidget {
                         itemBuilder: (context, index) {
                           return VehicleViewListItem(
                             vehicle: _vehicles[index],
+                            isEditing: isEditing,
                           );
                         },
                       );

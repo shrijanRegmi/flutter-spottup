@@ -5,6 +5,7 @@ import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/services/firestore/hotel_provider.dart';
 import 'package:motel/services/firestore/tour_provider.dart';
 import 'package:motel/services/firestore/user_provider.dart';
+import 'package:motel/services/firestore/vehicle_provider.dart';
 import 'package:motel/views/screens/home/book_screen.dart';
 
 class HotelViewVm extends ChangeNotifier {
@@ -87,7 +88,15 @@ class HotelViewVm extends ChangeNotifier {
   // delete tour
   deleteTour(final String tourId) async {
     final _result = await TourProvider().deleteTour(tourId);
-    print('The result is:::: $_result');
+    if (_result != null) {
+      Navigator.pop(context);
+    }
+    return _result;
+  }
+
+  // delete vehicle
+  deleteVehicle(final String vehicleId) async {
+    final _result = await VehicleProvider().deleteVehicle(vehicleId);
     if (_result != null) {
       Navigator.pop(context);
     }

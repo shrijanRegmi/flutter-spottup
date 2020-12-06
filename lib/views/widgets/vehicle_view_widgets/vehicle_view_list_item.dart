@@ -6,8 +6,10 @@ import 'package:motel/views/widgets/common_widgets/star_ratings.dart';
 
 class VehicleViewListItem extends StatelessWidget {
   final Vehicle vehicle;
+  final bool isEditing;
   VehicleViewListItem({
     this.vehicle,
+    this.isEditing = false,
   });
 
   @override
@@ -19,6 +21,7 @@ class VehicleViewListItem extends StatelessWidget {
           MaterialPageRoute(
             builder: (_) => VehicleViewScreen(
               vehicle: vehicle,
+              isEditinig: isEditing,
             ),
           ),
         );

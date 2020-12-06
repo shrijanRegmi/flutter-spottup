@@ -25,6 +25,34 @@ class VehicleProvider {
     }
   }
 
+  // update vehicle
+  Future updateVehicle() async {
+    try {
+      final _vehicleRef = vehicle.toRef();
+      await _vehicleRef.updateData(vehicle.toJson());
+      print('Success: Updating vehicle details ${vehicle.id}');
+      return 'Success';
+    } catch (e) {
+      print(e);
+      print('Error!!!: Updating vehicle details ${vehicle.id}');
+      return null;
+    }
+  }
+
+  // delete vehicle
+  Future deleteVehicle(final String vehicleId) async {
+    try {
+      final _vehicleRef = _ref.collection('vehicles').document(vehicleId);
+      await _vehicleRef.delete();
+      print('Success: Deleting vehicle $vehicleId');
+      return 'Success';
+    } catch (e) {
+      print(e);
+      print('Error: Deleting vehicle $vehicleId');
+      return null;
+    }
+  }
+
   // vehicles list from firestore
   List<Vehicle> _vehiclesFromFirestore(QuerySnapshot colSnap) {
     return colSnap.documents.map((docSnap) {
