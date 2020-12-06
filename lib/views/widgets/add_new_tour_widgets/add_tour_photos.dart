@@ -59,14 +59,14 @@ class _AddTourPhotosState extends State<AddTourPhotos> {
               width: 2.0,
             ),
             borderRadius: BorderRadius.circular(5.0),
-            image: widget.vm.dp != null
+            image: widget.vm.dp != null && !widget.vm.dp.path.contains('.com')
                 ? DecorationImage(
                     image: FileImage(
                       widget.vm.dp,
                     ),
                     fit: BoxFit.cover,
                   )
-                : widget.existingTour != null && widget.existingTour.dp != null
+                : widget.vm.dp != null && widget.vm.dp.path.contains('.com')
                     ? DecorationImage(
                         image: CachedNetworkImageProvider(
                           widget.existingTour.dp,
@@ -75,9 +75,7 @@ class _AddTourPhotosState extends State<AddTourPhotos> {
                       )
                     : null,
           ),
-          child: widget.vm.dp != null ||
-                  (widget.existingTour != null &&
-                      widget.existingTour.dp != null)
+          child: widget.vm.dp != null
               ? Align(
                   alignment: Alignment.topRight,
                   child: Padding(
@@ -93,7 +91,7 @@ class _AddTourPhotosState extends State<AddTourPhotos> {
                         icon: Icon(Icons.delete),
                         color: Colors.grey[100],
                         onPressed: () {
-                          // widget.vm.removeDpCallback();
+                          widget.vm.removeDpCallback();
                           setState(() {});
                         },
                       ),
@@ -210,7 +208,7 @@ class _AddTourPhotosState extends State<AddTourPhotos> {
                   iconSize: 18.0,
                   color: Colors.grey[100],
                   onPressed: () {
-                    // _removePhotoCallback();
+                    widget.vm.removeTourPhotos(_img);
                     setState(() {});
                   },
                 ),

@@ -204,15 +204,30 @@ class AddNewTourVm extends ChangeNotifier {
 
         String _mDp = '';
         List<String> _mPhotos = [];
+        List<File> _newFilePhotos = [];
+        List<String> _newStringPhotos = [];
 
-        _mDp = await TourStorage().uploadTourDp(_dp);
-        _mPhotos = await TourStorage().uploadTourPhotos(_photos);
+        _mDp = _dp.path.contains('.com')
+            ? _dp.path
+            : await TourStorage().uploadTourDp(_dp);
+
+        _photos.forEach((photo) {
+          if (!photo.path.contains('.com')) {
+            _newFilePhotos.add(photo);
+          } else {
+            _newStringPhotos.add(photo.path);
+          }
+        });
+
+        if (_newFilePhotos.isNotEmpty) {
+          _mPhotos = await TourStorage().uploadTourPhotos(_newFilePhotos);
+        }
 
         final _tour = Tour(
           name: _nameController.text.trim(),
           days: int.parse(_daysController.text.trim()),
           nights: int.parse(_nightsController.text.trim()),
-          price: int.parse(_priceController.text.trim()),
+          price: int.parse(_priceController.text.replaceAll(',', '').trim()),
           person: int.parse(_personController.text.trim()),
           start: _start.millisecondsSinceEpoch,
           end: _end.millisecondsSinceEpoch,
@@ -221,7 +236,7 @@ class AddNewTourVm extends ChangeNotifier {
           exclusions: _exclusionsController.text.trim(),
           ownerId: appUser.uid,
           dp: _mDp,
-          photos: _mPhotos,
+          photos: [..._newStringPhotos, ..._mPhotos],
           updatedAt: DateTime.now().millisecondsSinceEpoch,
           paymentAndCancellationPolicy: _paymentPolicyController.text.trim(),
           pickUpDate: _pickUpDate.millisecondsSinceEpoch,
@@ -267,6 +282,14 @@ class AddNewTourVm extends ChangeNotifier {
     _inclusionsController.text = tour.inclusions;
     _exclusionsController.text = tour.exclusions;
     _paymentPolicyController.text = tour.paymentAndCancellationPolicy;
+    _dp = File(tour.dp);
+
+    List<File> _filePhotos = [];
+    tour.photos.forEach((element) {
+      final File _filePhoto = File(element);
+      _filePhotos.add(_filePhoto);
+    });
+    _photos = _filePhotos;
 
     _start = DateTime.fromMillisecondsSinceEpoch(tour.start);
     _end = DateTime.fromMillisecondsSinceEpoch(tour.end);
@@ -274,5 +297,17 @@ class AddNewTourVm extends ChangeNotifier {
     _pickUpTime = TimeOfDay(
         hour: int.parse(tour.pickUpTime.split(":")[0]),
         minute: int.parse(tour.pickUpTime.split(":")[1]));
+  }
+
+  // remove dp
+  removeDpCallback() {
+    _dp = null;
+    notifyListeners();
+  }
+
+  // remove photos
+  removeTourPhotos(final File tourPhoto) {
+    _photos.remove(tourPhoto);
+    notifyListeners();
   }
 }
