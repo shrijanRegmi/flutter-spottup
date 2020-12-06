@@ -26,13 +26,13 @@ class _AddNewHotelState extends State<AddNewTour> {
         });
 
         if (widget.tour != null) {
-          // vm.initializeHotelValues(widget.tour);
+          vm.initializeTourValues(widget.tour);
         }
       },
       vm: AddNewTourVm(context),
       builder: (context, vm, appUser) {
         return Scaffold(
-          // key: vm.hotelScaffoldKey,
+          key: vm.scaffoldKey,
           body: SafeArea(
             child: GestureDetector(
               onTap: () {
@@ -74,13 +74,20 @@ class _AddNewHotelState extends State<AddNewTour> {
                               height: 20.0,
                             ),
                             AddTourDetails(vm),
-                            AddTourPhotos(vm),
+                            AddTourPhotos(vm, widget.tour),
                             vm.isLoading
                                 ? Container()
                                 : RoundedBtn(
-                                    title: 'Publish Tour',
+                                    title: widget.tour == null
+                                        ? 'Publish Tour'
+                                        : 'Update Tour',
                                     onPressed: () {
-                                      vm.publishTour(appUser);
+                                      widget.tour == null
+                                          ? vm.publishTour(appUser)
+                                          : vm.updateTour(
+                                              appUser,
+                                              widget.tour.id,
+                                            );
                                     },
                                   ),
                             SizedBox(
@@ -110,7 +117,7 @@ class _AddNewHotelState extends State<AddNewTour> {
     return Padding(
       padding: const EdgeInsets.only(left: 20.0),
       child: Text(
-        'Add New Tour',
+        widget.tour == null ? 'Add New Tour' : 'Update Tour',
         style: TextStyle(
           fontWeight: FontWeight.w600,
           fontSize: 22.0,

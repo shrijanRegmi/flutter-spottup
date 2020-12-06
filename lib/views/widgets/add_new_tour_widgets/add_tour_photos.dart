@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:motel/models/firebase/tour_model.dart';
 import 'package:motel/viewmodels/add_new_tour_vm.dart';
 
 class AddTourPhotos extends StatefulWidget {
   final AddNewTourVm vm;
-  AddTourPhotos(this.vm);
+  final Tour existingTour;
+  AddTourPhotos(this.vm, this.existingTour);
 
   @override
   _AddTourPhotosState createState() => _AddTourPhotosState();
@@ -64,9 +66,18 @@ class _AddTourPhotosState extends State<AddTourPhotos> {
                     ),
                     fit: BoxFit.cover,
                   )
-                : null,
+                : widget.existingTour != null && widget.existingTour.dp != null
+                    ? DecorationImage(
+                        image: CachedNetworkImageProvider(
+                          widget.existingTour.dp,
+                        ),
+                        fit: BoxFit.cover,
+                      )
+                    : null,
           ),
-          child: widget.vm.dp != null
+          child: widget.vm.dp != null ||
+                  (widget.existingTour != null &&
+                      widget.existingTour.dp != null)
               ? Align(
                   alignment: Alignment.topRight,
                   child: Padding(

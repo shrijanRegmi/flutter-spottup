@@ -7,6 +7,9 @@ import 'package:motel/views/widgets/tour_view_widgets/tour_view_list_item.dart';
 import 'package:provider/provider.dart';
 
 class PartnerToursList extends StatelessWidget {
+  final bool isEditing;
+  PartnerToursList({this.isEditing = false});
+
   @override
   Widget build(BuildContext context) {
     final _appUser = Provider.of<AppUser>(context);
@@ -44,6 +47,7 @@ class PartnerToursList extends StatelessWidget {
                         itemBuilder: (context, index) {
                           return TourViewListItem(
                             tour: _tours[index],
+                            isEditing: isEditing,
                           );
                         },
                       );

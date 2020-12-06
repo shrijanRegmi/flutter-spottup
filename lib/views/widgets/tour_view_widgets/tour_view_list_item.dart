@@ -7,8 +7,10 @@ import 'package:motel/views/widgets/common_widgets/star_ratings.dart';
 
 class TourViewListItem extends StatelessWidget {
   final Tour tour;
+  final bool isEditing;
   TourViewListItem({
     this.tour,
+    this.isEditing = false,
   });
 
   @override
@@ -20,6 +22,7 @@ class TourViewListItem extends StatelessWidget {
           MaterialPageRoute(
             builder: (_) => TourViewScreen(
               tour: tour,
+              isEditing: isEditing,
             ),
           ),
         );
