@@ -117,7 +117,7 @@ class _AddNewHotelState extends State<AddNewTour> {
     return Padding(
       padding: const EdgeInsets.only(left: 20.0),
       child: Text(
-        widget.tour == null ? 'Add New Tour' : 'Update Tour',
+        widget.tour == null ? 'Add New Tour' : 'Edit Tour',
         style: TextStyle(
           fontWeight: FontWeight.w600,
           fontSize: 22.0,
