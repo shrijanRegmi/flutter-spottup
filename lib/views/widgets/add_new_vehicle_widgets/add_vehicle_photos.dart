@@ -57,14 +57,21 @@ class _AddVehiclePhotosState extends State<AddVehiclePhotos> {
               width: 2.0,
             ),
             borderRadius: BorderRadius.circular(5.0),
-            image: widget.vm.dp != null
+            image: widget.vm.dp != null && !widget.vm.dp.path.contains('.com')
                 ? DecorationImage(
                     image: FileImage(
                       widget.vm.dp,
                     ),
                     fit: BoxFit.cover,
                   )
-                : null,
+                : widget.vm.dp != null && widget.vm.dp.path.contains('.com')
+                    ? DecorationImage(
+                        image: CachedNetworkImageProvider(
+                          widget.vm.dp.path,
+                        ),
+                        fit: BoxFit.cover,
+                      )
+                    : null,
           ),
           child: widget.vm.dp != null
               ? Align(
@@ -82,7 +89,7 @@ class _AddVehiclePhotosState extends State<AddVehiclePhotos> {
                         icon: Icon(Icons.delete),
                         color: Colors.grey[100],
                         onPressed: () {
-                          // widget.vm.removeDpCallback();
+                          widget.vm.removeDpCallback();
                           setState(() {});
                         },
                       ),
@@ -199,7 +206,7 @@ class _AddVehiclePhotosState extends State<AddVehiclePhotos> {
                   iconSize: 18.0,
                   color: Colors.grey[100],
                   onPressed: () {
-                    // _removePhotoCallback();
+                    widget.vm.removeVehiclePhotos(_img);
                     setState(() {});
                   },
                 ),

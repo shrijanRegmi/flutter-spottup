@@ -112,6 +112,79 @@ class AddNewVehicleVm extends ChangeNotifier {
     }
   }
 
+  // update vehicle
+  Future updateVehicle(final AppUser appUser, final String existingId) async {
+    if (_nameController.text.trim() != '' &&
+        _modelYearController.text.trim() != '' &&
+        _seatsController.text.trim() != '' &&
+        _priceController.text.trim() != '' &&
+        _summaryController.text.trim() != '') {
+      if (_dp != null) {
+        _updateLoaderValue(true);
+
+        String _mDp = '';
+        List<String> _mPhotos = [];
+        List<File> _newFilePhotos = [];
+        List<String> _newStringPhotos = [];
+
+        _mDp = _dp.path.contains('.com')
+            ? _dp.path
+            : await VehicleStorage().uploadVehicleDp(_dp);
+
+        _photos.forEach((photo) {
+          if (!photo.path.contains('.com')) {
+            _newFilePhotos.add(photo);
+          } else {
+            _newStringPhotos.add(photo.path);
+          }
+        });
+
+        if (_newFilePhotos.isNotEmpty) {
+          _mPhotos = await VehicleStorage().uploadVehiclePhotos(_newFilePhotos);
+        }
+
+        final _vehicle = Vehicle(
+          name: _nameController.text.trim(),
+          modelYear: int.parse(_modelYearController.text.trim()),
+          seats: int.parse(_seatsController.text.trim()),
+          price: int.parse(_priceController.text.trim()),
+          ownerId: appUser.uid,
+          dp: _mDp,
+          photos: [..._newStringPhotos, ..._mPhotos],
+          summary: _summaryController.text.trim(),
+          updatedAt: DateTime.now().millisecondsSinceEpoch,
+          whoWillPay: [
+            _result1,
+            _result2,
+            _result3,
+            _result4,
+            _result5,
+            _result6
+          ],
+          id: existingId,
+        );
+
+        final _result =
+            await VehicleProvider(vehicle: _vehicle).updateVehicle();
+
+        if (_result == null) {
+          _updateLoaderValue(false);
+        } else {
+          Navigator.pop(context);
+          Navigator.pop(context);
+        }
+      } else {
+        _scaffoldKey.currentState.showSnackBar(SnackBar(
+          content: Text('Please upload display picture.'),
+        ));
+      }
+    } else {
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text('Please fill up all the input fields.'),
+      ));
+    }
+  }
+
   // update value of result
   updateResult1(final Map<String, dynamic> _result) {
     _result1 = _result;
@@ -135,7 +208,7 @@ class AddNewVehicleVm extends ChangeNotifier {
     _result4 = _result;
     notifyListeners();
   }
-  
+
   // update value of result
   updateResult5(final Map<String, dynamic> _result) {
     _result5 = _result;
@@ -151,6 +224,42 @@ class AddNewVehicleVm extends ChangeNotifier {
   // update value of loader
   _updateLoaderValue(final bool _newVal) {
     _isLoading = _newVal;
+    notifyListeners();
+  }
+
+  // initialize vehicles value
+  initializeVehicleValues(final Vehicle vehicle) {
+    _nameController.text = vehicle.name;
+    _modelYearController.text = vehicle.modelYear.toString();
+    _seatsController.text = vehicle.seats.toString();
+    _priceController.text = vehicle.price.toString();
+    _summaryController.text = vehicle.summary;
+    _dp = File(vehicle.dp);
+
+    List<File> _filePhotos = [];
+    vehicle.photos.forEach((element) {
+      final File _filePhoto = File(element);
+      _filePhotos.add(_filePhoto);
+    });
+    _photos = _filePhotos;
+
+    _result1 = vehicle.whoWillPay[0];
+    _result2 = vehicle.whoWillPay[1];
+    _result3 = vehicle.whoWillPay[2];
+    _result4 = vehicle.whoWillPay[3];
+    _result5 = vehicle.whoWillPay[4];
+    _result6 = vehicle.whoWillPay[5];
+  }
+
+  // remove dp
+  removeDpCallback() {
+    _dp = null;
+    notifyListeners();
+  }
+
+  // remove photos
+  removeVehiclePhotos(final File vehiclePhoto) {
+    _photos.remove(vehiclePhoto);
     notifyListeners();
   }
 }

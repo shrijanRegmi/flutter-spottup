@@ -7,7 +7,11 @@ class VehicleViewScreen extends StatefulWidget {
   @override
   _VehicleViewScreenState createState() => _VehicleViewScreenState();
   final Vehicle vehicle;
-  VehicleViewScreen({this.vehicle});
+  final bool isEditinig;
+  VehicleViewScreen({
+    this.vehicle,
+    this.isEditinig = false,
+  });
 }
 
 class _VehicleViewScreenState extends State<VehicleViewScreen> {
@@ -34,6 +38,7 @@ class _VehicleViewScreenState extends State<VehicleViewScreen> {
           ExpandedVehicleViewScreen(
             pageController: _pageController,
             vehicle: widget.vehicle,
+            isEditing: widget.isEditinig,
           ),
         ],
       ),

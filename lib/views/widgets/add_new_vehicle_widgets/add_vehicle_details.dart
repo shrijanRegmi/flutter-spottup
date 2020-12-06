@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:motel/models/firebase/vehicle_model.dart';
 import 'package:motel/viewmodels/add_new_vehicle_vm.dart';
 import 'package:motel/views/widgets/hotels_tab_widgets/new_hotel_field.dart';
 
 class AddVehicleDetails extends StatefulWidget {
   final AddNewVehicleVm vm;
-  AddVehicleDetails(this.vm);
+  final Vehicle existingVehicle;
+  AddVehicleDetails(this.vm, this.existingVehicle);
 
   @override
   _AddVehicleDetailsState createState() => _AddVehicleDetailsState();
@@ -17,6 +19,41 @@ class _AddVehicleDetailsState extends State<AddVehicleDetails> {
   var _rad4 = -1;
   var _rad5 = -1;
   var _rad6 = -1;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.existingVehicle != null) {
+      for (int i = 0; i < widget.existingVehicle.whoWillPay.length; i++) {
+        final element = widget.existingVehicle.whoWillPay[i];
+        if (element['value'] == 'With Driver' && i == 0) {
+          _rad1 = 0;
+        } else if (element['value'] == 'Without Driver' && i == 0) {
+          _rad1 = 1;
+        } else if (element['value'] == 'Company' && i == 1) {
+          _rad2 = 2;
+        } else if (element['value'] == 'Client' && i == 1) {
+          _rad2 = 3;
+        } else if (element['value'] == 'Company' && i == 2) {
+          _rad3 = 4;
+        } else if (element['value'] == 'Client' && i == 2) {
+          _rad3 = 5;
+        } else if (element['value'] == 'Company' && i == 3) {
+          _rad4 = 6;
+        } else if (element['value'] == 'Client' && i == 3) {
+          _rad4 = 7;
+        } else if (element['value'] == 'Company' && i == 4) {
+          _rad5 = 8;
+        } else if (element['value'] == 'Client' && i == 4) {
+          _rad5 = 9;
+        } else if (element['value'] == 'Company' && i == 5) {
+          _rad6 = 10;
+        } else if (element['value'] == 'Client' && i == 5) {
+          _rad6 = 11;
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

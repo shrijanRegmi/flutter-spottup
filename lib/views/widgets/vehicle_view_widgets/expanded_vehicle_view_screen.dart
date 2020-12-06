@@ -9,14 +9,17 @@ import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/screens/home/vehicle_book_screen.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 import 'package:motel/views/widgets/hotel_view_widgets/hotel_photos_list.dart';
+import 'package:motel/views/widgets/vehicles_tab_widgets/add_new_vehicle.dart';
 import 'package:provider/provider.dart';
 
 class ExpandedVehicleViewScreen extends StatefulWidget {
   final PageController pageController;
   final Vehicle vehicle;
+  final bool isEditing;
   ExpandedVehicleViewScreen({
     this.pageController,
     this.vehicle,
+    this.isEditing = false,
   });
 
   @override
@@ -106,7 +109,44 @@ class _ExpandedVehicleViewScreenState extends State<ExpandedVehicleViewScreen> {
                     },
                   ),
                 )
-              : null,
+              : widget.isEditing
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        FloatingActionButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => AddNewVehicle(
+                                  vehicle: widget.vehicle,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Center(
+                            child: Icon(Icons.edit),
+                          ),
+                          backgroundColor: Color(0xff45ad90),
+                          heroTag: 'edit',
+                        ),
+                        SizedBox(
+                          width: 20.0,
+                        ),
+                        FloatingActionButton(
+                          onPressed: () => vm.deleteVehicle(widget.vehicle.id),
+                          child: Center(
+                            child: Icon(Icons.delete),
+                          ),
+                          backgroundColor: Color(0xff45ad90),
+                          heroTag: 'delete',
+                        ),
+                        SizedBox(
+                          width: 20.0,
+                        ),
+                      ],
+                    )
+                  : null,
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
         );

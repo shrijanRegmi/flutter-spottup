@@ -9,7 +9,9 @@ class VehiclesTab extends StatelessWidget {
       child: Column(
         children: [
           _addNewServiceBuilder(context),
-          PartnerVehiclesList(),
+          PartnerVehiclesList(
+            isEditing: true,
+          ),
         ],
       ),
     );
