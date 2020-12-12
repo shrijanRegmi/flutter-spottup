@@ -294,9 +294,15 @@ class AddNewTourVm extends ChangeNotifier {
     _start = DateTime.fromMillisecondsSinceEpoch(tour.start);
     _end = DateTime.fromMillisecondsSinceEpoch(tour.end);
     _pickUpDate = DateTime.fromMillisecondsSinceEpoch(tour.pickUpDate);
+
+    final _newTime =
+        tour.pickUpTime.toLowerCase().replaceAll('pm', '').replaceAll('am', '');
+
     _pickUpTime = TimeOfDay(
-        hour: int.parse(tour.pickUpTime.split(":")[0]),
-        minute: int.parse(tour.pickUpTime.split(":")[1]));
+        hour: tour.pickUpTime.toLowerCase().contains('pm')
+            ? (12 + int.parse(_newTime.split(":")[0]))
+            : int.parse(_newTime.split(":")[0]),
+        minute: int.parse(_newTime.split(":")[1]));
   }
 
   // remove dp
