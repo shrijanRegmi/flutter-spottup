@@ -142,7 +142,7 @@ class VehicleViewListItem extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '/per person',
+                      '/per day',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         color: Colors.black26,
