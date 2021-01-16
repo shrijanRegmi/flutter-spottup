@@ -11,15 +11,15 @@ class UserProvider {
   final DocumentReference appUserRef;
   UserProvider({this.uid, this.appUserRef});
 
-  final _ref = Firestore.instance;
+  final _ref = FirebaseFirestore.instance;
 
   // send user to firestore
   Future sendUserToFirestore(AppUser appUser, String uid) async {
     try {
-      final _userRef = _ref.collection('users').document(uid);
+      final _userRef = _ref.collection('users').doc(uid);
 
       print('Success: Sending user data to firestore');
-      return await _userRef.setData(appUser.toJson());
+      return await _userRef.set(appUser.toJson());
     } catch (e) {
       print(e);
       print('Error!!!: Sending user data to firestore');
@@ -30,7 +30,7 @@ class UserProvider {
   // update user data
   Future updateUserData(final Map<String, dynamic> data) async {
     try {
-      await _ref.collection('users').document(uid).updateData(data);
+      await _ref.collection('users').doc(uid).update(data);
       print('Success: Updating user data $data');
       return 'Success';
     } catch (e) {
@@ -44,17 +44,17 @@ class UserProvider {
   Future saveLastSearch(final LastSearch lastSearch) async {
     try {
       final _lastSearchRef =
-          _ref.collection('users').document(uid).collection('last_search');
+          _ref.collection('users').doc(uid).collection('last_search');
 
       final _values = await _lastSearchRef
           .limit(5)
           .orderBy('last_updated', descending: true)
-          .getDocuments();
+          .get();
       var _result;
       bool _alreadyExists = false;
-      if (_values.documents.isNotEmpty) {
-        for (final doc in _values.documents) {
-          final _hotelRef = doc.data['hotel_ref'];
+      if (_values.docs.isNotEmpty) {
+        for (final doc in _values.docs) {
+          final _hotelRef = doc.data()['hotel_ref'];
           _alreadyExists = lastSearch.hotelRef.path == _hotelRef.path;
           if (_alreadyExists) {
             break;
@@ -78,11 +78,11 @@ class UserProvider {
     try {
       final _lastSearchRef = await _ref
           .collection('users')
-          .document(uid)
+          .doc(uid)
           .collection('last_search')
-          .getDocuments();
-      if (_lastSearchRef.documents.isNotEmpty) {
-        for (final doc in _lastSearchRef.documents) {
+          .get();
+      if (_lastSearchRef.docs.isNotEmpty) {
+        for (final doc in _lastSearchRef.docs) {
           doc.reference.delete();
         }
       }
@@ -98,13 +98,13 @@ class UserProvider {
   // confirm hotel booking
   Future confirmHotelBooking(final ConfirmHotelBooking booking) async {
     try {
-      final _bookingRef = _ref.collection('bookings').document();
+      final _bookingRef = _ref.collection('bookings').doc();
       final _upcommingRef =
-          _ref.collection('users').document(uid).collection('upcomming');
+          _ref.collection('users').doc(uid).collection('upcomming');
 
-      booking.bookingId = _bookingRef.documentID;
+      booking.bookingId = _bookingRef.id;
 
-      var _result = await _bookingRef.setData(booking.toJson());
+      var _result = await _bookingRef.set(booking.toJson());
       final _upcoming = UpcomingBooking(
         hotelRef: booking.hotelRef,
         checkIn: booking.checkInDate,
@@ -125,10 +125,10 @@ class UserProvider {
 
   Future confirmTourBooking(final ConfirmTourBooking booking) async {
     try {
-      final _bookingRef = _ref.collection('bookings').document();
-      booking.bookingId = _bookingRef.documentID;
+      final _bookingRef = _ref.collection('bookings').doc();
+      booking.bookingId = _bookingRef.id;
 
-      var _result = await _bookingRef.setData(booking.toJson());
+      var _result = await _bookingRef.set(booking.toJson());
       print('Success: Sending booking details to firestore');
       return _result;
     } catch (e) {
@@ -140,11 +140,11 @@ class UserProvider {
 
   Future confirmVehicleBooking(final ConfirmVehicleBooking booking) async {
     try {
-      final _bookingRef = _ref.collection('bookings').document();
+      final _bookingRef = _ref.collection('bookings').doc();
 
-      booking.bookingId = _bookingRef.documentID;
+      booking.bookingId = _bookingRef.id;
 
-      var _result = await _bookingRef.setData(booking.toJson());
+      var _result = await _bookingRef.set(booking.toJson());
       print('Success: Sending booking details to firestore');
       return _result;
     } catch (e) {
@@ -159,10 +159,10 @@ class UserProvider {
     try {
       final _notifRef = _ref
           .collection('users')
-          .document(uid)
+          .doc(uid)
           .collection('notifications')
-          .document(notifId);
-      await _notifRef.updateData({'is_read': true});
+          .doc(notifId);
+      await _notifRef.update({'is_read': true});
       print('Success: reading notification');
       return 'Success';
     } catch (e) {
@@ -176,7 +176,7 @@ class UserProvider {
   removeNotifCount() async {
     try {
       final _userRef = appUserRef;
-      await _userRef.updateData({'notif_count': 0});
+      await _userRef.update({'notif_count': 0});
       print('Success: removing notif count of user $uid');
     } catch (e) {
       print(e);
@@ -186,33 +186,33 @@ class UserProvider {
 
   // user from firebase
   AppUser _appUserFromFirebase(DocumentSnapshot userSnap) {
-    return AppUser.fromJson(userSnap.data);
+    return AppUser.fromJson(userSnap.data());
   }
 
   // upcomming bookings from firebase
   List<UpcomingBooking> _upcomingBookingFromFirebase(QuerySnapshot colSnap) {
-    return colSnap.documents
-        .map((doc) => UpcomingBooking.fromJson(doc.data))
+    return colSnap.docs
+        .map((doc) => UpcomingBooking.fromJson(doc.data()))
         .toList();
   }
 
   // notifications from firebase
   List<AppNotification> _notificationFromFirebase(QuerySnapshot colSnap) {
-    return colSnap.documents
-        .map((doc) => AppNotification.fromJson(doc.data))
+    return colSnap.docs
+        .map((doc) => AppNotification.fromJson(doc.data()))
         .toList();
   }
 
   // payment from firebase
   Payment _paymentFromFirebase(DocumentSnapshot docSnap) {
-    return Payment.fromJson(docSnap.data);
+    return Payment.fromJson(docSnap.data());
   }
 
   // stream of user
   Stream<AppUser> get appUser {
     return _ref
         .collection('users')
-        .document(uid)
+        .doc(uid)
         .snapshots()
         .map(_appUserFromFirebase);
   }
@@ -226,7 +226,7 @@ class UserProvider {
   Stream<List<UpcomingBooking>> get upcomingBookings {
     return _ref
         .collection('users')
-        .document(uid)
+        .doc(uid)
         .collection('upcomming')
         .orderBy('issue_date', descending: true)
         .limit(50)
@@ -238,7 +238,7 @@ class UserProvider {
   Stream<List<AppNotification>> get notificationsList {
     return _ref
         .collection('users')
-        .document(uid)
+        .doc(uid)
         .collection('notifications')
         .orderBy('last_updated', descending: true)
         .limit(50)
@@ -250,7 +250,7 @@ class UserProvider {
   Stream<Payment> get paymentDetails {
     return _ref
         .collection('configs')
-        .document('payment')
+        .doc('payment')
         .snapshots()
         .map(_paymentFromFirebase);
   }

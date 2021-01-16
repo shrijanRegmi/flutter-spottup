@@ -64,7 +64,7 @@ class Vehicle {
   }
 
   DocumentReference toRef() {
-    final _ref = Firestore.instance;
-    return _ref.collection('vehicles').document(id);
+    final _ref = FirebaseFirestore.instance;
+    return _ref.collection('vehicles').doc(id);
   }
 }

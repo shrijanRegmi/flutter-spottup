@@ -8,14 +8,14 @@ class VehicleProvider {
   final String searchKey;
   VehicleProvider({this.vehicle, this.appUser, this.searchKey});
 
-  final _ref = Firestore.instance;
+  final _ref = FirebaseFirestore.instance;
 
   // publish vehicle
   Future publishVehicle() async {
     try {
-      final _vehicleRef = _ref.collection('vehicles').document();
-      vehicle.id = _vehicleRef.documentID;
-      await _vehicleRef.setData(vehicle.toJson());
+      final _vehicleRef = _ref.collection('vehicles').doc();
+      vehicle.id = _vehicleRef.id;
+      await _vehicleRef.set(vehicle.toJson());
       print('Success: Publishing vehicle ${vehicle.id}');
       return 'Success';
     } catch (e) {
@@ -29,7 +29,7 @@ class VehicleProvider {
   Future updateVehicle() async {
     try {
       final _vehicleRef = vehicle.toRef();
-      await _vehicleRef.updateData(vehicle.toJson());
+      await _vehicleRef.update(vehicle.toJson());
       print('Success: Updating vehicle details ${vehicle.id}');
       return 'Success';
     } catch (e) {
@@ -42,7 +42,7 @@ class VehicleProvider {
   // delete vehicle
   Future deleteVehicle(final String vehicleId) async {
     try {
-      final _vehicleRef = _ref.collection('vehicles').document(vehicleId);
+      final _vehicleRef = _ref.collection('vehicles').doc(vehicleId);
       await _vehicleRef.delete();
       print('Success: Deleting vehicle $vehicleId');
       return 'Success';
@@ -55,8 +55,8 @@ class VehicleProvider {
 
   // vehicles list from firestore
   List<Vehicle> _vehiclesFromFirestore(QuerySnapshot colSnap) {
-    return colSnap.documents.map((docSnap) {
-      return Vehicle.fromJson(docSnap.data);
+    return colSnap.docs.map((docSnap) {
+      return Vehicle.fromJson(docSnap.data());
     }).toList();
   }
 

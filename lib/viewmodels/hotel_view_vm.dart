@@ -47,15 +47,15 @@ class HotelViewVm extends ChangeNotifier {
 
   // open rooms dialog
   showRoomDialog(final Hotel hotel) async {
-    // final _ref = Firestore.instance;
+    // final _ref = FirebaseFirestore.instance;
     // final _roomRef = await _ref
     //     .collection('hotels')
-    //     .document(hotel.id)
+    //     .doc(hotel.id)
     //     .collection('rooms')
     //     .limit(2)
-    //     .getDocuments();
+    //     .get();
 
-    // final _isRoom = _roomRef.documents.length > 1;
+    // final _isRoom = _roomRef.docs.length > 1;
 
     // if (_isRoom) {
     //   return showDialog(

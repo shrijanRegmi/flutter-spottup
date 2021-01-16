@@ -92,7 +92,7 @@ class Tour {
   }
 
   DocumentReference toRef() {
-    final _ref = Firestore.instance;
-    return _ref.collection('tours').document(id);
+    final _ref = FirebaseFirestore.instance;
+    return _ref.collection('tours').doc(id);
   }
 }

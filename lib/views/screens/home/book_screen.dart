@@ -24,14 +24,14 @@ class _BookScreenState extends State<BookScreen> {
     return VmProvider<BookVm>(
       vm: BookVm(context: context),
       onInit: (vm) async {
-        final _ref = Firestore.instance;
+        final _ref = FirebaseFirestore.instance;
         final _roomRef = await _ref
             .collection('hotels')
-            .document(widget.hotel.id)
+            .doc(widget.hotel.id)
             .collection('rooms')
             .limit(1)
-            .getDocuments();
-        vm.updateRoomSelectedValue(_roomRef.documents.isEmpty,
+            .get();
+        vm.updateRoomSelectedValue(_roomRef.docs.isEmpty,
             requiresScroll: false);
       },
       builder: (context, vm, appUser) {
@@ -64,15 +64,15 @@ class _BookScreenState extends State<BookScreen> {
                       height: 30.0,
                     ),
                     StreamBuilder(
-                        stream: Firestore.instance
+                        stream: FirebaseFirestore.instance
                             .collection('hotels')
-                            .document(widget.hotel.id)
+                            .doc(widget.hotel.id)
                             .collection('rooms')
                             .limit(1)
                             .snapshots(),
                         builder: (context, snapshot) {
                           if (snapshot.hasData &&
-                              snapshot.data.documents.isNotEmpty) {
+                              snapshot.data.docs.isNotEmpty) {
                             return _roomSelectionBuilder(vm);
                           }
                           return Container();

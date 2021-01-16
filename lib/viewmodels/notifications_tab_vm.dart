@@ -24,7 +24,7 @@ class NotificationTabVm extends ChangeNotifier {
   NotificationTabVm(this.context);
 
   bool _isLoading = false;
-  final _ref = Firestore.instance;
+  final _ref = FirebaseFirestore.instance;
 
   bool get isLoading => _isLoading;
   List<AppNotification> get notificationsList =>
@@ -71,10 +71,10 @@ class NotificationTabVm extends ChangeNotifier {
           .where('id', isEqualTo: notification.bookingId)
           .limit(1);
 
-      final _bookingSnap = await _bookingRef.getDocuments();
+      final _bookingSnap = await _bookingRef.get();
 
-      if (_bookingSnap.documents.isNotEmpty) {
-        _booking = ConfirmBooking.fromJson(_bookingSnap.documents.first.data);
+      if (_bookingSnap.docs.isNotEmpty) {
+        _booking = ConfirmBooking.fromJson(_bookingSnap.docs.first.data());
         _bookingExists = true;
       }
     } else {
@@ -88,8 +88,8 @@ class NotificationTabVm extends ChangeNotifier {
         final _hotelSnap = await _booking.hotelRef.get();
 
         if (_userSnap.exists && _hotelSnap.exists) {
-          final _appUser = AppUser.fromJson(_userSnap.data);
-          final _hotel = Hotel.fromJson(_hotelSnap.data);
+          final _appUser = AppUser.fromJson(_userSnap.data());
+          final _hotel = Hotel.fromJson(_hotelSnap.data());
 
           Navigator.push(
             context,
@@ -108,8 +108,8 @@ class NotificationTabVm extends ChangeNotifier {
         final _hotelSnap = await _booking.tourRef.get();
 
         if (_userSnap.exists && _hotelSnap.exists) {
-          final _appUser = AppUser.fromJson(_userSnap.data);
-          final _hotel = Tour.fromJson(_hotelSnap.data);
+          final _appUser = AppUser.fromJson(_userSnap.data());
+          final _hotel = Tour.fromJson(_hotelSnap.data());
 
           Navigator.push(
             context,
@@ -128,8 +128,8 @@ class NotificationTabVm extends ChangeNotifier {
         final _hotelSnap = await _booking.vehicleRef.get();
 
         if (_userSnap.exists && _hotelSnap.exists) {
-          final _appUser = AppUser.fromJson(_userSnap.data);
-          final _hotel = Vehicle.fromJson(_hotelSnap.data);
+          final _appUser = AppUser.fromJson(_userSnap.data());
+          final _hotel = Vehicle.fromJson(_hotelSnap.data());
 
           Navigator.push(
             context,
@@ -164,10 +164,10 @@ class NotificationTabVm extends ChangeNotifier {
           .where('id', isEqualTo: notification.bookingId)
           .limit(1);
 
-      final _bookingSnap = await _bookingRef.getDocuments();
+      final _bookingSnap = await _bookingRef.get();
 
-      if (_bookingSnap.documents.isNotEmpty) {
-        _booking = ConfirmBooking.fromJson(_bookingSnap.documents.first.data);
+      if (_bookingSnap.docs.isNotEmpty) {
+        _booking = ConfirmBooking.fromJson(_bookingSnap.docs.first.data());
         _bookingExists = true;
       }
     } else {
@@ -179,7 +179,7 @@ class NotificationTabVm extends ChangeNotifier {
         final _hotelSnap = await _booking.hotelRef.get();
 
         if (_hotelSnap.exists) {
-          final _hotel = Hotel.fromJson(_hotelSnap.data);
+          final _hotel = Hotel.fromJson(_hotelSnap.data());
 
           Navigator.push(
             context,
@@ -195,7 +195,7 @@ class NotificationTabVm extends ChangeNotifier {
         final _hotelSnap = await _booking.tourRef.get();
 
         if (_hotelSnap.exists) {
-          final _hotel = Tour.fromJson(_hotelSnap.data);
+          final _hotel = Tour.fromJson(_hotelSnap.data());
 
           Navigator.push(
             context,
@@ -211,7 +211,7 @@ class NotificationTabVm extends ChangeNotifier {
         final _hotelSnap = await _booking.vehicleRef.get();
 
         if (_hotelSnap.exists) {
-          final _hotel = Vehicle.fromJson(_hotelSnap.data);
+          final _hotel = Vehicle.fromJson(_hotelSnap.data());
 
           Navigator.push(
             context,
@@ -245,10 +245,10 @@ class NotificationTabVm extends ChangeNotifier {
           .where('id', isEqualTo: notification.bookingId)
           .limit(1);
 
-      final _bookingSnap = await _bookingRef.getDocuments();
+      final _bookingSnap = await _bookingRef.get();
 
-      if (_bookingSnap.documents.isNotEmpty) {
-        _booking = ConfirmBooking.fromJson(_bookingSnap.documents.first.data);
+      if (_bookingSnap.docs.isNotEmpty) {
+        _booking = ConfirmBooking.fromJson(_bookingSnap.docs.first.data());
         _bookingExists = true;
       }
     } else {
@@ -260,7 +260,7 @@ class NotificationTabVm extends ChangeNotifier {
         final _hotelSnap = await _booking.hotelRef.get();
 
         if (_hotelSnap.exists) {
-          final _hotel = Hotel.fromJson(_hotelSnap.data);
+          final _hotel = Hotel.fromJson(_hotelSnap.data());
 
           Navigator.push(
             context,
@@ -277,7 +277,7 @@ class NotificationTabVm extends ChangeNotifier {
         final _hotelSnap = await _booking.tourRef.get();
 
         if (_hotelSnap.exists) {
-          final _hotel = Tour.fromJson(_hotelSnap.data);
+          final _hotel = Tour.fromJson(_hotelSnap.data());
 
           Navigator.push(
             context,
@@ -293,7 +293,7 @@ class NotificationTabVm extends ChangeNotifier {
         final _hotelSnap = await _booking.vehicleRef.get();
 
         if (_hotelSnap.exists) {
-          final _hotel = Vehicle.fromJson(_hotelSnap.data);
+          final _hotel = Vehicle.fromJson(_hotelSnap.data());
 
           Navigator.push(
             context,
@@ -327,10 +327,10 @@ class NotificationTabVm extends ChangeNotifier {
           .where('id', isEqualTo: notification.bookingId)
           .limit(1);
 
-      final _bookingSnap = await _bookingRef.getDocuments();
+      final _bookingSnap = await _bookingRef.get();
 
-      if (_bookingSnap.documents.isNotEmpty) {
-        _booking = ConfirmBooking.fromJson(_bookingSnap.documents.first.data);
+      if (_bookingSnap.docs.isNotEmpty) {
+        _booking = ConfirmBooking.fromJson(_bookingSnap.docs.first.data());
         _bookingExists = true;
       }
     } else {
@@ -343,8 +343,8 @@ class NotificationTabVm extends ChangeNotifier {
         final _hotelSnap = await _booking.hotelRef.get();
 
         if (_userSnap.exists && _hotelSnap.exists) {
-          final _appUser = AppUser.fromJson(_userSnap.data);
-          final _hotel = Hotel.fromJson(_hotelSnap.data);
+          final _appUser = AppUser.fromJson(_userSnap.data());
+          final _hotel = Hotel.fromJson(_hotelSnap.data());
 
           Navigator.push(
             context,
@@ -362,8 +362,8 @@ class NotificationTabVm extends ChangeNotifier {
         final _hotelSnap = await _booking.tourRef.get();
 
         if (_userSnap.exists && _hotelSnap.exists) {
-          final _appUser = AppUser.fromJson(_userSnap.data);
-          final _hotel = Tour.fromJson(_hotelSnap.data);
+          final _appUser = AppUser.fromJson(_userSnap.data());
+          final _hotel = Tour.fromJson(_hotelSnap.data());
 
           Navigator.push(
             context,
@@ -381,8 +381,8 @@ class NotificationTabVm extends ChangeNotifier {
         final _hotelSnap = await _booking.vehicleRef.get();
 
         if (_userSnap.exists && _hotelSnap.exists) {
-          final _appUser = AppUser.fromJson(_userSnap.data);
-          final _hotel = Vehicle.fromJson(_hotelSnap.data);
+          final _appUser = AppUser.fromJson(_userSnap.data());
+          final _hotel = Vehicle.fromJson(_hotelSnap.data());
 
           Navigator.push(
             context,

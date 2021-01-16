@@ -20,15 +20,15 @@ class HotelProvider {
       this.uid,
       this.hotelRef});
 
-  final _ref = Firestore.instance;
+  final _ref = FirebaseFirestore.instance;
 
   // upload new hotel by hotel owner
   Future uploadNewHotel(Hotel hotel) async {
     try {
-      final _hotelRef = _ref.collection('hotels').document();
-      hotel.id = _hotelRef.documentID;
+      final _hotelRef = _ref.collection('hotels').doc();
+      hotel.id = _hotelRef.id;
       print('Success: Adding new hotel');
-      await _hotelRef.setData(hotel.toJson());
+      await _hotelRef.set(hotel.toJson());
       return _hotelRef;
     } catch (e) {
       print(e);
@@ -41,10 +41,10 @@ class HotelProvider {
   Future uploadNewRoom(
       final DocumentReference _hotelRef, final Hotel _room) async {
     try {
-      final _roomRef = _hotelRef.collection('rooms').document();
-      _room.id = _roomRef.documentID;
+      final _roomRef = _hotelRef.collection('rooms').doc();
+      _room.id = _roomRef.id;
       print('Success: Uploading new room');
-      await _roomRef.setData(_room.toJson());
+      await _roomRef.set(_room.toJson());
       return _roomRef;
     } catch (e) {
       print(e);
@@ -56,7 +56,7 @@ class HotelProvider {
   // delele hotel
   Future deleteHotel(final String _hotelId) async {
     try {
-      final _hotelRef = _ref.collection('hotels').document(_hotelId);
+      final _hotelRef = _ref.collection('hotels').doc(_hotelId);
       await _hotelRef.delete();
       print('Success: Deleting hotel with id $_hotelId');
       return 'Success';
@@ -71,9 +71,9 @@ class HotelProvider {
   Future updateBookingData(
       final Map<String, dynamic> data, final String id) async {
     try {
-      final _bookingRef = _ref.collection('bookings').document(id);
+      final _bookingRef = _ref.collection('bookings').doc(id);
       print('Success: Updating booking data $data');
-      await _bookingRef.updateData(data);
+      await _bookingRef.update(data);
       return 'Success';
     } catch (e) {
       print(e);
@@ -85,8 +85,8 @@ class HotelProvider {
   // update hotel data
   Future updateHotelData(final Map<String, dynamic> data) async {
     try {
-      final _hotelRef = _ref.collection('hotels').document(hotelId);
-      await _hotelRef.updateData(data);
+      final _hotelRef = _ref.collection('hotels').doc(hotelId);
+      await _hotelRef.update(data);
 
       print('Success: Updating hotel data $data');
       return _hotelRef;
@@ -101,15 +101,15 @@ class HotelProvider {
   Future updateRoomData(final DocumentReference _hotelRef,
       final Map<String, dynamic> _data, final String roomId) async {
     try {
-      final _roomRef = _hotelRef.collection('rooms').document(roomId);
+      final _roomRef = _hotelRef.collection('rooms').doc(roomId);
       final _roomsSnap = await _roomRef.get();
       print('Success: Updating room $_data');
       if (_roomsSnap.exists) {
-        await _roomRef.updateData(_data);
+        await _roomRef.update(_data);
       } else {
         _data.remove('id');
-        _data.addAll({'id': _roomRef.documentID});
-        await _roomRef.setData(_data);
+        _data.addAll({'id': _roomRef.id});
+        await _roomRef.set(_data);
       }
       return _roomRef;
     } catch (e) {
@@ -121,49 +121,49 @@ class HotelProvider {
 
   // hotels list from firestore
   List<Hotel> _hotelsFromFirestore(QuerySnapshot colSnap) {
-    return colSnap.documents.map((docSnap) {
-      return Hotel.fromJson(docSnap.data);
+    return colSnap.docs.map((docSnap) {
+      return Hotel.fromJson(docSnap.data());
     }).toList();
   }
 
   // top three list from firestore
   List<TopThree> _topThreeFromFirestore(QuerySnapshot colSnap) {
-    return colSnap.documents.map((docSnap) {
-      return TopThree.fromJson(docSnap.data);
+    return colSnap.docs.map((docSnap) {
+      return TopThree.fromJson(docSnap.data());
     }).toList();
   }
 
   // popular destinations list from firestore
   List<PopularDestination> _popularDestinationsFromFirestore(
       QuerySnapshot colSnap) {
-    return colSnap.documents.map((docSnap) {
-      return PopularDestination.fromJson(docSnap.data);
+    return colSnap.docs.map((docSnap) {
+      return PopularDestination.fromJson(docSnap.data());
     }).toList();
   }
 
   // hotel from firebase
   Hotel _hotelFromFirebase(DocumentSnapshot docSnap) {
-    return Hotel.fromJson(docSnap.data);
+    return Hotel.fromJson(docSnap.data());
   }
 
   // room from firebase
   List<Hotel> _roomFromFirebase(QuerySnapshot colSnap) {
-    return colSnap.documents.map((docSnap) {
-      return Hotel.fromJson(docSnap.data);
+    return colSnap.docs.map((docSnap) {
+      return Hotel.fromJson(docSnap.data());
     }).toList();
   }
 
   // last searches collection from firebase
   List<LastSearch> _lastSearchFromFirebase(QuerySnapshot colSnap) {
-    return colSnap.documents.map((docSnap) {
-      return LastSearch.fromJson(docSnap.data);
+    return colSnap.docs.map((docSnap) {
+      return LastSearch.fromJson(docSnap.data());
     }).toList();
   }
 
   // bookings from firebase
   List<ConfirmBooking> _bookingFromFirebase(QuerySnapshot colSnap) {
-    return colSnap.documents
-        .map((doc) => ConfirmBooking.fromJson(doc.data))
+    return colSnap.docs
+        .map((doc) => ConfirmBooking.fromJson(doc.data()))
         .toList();
   }
 
@@ -209,12 +209,12 @@ class HotelProvider {
   Stream<Hotel> get hotelFromId {
     return _ref
         .collection('hotels')
-        .document(hotelId)
+        .doc(hotelId)
         .snapshots()
         .map(_hotelFromFirebase);
   }
 
-  // stream of hotel from document reference
+  // stream of hotel from doc reference
   Stream<Hotel> get hotelFromRef {
     return hotelRef.snapshots().map(_hotelFromFirebase);
   }
@@ -223,7 +223,7 @@ class HotelProvider {
   Stream<List<Hotel>> get roomsList {
     return _ref
         .collection('hotels')
-        .document(hotelId)
+        .doc(hotelId)
         .collection('rooms')
         .orderBy('price')
         .snapshots()
@@ -254,7 +254,7 @@ class HotelProvider {
   Stream<List<LastSearch>> get lastSearchList {
     return _ref
         .collection('users')
-        .document(uid)
+        .doc(uid)
         .collection('last_search')
         .limit(5)
         .orderBy('last_updated', descending: true)

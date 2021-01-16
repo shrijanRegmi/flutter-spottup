@@ -54,7 +54,7 @@ class ProfileVm extends ChangeNotifier {
   }
 
   // update user data
-  Future updateData(
+  Future update(
       final Map<String, dynamic> data, final AppUser appUser) async {
     _isUpdatingData = true;
     notifyListeners();
@@ -79,7 +79,7 @@ class ProfileVm extends ChangeNotifier {
       final _data = {
         'dob': _dob.millisecondsSinceEpoch,
       };
-      updateData(_data, appUser);
+      update(_data, appUser);
     }
     notifyListeners();
   }
