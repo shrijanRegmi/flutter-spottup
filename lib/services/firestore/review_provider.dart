@@ -6,16 +6,16 @@ class ReviewProvider {
   final String uid;
   ReviewProvider({this.uid, this.hotelId});
 
-  final _ref = Firestore.instance;
+  final _ref = FirebaseFirestore.instance;
 
   // store review on firestore
   Future publishReview(Review review) async {
     try {
-      final _hotelRef = _ref.collection('hotels').document(hotelId);
-      final _reviewRef = _hotelRef.collection('reviews').document();
+      final _hotelRef = _ref.collection('hotels').doc(hotelId);
+      final _reviewRef = _hotelRef.collection('reviews').doc();
 
-      await _reviewRef.setData(review.toJson());
-      await _hotelRef.updateData({'reviews': FieldValue.increment(1)});
+      await _reviewRef.set(review.toJson());
+      await _hotelRef.update({'reviews': FieldValue.increment(1)});
       print('Success: publishing review');
       return 'Success';
     } catch (e) {
@@ -27,14 +27,14 @@ class ReviewProvider {
 
   // reviews from firestore
   List<Review> _reviewsFromFirestore(QuerySnapshot colSnap) {
-    return colSnap.documents.map((doc) => Review.fromJson(doc.data)).toList();
+    return colSnap.docs.map((doc) => Review.fromJson(doc.data())).toList();
   }
 
   // stream of reviews
   Stream<List<Review>> get reviewsList {
     return _ref
         .collection('hotels')
-        .document(hotelId)
+        .doc(hotelId)
         .collection('reviews')
         .orderBy('milliseconds', descending: true)
         .snapshots()

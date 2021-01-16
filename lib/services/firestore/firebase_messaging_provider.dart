@@ -16,7 +16,7 @@ class FirebaseMessagingProvider {
   final BuildContext context;
   FirebaseMessagingProvider({this.uid, this.context});
 
-  final _ref = Firestore.instance;
+  final _ref = FirebaseFirestore.instance;
   final _firebaseMessaging = FirebaseMessaging();
 
   Future configureMessaging() async {
@@ -69,13 +69,13 @@ class FirebaseMessagingProvider {
 
       final _deviceRef = _ref
           .collection('users')
-          .document(uid)
+          .doc(uid)
           .collection('devices')
-          .document(_androidInfo.androidId);
+          .doc(_androidInfo.androidId);
 
       final _token = await _firebaseMessaging.getToken();
       print('Success: saving device info to firestore');
-      await _deviceRef.setData({'token': _token});
+      await _deviceRef.set({'token': _token});
       return 'Success';
     } catch (e) {
       print(e);
@@ -91,9 +91,9 @@ class FirebaseMessagingProvider {
 
       final _deviceRef = _ref
           .collection('users')
-          .document(uid)
+          .doc(uid)
           .collection('devices')
-          .document(_androidInfo.androidId);
+          .doc(_androidInfo.androidId);
 
       print(
           'Success: Deleting device ${_androidInfo.androidId} info from firestore');
@@ -110,14 +110,14 @@ class FirebaseMessagingProvider {
     try {
       final _bookingRef =
           _ref.collection('bookings').where('id', isEqualTo: bookingId);
-      final _bookingSnap = await _bookingRef.getDocuments();
+      final _bookingSnap = await _bookingRef.get();
 
       ConfirmBooking _booking;
 
-      if (_bookingSnap.documents.isNotEmpty) {
-        _bookingSnap.documents.forEach((docSnap) {
+      if (_bookingSnap.docs.isNotEmpty) {
+        _bookingSnap.docs.forEach((docSnap) {
           if (docSnap.exists) {
-            _booking = ConfirmBooking.fromJson(docSnap.data);
+            _booking = ConfirmBooking.fromJson(docSnap.data());
           }
         });
       }
@@ -130,8 +130,8 @@ class FirebaseMessagingProvider {
         final _hotelSnap = await _hotelRef.get();
 
         if (_userSnap.exists && _hotelSnap.exists) {
-          final _appUser = AppUser.fromJson(_userSnap.data);
-          final _hotel = Hotel.fromJson(_hotelSnap.data);
+          final _appUser = AppUser.fromJson(_userSnap.data());
+          final _hotel = Hotel.fromJson(_hotelSnap.data());
 
           Navigator.push(
             context,
@@ -158,14 +158,14 @@ class FirebaseMessagingProvider {
     try {
       final _bookingRef =
           _ref.collection('bookings').where('id', isEqualTo: bookingId);
-      final _bookingSnap = await _bookingRef.getDocuments();
+      final _bookingSnap = await _bookingRef.get();
 
       ConfirmBooking _booking;
 
-      if (_bookingSnap.documents.isNotEmpty) {
-        _bookingSnap.documents.forEach((docSnap) {
+      if (_bookingSnap.docs.isNotEmpty) {
+        _bookingSnap.docs.forEach((docSnap) {
           if (docSnap.exists) {
-            _booking = ConfirmBooking.fromJson(docSnap.data);
+            _booking = ConfirmBooking.fromJson(docSnap.data());
           }
         });
       }
@@ -178,8 +178,8 @@ class FirebaseMessagingProvider {
         final _hotelSnap = await _hotelRef.get();
 
         if (_hotelSnap.exists) {
-          // final _appUser = AppUser.fromJson(_userSnap.data);
-          final _hotel = Hotel.fromJson(_hotelSnap.data);
+          // final _appUser = AppUser.fromJson(_userSnap.data());
+          final _hotel = Hotel.fromJson(_hotelSnap.data());
 
           if (_booking.isAccepted && !_booking.isDeclined) {
             _openBookingAcceptScreen(_booking, _hotel);
@@ -220,14 +220,14 @@ class FirebaseMessagingProvider {
     try {
       final _bookingRef =
           _ref.collection('bookings').where('id', isEqualTo: bookingId);
-      final _bookingSnap = await _bookingRef.getDocuments();
+      final _bookingSnap = await _bookingRef.get();
 
       ConfirmBooking _booking;
 
-      if (_bookingSnap.documents.isNotEmpty) {
-        _bookingSnap.documents.forEach((docSnap) {
+      if (_bookingSnap.docs.isNotEmpty) {
+        _bookingSnap.docs.forEach((docSnap) {
           if (docSnap.exists) {
-            _booking = ConfirmBooking.fromJson(docSnap.data);
+            _booking = ConfirmBooking.fromJson(docSnap.data());
           }
         });
       }
@@ -240,8 +240,8 @@ class FirebaseMessagingProvider {
         final _hotelSnap = await _hotelRef.get();
 
         if (_userSnap.exists && _hotelSnap.exists) {
-          final _appUser = AppUser.fromJson(_userSnap.data);
-          final _hotel = Hotel.fromJson(_hotelSnap.data);
+          final _appUser = AppUser.fromJson(_userSnap.data());
+          final _hotel = Hotel.fromJson(_hotelSnap.data());
 
           Navigator.push(
             context,

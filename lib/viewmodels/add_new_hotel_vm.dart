@@ -527,14 +527,14 @@ class AddNewHotelVm extends ChangeNotifier {
     });
 
     // rooms
-    final _ref = Firestore.instance;
+    final _ref = FirebaseFirestore.instance;
     final _roomsRef =
-        _ref.collection('hotels').document(hotel.id).collection('rooms');
+        _ref.collection('hotels').doc(hotel.id).collection('rooms');
 
-    final _roomsSnap = await _roomsRef.getDocuments();
-    if (_roomsSnap.documents.isNotEmpty) {
-      for (var _roomSnap in _roomsSnap.documents) {
-        final _room = Hotel.fromJson(_roomSnap.data);
+    final _roomsSnap = await _roomsRef.get();
+    if (_roomsSnap.docs.isNotEmpty) {
+      for (var _roomSnap in _roomsSnap.docs) {
+        final _room = Hotel.fromJson(_roomSnap.data());
         _rooms.add(_room);
       }
     }

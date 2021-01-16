@@ -8,7 +8,7 @@ import 'package:motel/services/firestore/user_provider.dart';
 class AuthProvider {
   final _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-  final _ref = Firestore.instance;
+  final _ref = FirebaseFirestore.instance;
 
   // create account with email and password
   Future signUpWithEmailAndPassword({
@@ -45,9 +45,9 @@ class AuthProvider {
       final _result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
 
-      final _userRef = _ref.collection('users').document(_result.user.uid);
+      final _userRef = _ref.collection('users').doc(_result.user.uid);
 
-      await _userRef.updateData({
+      await _userRef.update({
         'account_type': accountType.index,
       });
 
@@ -68,7 +68,7 @@ class AuthProvider {
     try {
       final _account = await _googleSignIn.signIn();
       final _tokens = await _account.authentication;
-      final _cred = GoogleAuthProvider.getCredential(
+      final _cred = GoogleAuthProvider.credential(
           idToken: _tokens.idToken, accessToken: _tokens.accessToken);
       final _result = await _auth.signInWithCredential(_cred);
 
@@ -82,18 +82,18 @@ class AuthProvider {
         accountType: accountType,
       );
 
-      final _ref = Firestore.instance;
+      final _ref = FirebaseFirestore.instance;
 
-      final _userRef = _ref.collection('users').document(_user.uid);
+      final _userRef = _ref.collection('users').doc(_user.uid);
 
       final _userSnap = await _userRef.get();
 
-      if (_userSnap.data == null) {
+      if (_userSnap.data() == null) {
         await UserProvider().sendUserToFirestore(_appUser, _result.user.uid);
         _userFromFirebase(_user);
         print('Success: Signing up user with name ${_user.displayName}');
       } else {
-        await _userRef.updateData({
+        await _userRef.update({
           'account_type': accountType.index,
         });
         _userFromFirebase(_user);
@@ -128,12 +128,12 @@ class AuthProvider {
   }
 
   // user from firebase
-  AppUser _userFromFirebase(FirebaseUser user) {
+  AppUser _userFromFirebase(User user) {
     return user != null ? AppUser(uid: user.uid) : null;
   }
 
   // stream of user
   Stream<AppUser> get user {
-    return _auth.onAuthStateChanged.map(_userFromFirebase);
+    return _auth.authStateChanges().map(_userFromFirebase);
   }
 }

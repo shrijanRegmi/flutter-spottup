@@ -161,8 +161,8 @@ class Hotel {
   }
 
   DocumentReference toRef() {
-    final _ref = Firestore.instance;
-    return _ref.collection('hotels').document(id);
+    final _ref = FirebaseFirestore.instance;
+    return _ref.collection('hotels').doc(id);
   }
 
   Map<String, dynamic> toJson() {

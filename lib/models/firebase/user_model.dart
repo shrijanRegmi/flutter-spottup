@@ -66,7 +66,7 @@ class AppUser {
   }
 
   DocumentReference toRef() {
-    final _ref = Firestore.instance;
-    return _ref.collection('users').document(uid);
+    final _ref = FirebaseFirestore.instance;
+    return _ref.collection('users').doc(uid);
   }
 }

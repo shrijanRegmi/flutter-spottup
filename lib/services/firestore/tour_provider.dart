@@ -12,14 +12,14 @@ class TourProvider {
     this.searchKey,
   });
 
-  final _ref = Firestore.instance;
+  final _ref = FirebaseFirestore.instance;
 
   // publish tour
   Future publishTour() async {
     try {
-      final _tourRef = _ref.collection('tours').document();
-      tour.id = _tourRef.documentID;
-      await _tourRef.setData(tour.toJson());
+      final _tourRef = _ref.collection('tours').doc();
+      tour.id = _tourRef.id;
+      await _tourRef.set(tour.toJson());
       print('Success: Publishing tour ${tour.id}');
       return 'Success';
     } catch (e) {
@@ -33,7 +33,7 @@ class TourProvider {
   Future updateTour() async {
     try {
       final _tourRef = tour.toRef();
-      await _tourRef.updateData(tour.toJson());
+      await _tourRef.update(tour.toJson());
       print('Success: Updating tour details ${tour.id}');
       return 'Success';
     } catch (e) {
@@ -46,7 +46,7 @@ class TourProvider {
   // delete tour
   Future deleteTour(final String tourId) async {
     try {
-      final _tourRef = _ref.collection('tours').document(tourId);
+      final _tourRef = _ref.collection('tours').doc(tourId);
       await _tourRef.delete();
       print('Success: Deleting tour $tourId');
       return 'Success';
@@ -59,8 +59,8 @@ class TourProvider {
 
   // tours list from firestore
   List<Tour> _toursFromFirestore(QuerySnapshot colSnap) {
-    return colSnap.documents.map((docSnap) {
-      return Tour.fromJson(docSnap.data);
+    return colSnap.docs.map((docSnap) {
+      return Tour.fromJson(docSnap.data());
     }).toList();
   }
 
