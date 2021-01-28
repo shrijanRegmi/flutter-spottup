@@ -62,17 +62,17 @@ class DynamicLinkProvider {
     }
   }
 
-  Future<String> createFirstPostLink(String chatId) async {
+  Future<String> createInviteLink() async {
     final DynamicLinkParameters parameters = DynamicLinkParameters(
-      uriPrefix: 'https://peaman.page.link',
-      link: Uri.parse('https://peaman.page.link/goto-chat/$chatId'),
+      uriPrefix: 'https://spottup.net',
+      link: Uri.parse("https://spottup.net/user?id='$uid'"),
       androidParameters: AndroidParameters(
-        packageName: 'com.example.peaman',
+        packageName: 'com.spottup.app',
       ),
     );
 
-    final Uri dynamicUrl = await parameters.buildUrl();
+    final dynamicUrl = await parameters.buildShortLink();
 
-    return dynamicUrl.toString();
+    return dynamicUrl.shortUrl.toString();
   }
 }

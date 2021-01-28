@@ -1,0 +1,4 @@
+enum AnalyticStatus {
+  booked,
+  notBooked,
+}
