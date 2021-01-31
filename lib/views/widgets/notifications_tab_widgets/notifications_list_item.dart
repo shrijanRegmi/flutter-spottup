@@ -23,7 +23,6 @@ class NotificationsListItem extends StatelessWidget {
     final _bookingsList = Provider.of<List<ConfirmBooking>>(context) ?? [];
 
     Widget _notifWidget;
-    print(notification.bookingFor);
     switch (notification.bookingFor) {
       case BookingForType.hotel:
         _notifWidget = _hotelNotifBuilder(_appUser);

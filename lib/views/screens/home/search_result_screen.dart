@@ -13,9 +13,7 @@ class SearchResultScreen extends StatelessWidget {
   SearchResultScreen(this.stream, this.city, this.type);
 
   @override
-  Widget build(BuildContext context) {
-    print('The values are::::: $type $stream $city');
-    
+  Widget build(BuildContext context) {    
     return VmProvider<SearchVm>(
       vm: SearchVm(context: context),
       onInit: (vm) {

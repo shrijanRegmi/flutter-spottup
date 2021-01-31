@@ -1,5 +1,8 @@
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:motel/enums/analytics_status.dart';
+import 'package:motel/models/firebase/user_model.dart';
+import 'package:motel/services/firestore/user_provider.dart';
 
 class DynamicLinkProvider {
   final String uid;
@@ -31,32 +34,12 @@ class DynamicLinkProvider {
     if (deepLink != null) {
       print('_handleDeepLink | deeplink: $deepLink');
 
-      var isInvite = deepLink.pathSegments.contains('invite');
+      var isInvite = deepLink.pathSegments.contains('user');
 
       if (isInvite) {
-        var _userId = deepLink.queryParameters['uid'];
-        if (_userId != null && _userId != uid) {
-          final _linkRef = _ref
-              .collection('users')
-              .doc(_userId)
-              .collection('dynamic_links')
-              .doc(uid);
-
-          try {
-            final _linkSnap = await _linkRef.get();
-            if (!_linkSnap.exists) {
-              final _data = {
-                'accepted_by': uid,
-                'updated_at': DateTime.now().millisecondsSinceEpoch,
-              };
-
-              await _linkRef.set(_data);
-              print('Success: Opening dynamic link sent by $_userId');
-            }
-          } catch (e) {
-            print(e);
-            print('Error!!!: Opening dynamic link sent by $_userId');
-          }
+        var _userId = deepLink.queryParameters['id'];
+        if (_userId != null) {
+          await registerUserAsDynamicUser(_userId);
         }
       }
     }
@@ -65,7 +48,7 @@ class DynamicLinkProvider {
   Future<String> createInviteLink() async {
     final DynamicLinkParameters parameters = DynamicLinkParameters(
       uriPrefix: 'https://spottup.net',
-      link: Uri.parse("https://spottup.net/user?id='$uid'"),
+      link: Uri.parse("https://spottup.net/user?id=$uid"),
       androidParameters: AndroidParameters(
         packageName: 'com.spottup.app',
       ),
@@ -74,5 +57,58 @@ class DynamicLinkProvider {
     final dynamicUrl = await parameters.buildShortLink();
 
     return dynamicUrl.shortUrl.toString();
+  }
+
+  // register user as dynamic user
+  Future registerUserAsDynamicUser(final String userId) async {
+    try {
+      final _dynamicUserRef = _ref
+          .collection('users')
+          .doc(userId)
+          .collection('dynamic_users')
+          .doc(uid);
+
+      final _dynamicUserSnap = await _dynamicUserRef.get();
+
+      if (!_dynamicUserSnap.exists) {
+        final _appUserRef = _ref.collection('users').doc(uid);
+        final _appUserSnap = await _appUserRef.get();
+        AppUser _appUser;
+
+        if (_appUserSnap.exists) {
+          final _appUserData = _appUserSnap.data();
+          if (_appUserData != null) {
+            _appUser = AppUser.fromJson(_appUserData);
+          }
+        }
+
+        if (_appUser != null) {
+          final _data = {
+            'uid': uid,
+            'first_name': _appUser.firstName,
+            'last_name': _appUser.lastName,
+            'email': _appUser.email,
+            'photo_url': _appUser.photoUrl ?? '',
+            'analytic_status': AnalyticStatus.notBooked.index,
+            'updated_at': DateTime.now().millisecondsSinceEpoch,
+          };
+
+          await _dynamicUserRef.set(_data);
+
+          await UserProvider(uid: uid).updateUserData({
+            'invitation_from': {
+              'uid': userId,
+            }
+          });
+
+          print('Success: registering user $uid as dynamic user to $userId');
+        }
+      }
+      return 'Success';
+    } catch (e) {
+      print(e);
+      print('Error!!!: registering user $uid as dynamic user to $userId');
+      return null;
+    }
   }
 }
