@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:motel/enums/account_type.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/services/auth/auth_provider.dart';
+import 'package:motel/services/dynamic_link_provider.dart';
 
 class AuthVm extends ChangeNotifier {
   TextEditingController _emailController = TextEditingController();
@@ -82,6 +83,8 @@ class AuthVm extends ChangeNotifier {
         appUser: _appUser,
         password: _pass,
       );
+
+      await DynamicLinkProvider(_appUser.uid).handleDynamicLinks();
 
       if (_result != null) {
         _showErrorMessage(_result.code);
@@ -205,8 +208,7 @@ class AuthVm extends ChangeNotifier {
             'User with that email not found. Please create an account with that email first.';
         break;
       case 'ERROR_WRONG_PASSWORD':
-        _errorText =
-            'The password you provided is not correct';
+        _errorText = 'The password you provided is not correct';
         break;
       default:
         _errorText = 'Unexpected error occured! Please try again.';

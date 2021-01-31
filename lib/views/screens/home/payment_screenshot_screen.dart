@@ -3,8 +3,13 @@ import 'package:image_viewer/image_viewer.dart';
 import 'package:motel/helpers/date_helper.dart';
 import 'package:motel/models/firebase/confirm_booking_model.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
+import 'package:motel/models/firebase/payment_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
+import 'package:motel/viewmodels/payment_ss_vm.dart';
+import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/widgets/hotel_view_widgets/hotel_photos_item.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
 class PaymentScreenshotScreen extends StatelessWidget {
   final ConfirmHotelBooking booking;
@@ -14,59 +19,75 @@ class PaymentScreenshotScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height - kToolbarHeight,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _appbarBuilder(context),
-                SizedBox(
-                  height: 10.0,
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Expanded(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                _topSectionBuilder(),
-                                SizedBox(
-                                  height: 20.0,
-                                ),
-                                _hotelDetailBuilder(),
-                                SizedBox(
-                                  height: 20.0,
-                                ),
-                                _screenshotTextBuilder(),
-                                SizedBox(
-                                  height: 10.0,
-                                ),
-                                _screenshotsBuilder(),
-                                SizedBox(
-                                  height: 20.0,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+    return VmProvider<PaymentSsVm>(
+      vm: PaymentSsVm(),
+      onInit: (vm) => vm.onInit(user),
+      builder: (context, vm, appUser) {
+        return Scaffold(
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Container(
+                height: MediaQuery.of(context).size.height - kToolbarHeight,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _appbarBuilder(context),
+                    SizedBox(
+                      height: 10.0,
                     ),
-                  ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Expanded(
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    _topSectionBuilder(),
+                                    SizedBox(
+                                      height: 20.0,
+                                    ),
+                                    _hotelDetailBuilder(),
+                                    SizedBox(
+                                      height: 20.0,
+                                    ),
+                                    _screenshotTextBuilder(),
+                                    SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    _screenshotsBuilder(),
+                                    SizedBox(
+                                      height: 50.0,
+                                    ),
+                                    if (user.invitationFrom != null &&
+                                        user.invitationFrom.bookingId ==
+                                            booking.bookingId)
+                                      _invitationFromBuilder(context, vm),
+                                    if (user.invitationFrom != null &&
+                                        user.invitationFrom.bookingId ==
+                                            booking.bookingId)
+                                      SizedBox(
+                                        height: 20.0,
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -232,5 +253,127 @@ class PaymentScreenshotScreen extends StatelessWidget {
       _list.add(element.toString());
     });
     return _list;
+  }
+
+  Widget _invitationFromBuilder(
+      final BuildContext context, final PaymentSsVm vm) {
+    final _paymentConfig = Provider.of<Payment>(context);
+
+    final _ref = FirebaseFirestore.instance;
+    return StreamBuilder<AppUser>(
+      stream: _ref
+          .collection('users')
+          .doc(user.invitationFrom?.uid)
+          .snapshots()
+          .map((event) => AppUser.fromJson(event.data())),
+      builder: (BuildContext context, AsyncSnapshot<AppUser> snapshot) {
+        if (snapshot.hasData) {
+          final _user = snapshot.data;
+
+          return Container(
+            child: Column(
+              children: [
+                RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontFamily: 'Nunito',
+                      color: Colors.black,
+                    ),
+                    children: [
+                      TextSpan(
+                        text:
+                            'The booking is made from an invitation link which was shared by ',
+                      ),
+                      TextSpan(
+                        text:
+                            'username: ${_user.firstName} ${_user.lastName} | email: ${_user.email} | phone: ${_user.phone == 0 ? 'N/A' : _user.phone}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                Text(
+                  'Please confirm so that the person will get ${_paymentConfig.percentage}% commission (Rs ${int.parse((_paymentConfig.percentage / 100 * booking.total).toStringAsFixed(0))}) of the total amount.',
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                _acceptDeclineBuilder(context, vm, user.invitationFrom.uid),
+              ],
+            ),
+          );
+        }
+        return Container();
+      },
+    );
+  }
+
+  Widget _acceptDeclineBuilder(
+      final BuildContext context, final PaymentSsVm vm, final String uid) {
+    final _paymentConfig = Provider.of<Payment>(context);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: !vm.isConfirmed && !vm.isDeclined
+          ? Row(
+              children: [
+                Expanded(
+                  child: Center(
+                    child: MaterialButton(
+                      child: Text('Confirm'),
+                      color: Color(0xff45ad90),
+                      minWidth: 180.0,
+                      textColor: Colors.white,
+                      onPressed: () => vm.confirmToPay(
+                        user,
+                        uid,
+                        int.parse(
+                          (_paymentConfig.percentage / 100 * booking.total)
+                              .toStringAsFixed(0),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 10.0,
+                ),
+                Expanded(
+                  child: Center(
+                    child: MaterialButton(
+                      child: Text('Decline'),
+                      color: Colors.red,
+                      minWidth: 180.0,
+                      textColor: Colors.white,
+                      onPressed: () => vm.declineToPay(user),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          : vm.isConfirmed && !vm.isDeclined
+              ? MaterialButton(
+                  child: Text('Confirmed'),
+                  color: Color(0xff45ad90),
+                  minWidth: 180.0,
+                  textColor: Colors.white,
+                  onPressed: () {},
+                )
+              : MaterialButton(
+                  child: Text('Declined'),
+                  color: Colors.red,
+                  minWidth: 180.0,
+                  textColor: Colors.white,
+                  onPressed: () {},
+                ),
+    );
   }
 }

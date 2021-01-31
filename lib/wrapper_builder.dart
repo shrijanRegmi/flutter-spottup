@@ -8,7 +8,6 @@ import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/notification_model.dart';
 import 'package:motel/models/firebase/vehicle_model.dart';
-import 'package:motel/services/dynamic_link_provider.dart';
 import 'package:motel/services/firestore/tour_provider.dart';
 import 'package:motel/services/firestore/user_provider.dart';
 import 'package:motel/services/firestore/hotel_provider.dart';
@@ -52,8 +51,8 @@ class WrapperBuilder extends StatelessWidget {
           StreamProvider<Payment>.value(
             value: UserProvider().paymentDetails,
           ),
-          FutureProvider<void>.value(
-            value: DynamicLinkProvider(_appUser.uid).handleDynamicLinks(),
+          StreamProvider<List<AppUser>>.value(
+            value: UserProvider(uid: _appUser.uid).dynamicUsers,
           ),
         ],
         child: builder(context, _appUser),

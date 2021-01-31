@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:motel/enums/account_type.dart';
+import 'package:motel/enums/analytics_status.dart';
+import 'package:motel/models/firebase/invitation_from_model.dart';
 
 class AppUser {
   final String firstName;
@@ -17,6 +19,9 @@ class AppUser {
   final bool admin;
   final int notifCount;
   final String dynamicLink;
+  final AnalyticStatus analyticStatus;
+  final InvitationFrom invitationFrom;
+  final int earnings;
 
   AppUser({
     this.uid,
@@ -34,6 +39,9 @@ class AppUser {
     this.admin,
     this.notifCount,
     this.dynamicLink,
+    this.analyticStatus,
+    this.invitationFrom,
+    this.earnings,
   });
 
   static AppUser fromJson(final Map<String, dynamic> data) {
@@ -53,6 +61,11 @@ class AppUser {
       admin: data['admin'] ?? false,
       notifCount: data['notif_count'] ?? 0,
       dynamicLink: data['dynamic_link'],
+      analyticStatus: AnalyticStatus.values[data['analytic_status'] ?? 0],
+      invitationFrom: data['invitation_from'] == null
+          ? null
+          : InvitationFrom.fromJson(data['invitation_from']),
+      earnings: data['earnings'] ?? 0,
     );
   }
 

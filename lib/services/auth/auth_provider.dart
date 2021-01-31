@@ -5,6 +5,8 @@ import 'package:motel/enums/account_type.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/services/firestore/user_provider.dart';
 
+import '../dynamic_link_provider.dart';
+
 class AuthProvider {
   final _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -90,6 +92,7 @@ class AuthProvider {
 
       if (_userSnap.data() == null) {
         await UserProvider().sendUserToFirestore(_appUser, _result.user.uid);
+        await DynamicLinkProvider(_appUser.uid).handleDynamicLinks();
         _userFromFirebase(_user);
         print('Success: Signing up user with name ${_user.displayName}');
       } else {

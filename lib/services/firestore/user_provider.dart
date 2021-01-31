@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:motel/enums/analytics_status.dart';
 import 'package:motel/models/firebase/confirm_booking_model.dart';
+import 'package:motel/models/firebase/invitation_from_model.dart';
 import 'package:motel/models/firebase/last_search_model.dart';
 import 'package:motel/models/firebase/notification_model.dart';
 import 'package:motel/models/firebase/payment_model.dart';
@@ -154,6 +156,66 @@ class UserProvider {
     }
   }
 
+  // confirm to pay
+  Future confirmPayment(final int earning, final String userId,
+      final InvitationFrom invitationFrom) async {
+    try {
+      final _userRef = _ref.collection('users').doc(userId);
+      final _dynamicUserRef = _userRef.collection('dynamic_users').doc(uid);
+
+      final _appUserRef = _ref.collection('users').doc(uid);
+
+      await _appUserRef.update({
+        'invitation_from': {
+          'booking_id': invitationFrom.bookingId,
+          'uid': invitationFrom.uid,
+          'is_confirmed': true,
+          'is_declined': false,
+        },
+      });
+
+      final _dynamicSnap = await _dynamicUserRef.get();
+      if (_dynamicSnap.exists) {
+        await _dynamicUserRef.update({
+          'analytic_status': AnalyticStatus.booked.index,
+        });
+
+        await _userRef.update({
+          'earnings': FieldValue.increment(earning),
+        });
+      }
+      print('Success: Paying to user $uid');
+      return 'Success';
+    } catch (e) {
+      print('Error!!!: Paying to user $uid');
+      print(e);
+      return null;
+    }
+  }
+
+  // decline to pay
+  Future declineToPay(final InvitationFrom invitationFrom) async {
+    try {
+      final _appUserRef = _ref.collection('users').doc(uid);
+
+      await _appUserRef.update({
+        'invitation_from': {
+          'booking_id': invitationFrom.bookingId,
+          'uid': invitationFrom.uid,
+          'is_confirmed': false,
+          'is_declined': true,
+        },
+      });
+
+      print('Success: Declining payment to user $uid');
+      return 'Success';
+    } catch (e) {
+      print('Error!!!: Declining payment to user $uid');
+      print(e);
+      return null;
+    }
+  }
+
   // read notification
   readNotification(final String notifId) async {
     try {
@@ -189,6 +251,11 @@ class UserProvider {
     return AppUser.fromJson(userSnap.data());
   }
 
+  // list of users from firebase
+  List<AppUser> _appUsersListFromFirebase(QuerySnapshot colSnap) {
+    return colSnap.docs.map((e) => AppUser.fromJson(e.data())).toList();
+  }
+
   // upcomming bookings from firebase
   List<UpcomingBooking> _upcomingBookingFromFirebase(QuerySnapshot colSnap) {
     return colSnap.docs
@@ -215,6 +282,17 @@ class UserProvider {
         .doc(uid)
         .snapshots()
         .map(_appUserFromFirebase);
+  }
+
+  // stream of list of dynamic users
+  Stream<List<AppUser>> get dynamicUsers {
+    return _ref
+        .collection('users')
+        .doc(uid)
+        .collection('dynamic_users')
+        .orderBy('updated_at', descending: true)
+        .snapshots()
+        .map(_appUsersListFromFirebase);
   }
 
   // stream of user from reference

@@ -19,7 +19,7 @@ class AnalyticsTab extends StatelessWidget {
         return Scaffold(
           key: vm.scaffoldKey,
           body: SafeArea(
-            child: vm.isLoading
+            child: vm.isLoading || vm.dynamicUsers == null
                 ? Center(
                     child: Lottie.asset('assets/lottie/loading.json'),
                   )
@@ -43,7 +43,7 @@ class AnalyticsTab extends StatelessWidget {
                                     SizedBox(
                                       height: 50.0,
                                     ),
-                                    _earningBuilder(),
+                                    _earningBuilder(appUser),
                                     SizedBox(
                                       height: 10.0,
                                     ),
@@ -55,13 +55,14 @@ class AnalyticsTab extends StatelessWidget {
                                     SizedBox(
                                       height: 10.0,
                                     ),
-                                    Text(
-                                      'Users who installed the app from your link',
-                                    ),
+                                    if (vm.dynamicUsers.isNotEmpty)
+                                      Text(
+                                        'Users who installed the app from your link',
+                                      ),
                                     SizedBox(
                                       height: 30.0,
                                     ),
-                                    AnalyticsUsersList([appUser])
+                                    AnalyticsUsersList(vm.dynamicUsers)
                                   ],
                                 ),
                         ],
@@ -157,7 +158,7 @@ class AnalyticsTab extends StatelessWidget {
     );
   }
 
-  Widget _earningBuilder() {
+  Widget _earningBuilder(final AppUser appUser) {
     return Container(
       child: Column(
         children: [
@@ -168,7 +169,7 @@ class AnalyticsTab extends StatelessWidget {
             ),
           ),
           Text(
-            'Rs 500',
+            'Rs ${appUser.earnings}',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 40.0,
