@@ -126,7 +126,7 @@ class AnalyticsTab extends StatelessWidget {
                 ),
                 padding: const EdgeInsets.all(20.0),
                 child: Icon(
-                  Icons.copy,
+                  Icons.share_outlined,
                   color: Colors.white,
                 ),
               ),
