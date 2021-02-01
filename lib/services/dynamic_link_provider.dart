@@ -52,6 +52,12 @@ class DynamicLinkProvider {
       androidParameters: AndroidParameters(
         packageName: 'com.spottup.app',
       ),
+      socialMetaTagParameters: SocialMetaTagParameters(
+        title: 'Spott Up',
+        description: 'Best deals for your next holiday.',
+        imageUrl: Uri.parse(
+            'https://firebasestorage.googleapis.com/v0/b/spott-up.appspot.com/o/welcome_img.jpg?alt=media&token=0e88f8e1-b8ff-4d10-a1e8-39635881d222'),
+      ),
     );
 
     final dynamicUrl = await parameters.buildShortLink();

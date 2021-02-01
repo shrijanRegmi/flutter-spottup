@@ -30,7 +30,7 @@ dependencies:
   firebase_auth: ^0.20.0+1
   firebase_core: ^0.7.0
   firebase_dynamic_links: ^0.7.0+1
-  firebase_messaging:
+  firebase_messaging: null
   firebase_storage: ^7.0.0
   flutter_email_sender: ^3.0.1
   flutter_keyboard_visibility: null
@@ -41,6 +41,7 @@ dependencies:
   lottie: ^0.5.1
   mailer: ^3.0.4
   provider: ^4.3.2
+  share: ^0.6.5+4
   smooth_star_rating: ^1.1.1
   timeago: ^2.0.27
   uuid: ^2.2.0

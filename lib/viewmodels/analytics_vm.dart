@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/services/dynamic_link_provider.dart';
 import 'package:motel/services/firestore/user_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 class AnalyticsVm extends ChangeNotifier {
   final BuildContext context;
@@ -38,15 +38,7 @@ class AnalyticsVm extends ChangeNotifier {
 
   // copy to clipboard
   copyLinkToClipboard(final String linkToCopy) async {
-    await Clipboard.setData(ClipboardData(text: linkToCopy));
-
-    _scaffoldKey.currentState.showSnackBar(
-      SnackBar(
-        content: Text(
-          'Link copied to clipboard !',
-        ),
-      ),
-    );
+    await Share.share(linkToCopy);
   }
 
   // update value of link
