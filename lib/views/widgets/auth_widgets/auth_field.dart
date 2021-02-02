@@ -39,6 +39,7 @@ class AuthField extends StatelessWidget {
               ? TextCapitalization.words
               : TextCapitalization.none,
           obscureText: isPassword,
+          keyboardType: type,
           style: TextStyle(
             fontSize: 14.0,
           ),

@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/viewmodels/auth_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/widgets/auth_widgets/auth_field.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 
-class ForgotPasswordScreen extends StatelessWidget {
+class PhoneVerificationScreen extends StatelessWidget {
+  final String verificationId;
+  final AppUser user;
+  PhoneVerificationScreen(this.verificationId, this.user);
+
   @override
   Widget build(BuildContext context) {
     return VmProvider<AuthVm>(
       vm: AuthVm(context),
       builder: (context, vm, appUser) {
         return Scaffold(
+          key: vm.scaffoldKey,
           body: SafeArea(
             child: vm.showingProgressBar
                 ? Center(
@@ -33,17 +39,18 @@ class ForgotPasswordScreen extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                _forgetPasswordTextBuilder(),
+                                _verificationTextBuilder(),
                                 SizedBox(
                                   height: 10.0,
                                 ),
-                                _detailsBuilder(),
+                                _detailsBuilder(vm),
                                 SizedBox(
                                   height: 30.0,
                                 ),
                                 AuthField(
-                                  hintText: 'Your email',
-                                  controller: vm.emailController,
+                                  hintText: 'Your OTP code',
+                                  controller: vm.otpController,
+                                  type: TextInputType.number,
                                 ),
                                 SizedBox(
                                   height: 30.0,
@@ -52,8 +59,11 @@ class ForgotPasswordScreen extends StatelessWidget {
                             ),
                           ),
                           RoundedBtn(
-                            title: 'Send',
-                            onPressed: () => vm.resetPassword(context),
+                            title: 'Done',
+                            onPressed: () => vm.submitVerificationCode(
+                              verificationId,
+                              user,
+                            ),
                           ),
                         ],
                       ),
@@ -72,9 +82,9 @@ class ForgotPasswordScreen extends StatelessWidget {
     );
   }
 
-  Widget _forgetPasswordTextBuilder() {
+  Widget _verificationTextBuilder() {
     return Text(
-      'Forget Password',
+      'Phone Verification',
       style: TextStyle(
         fontWeight: FontWeight.w600,
         fontSize: 22.0,
@@ -82,9 +92,9 @@ class ForgotPasswordScreen extends StatelessWidget {
     );
   }
 
-  Widget _detailsBuilder() {
+  Widget _detailsBuilder(final AuthVm vm) {
     return Text(
-      'Enter your email to receive an email to reset your password.',
+      'Please enter your OTP code sent on number ${user.phone}',
       style: TextStyle(
         fontWeight: FontWeight.w600,
         fontSize: 14.0,

@@ -5,11 +5,15 @@ import 'package:motel/services/auth/auth_provider.dart';
 import 'package:motel/services/dynamic_link_provider.dart';
 
 class AuthVm extends ChangeNotifier {
+  final BuildContext context;
+  AuthVm(this.context);
+
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passController = TextEditingController();
   TextEditingController _firstNameController = TextEditingController();
   TextEditingController _lastNameController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
+  TextEditingController _otpController = TextEditingController();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _showingProgressBar = false;
 
@@ -18,6 +22,7 @@ class AuthVm extends ChangeNotifier {
   TextEditingController get firstNameController => _firstNameController;
   TextEditingController get lastNameController => _lastNameController;
   TextEditingController get phoneController => _phoneController;
+  TextEditingController get otpController => _otpController;
   GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
   bool get showingProgressBar => _showingProgressBar;
 
@@ -74,7 +79,7 @@ class AuthVm extends ChangeNotifier {
       final _appUser = AppUser(
         firstName: _firstName,
         lastName: _lastName,
-        phone: int.parse(_phone),
+        phone: _phone,
         email: _email,
         accountType: accountType,
       );
@@ -88,6 +93,84 @@ class AuthVm extends ChangeNotifier {
 
       if (_result != null) {
         _showErrorMessage(_result.code);
+      }
+    } else {
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text(
+          'Please fill up all fields to continue',
+        ),
+      ));
+    }
+
+    if (_result != null) {
+      _updateProgressBar(false);
+    }
+  }
+
+  // login with phone
+  Future logInWithPhone(
+    final AccountType accountType,
+  ) async {
+    _updateProgressBar(true);
+
+    final _phone = _phoneController.text.trim();
+
+    var _result;
+
+    if (_phone != '') {
+      final _appUser = AppUser(
+        phone: _phone,
+        accountType: accountType,
+      );
+
+      _result = await AuthProvider(
+        scaffoldKey: _scaffoldKey,
+        context: context,
+      ).logInWithPhone('$_phone', _appUser);
+
+      if (_result != null) {
+        _showErrorMessage(_result);
+      }
+    } else {
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text(
+          'Please provide your phone number to continue.',
+        ),
+      ));
+    }
+
+    if (_result != null) {
+      _updateProgressBar(false);
+    }
+  }
+
+  // sign up with phone
+  Future signUpWithPhone(
+    final AccountType accountType,
+  ) async {
+    _updateProgressBar(true);
+
+    final _firstName = _firstNameController.text.trim();
+    final _lastName = _lastNameController.text.trim();
+    final _phone = _phoneController.text.trim();
+
+    var _result;
+
+    if (_firstName != '' && _lastName != '' && _phone != '') {
+      final _appUser = AppUser(
+        firstName: _firstName,
+        lastName: _lastName,
+        phone: _phone,
+        accountType: accountType,
+      );
+
+      _result = await AuthProvider(
+        scaffoldKey: _scaffoldKey,
+        context: context,
+      ).signUpWithPhone('$_phone', _appUser);
+
+      if (_result != null) {
+        _showErrorMessage(_result);
       }
     } else {
       _scaffoldKey.currentState.showSnackBar(SnackBar(
@@ -208,7 +291,15 @@ class AuthVm extends ChangeNotifier {
             'User with that email not found. Please create an account with that email first.';
         break;
       case 'ERROR_WRONG_PASSWORD':
-        _errorText = 'The password you provided is not correct';
+        _errorText = 'The password you provided is not correct.';
+        break;
+      case 'USER_ALREADY_EXISTS':
+        _errorText =
+            'Phone number already in use. Please use a different number or try to login with that number.';
+        break;
+      case 'USER_DOESNOT_EXIST':
+        _errorText =
+            'User with that phone number not found. Please create an account with that number first.';
         break;
       default:
         _errorText = 'Unexpected error occured! Please try again.';
@@ -219,5 +310,28 @@ class AuthVm extends ChangeNotifier {
         '$_errorText',
       ),
     ));
+  }
+
+  // submit verification code
+  submitVerificationCode(
+      final String verificationId, final AppUser appUser) async {
+    if (_otpController.text.trim() != '') {
+      _updateProgressBar(true);
+      final _result = await AuthProvider(context: context)
+          .submitVerificationCode(
+              verificationId, _otpController.text.trim(), appUser);
+
+      if (_result != null) {
+        _updateProgressBar(false);
+        _scaffoldKey.currentState.showSnackBar(
+          SnackBar(
+            content: Text(_result.toString().contains(
+                    'The sms verification code used to create the phone auth credential is invalid. Please resend the verification code sms and be sure use the verification code provided by the user')
+                ? 'Invalid verification code.'
+                : '$_result'),
+          ),
+        );
+      }
+    }
   }
 }

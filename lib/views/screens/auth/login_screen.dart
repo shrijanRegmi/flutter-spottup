@@ -15,7 +15,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return VmProvider<AuthVm>(
-      vm: AuthVm(),
+      vm: AuthVm(context),
       builder: (context, vm, appUser) {
         return Scaffold(
           key: vm.scaffoldKey,
@@ -55,17 +55,15 @@ class LoginScreen extends StatelessWidget {
                                   SizedBox(
                                     height: 20.0,
                                   ),
-                                  _authContainerBuilder(
-                                      vm.emailController, vm.passController),
+                                  _authContainerBuilder(vm.phoneController),
                                   SizedBox(
-                                    height: 20.0,
+                                    height: 50.0,
                                   ),
-                                  _forgotPasswordTextBuilder(context),
-                                  SizedBox(
-                                    height: 20.0,
-                                  ),
-                                  _loginBtnBuilder(
-                                      vm.loginWithEmailAndPassword),
+                                  // _forgotPasswordTextBuilder(context),
+                                  // SizedBox(
+                                  //   height: 20.0,
+                                  // ),
+                                  _loginBtnBuilder(vm.logInWithPhone),
                                   SizedBox(
                                     height: 50.0,
                                   ),
@@ -118,7 +116,7 @@ class LoginScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
-          'or login with email',
+          'or login with phone',
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 12.0,
@@ -189,24 +187,15 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _authContainerBuilder(final TextEditingController _emailController,
-      final TextEditingController _passController) {
+  Widget _authContainerBuilder(final TextEditingController _phoneController) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20.0),
       child: Column(
         children: <Widget>[
           AuthField(
-            hintText: 'Your Email',
-            type: TextInputType.emailAddress,
-            controller: _emailController,
-          ),
-          SizedBox(
-            height: 20.0,
-          ),
-          AuthField(
-            hintText: 'Password',
-            isPassword: true,
-            controller: _passController,
+            hintText: 'Phone eg: 1234567890',
+            type: TextInputType.phone,
+            controller: _phoneController,
           ),
         ],
       ),
@@ -217,7 +206,7 @@ class LoginScreen extends StatelessWidget {
     return RoundedBtn(
       title: 'Login',
       padding: 0.0,
-      onPressed: () => loginUser(accountType: accountType),
+      onPressed: () => loginUser(accountType),
     );
   }
 }
