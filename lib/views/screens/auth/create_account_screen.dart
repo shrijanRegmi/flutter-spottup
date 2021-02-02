@@ -13,7 +13,7 @@ class CreateAccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return VmProvider<AuthVm>(
-      vm: AuthVm(),
+      vm: AuthVm(context),
       builder: (context, vm, appUser) {
         return Scaffold(
           key: vm.scaffoldKey,
@@ -58,7 +58,7 @@ class CreateAccountScreen extends StatelessWidget {
                                     height: 20.0,
                                   ),
                                   _singUpBtnBuilder(
-                                    vm.signUpWithEmailAndPassword,
+                                    vm.signUpWithPhone,
                                   ),
                                   SizedBox(
                                     height: 20.0,
@@ -112,7 +112,7 @@ class CreateAccountScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
-          'or sign up with email',
+          'or sign up with phone',
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 12.0,
@@ -145,25 +145,9 @@ class CreateAccountScreen extends StatelessWidget {
             height: 20.0,
           ),
           AuthField(
-            hintText: 'Phone Number',
+            hintText: 'Phone eg: 1234567890',
             type: TextInputType.phone,
             controller: vm.phoneController,
-          ),
-          SizedBox(
-            height: 20.0,
-          ),
-          AuthField(
-            hintText: 'Your Email',
-            type: TextInputType.emailAddress,
-            controller: vm.emailController,
-          ),
-          SizedBox(
-            height: 20.0,
-          ),
-          AuthField(
-            hintText: 'Password',
-            isPassword: true,
-            controller: vm.passController,
           ),
         ],
       ),
@@ -183,7 +167,7 @@ class CreateAccountScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
-          'By signing up, you agreed with our terms of\nServices and Privacy Policy',
+          'By signing up, you agreed with our Terms Of\nServices and Privacy Policy.',
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 12.0,

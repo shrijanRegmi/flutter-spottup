@@ -125,7 +125,7 @@ class ProfileTab extends StatelessWidget {
                       ),
                     ),
                   )
-                : appUser.photoUrl == null
+                : appUser?.photoUrl == null
                     ? Container(
                         width: _width,
                         height: _width,
@@ -216,7 +216,7 @@ class ProfileTab extends StatelessWidget {
         _editProfileItem(
           context,
           'Phone',
-          appUser.phone == 0 ? 'N/A' : appUser.phone.toString(),
+          appUser.phone == '0' ? 'N/A' : appUser.phone.toString(),
           TextInputType.phone,
           vm.phoneController,
           vm.update,
@@ -256,7 +256,7 @@ class ProfileTab extends StatelessWidget {
       {final Function openDatePicker}) {
     return GestureDetector(
       onTap: () {
-        if (title != 'Email') {
+        if (title != 'Email' && title != 'Phone') {
           if (openDatePicker != null) {
             return openDatePicker();
           }
@@ -283,11 +283,11 @@ class ProfileTab extends StatelessWidget {
                           fontSize: 12.0,
                         ),
                       ),
-                      if (title != 'Email')
+                      if (title != 'Email' && title != 'Phone')
                         SizedBox(
                           width: 5.0,
                         ),
-                      if (title != 'Email')
+                      if (title != 'Email' && title != 'Phone')
                         Icon(
                           Icons.edit,
                           size: 14.0,

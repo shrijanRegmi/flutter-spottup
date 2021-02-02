@@ -9,7 +9,7 @@ class AppUser {
   String uid;
   final String email;
   final String photoUrl;
-  final int phone;
+  final String phone;
   final int dob;
   final String address;
   final List<dynamic> upcoming;
@@ -49,9 +49,9 @@ class AppUser {
       uid: data['uid'] ?? '',
       firstName: data['first_name'] ?? '',
       lastName: data['last_name'] ?? '',
-      email: data['email'] ?? '',
+      email: data['email'] ?? 'N/A',
       photoUrl: data['photo_url'] != '' ? data['photo_url'] : null,
-      phone: data['phone'] ?? 0,
+      phone: data['phone'] ?? '0',
       dob: data['dob'] ?? 0,
       address: data['address'] ?? 'N/A',
       upcoming: data['upcoming'] ?? [],

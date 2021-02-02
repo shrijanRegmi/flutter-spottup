@@ -288,7 +288,7 @@ class PaymentScreenshotScreen extends StatelessWidget {
                       ),
                       TextSpan(
                         text:
-                            'username: ${_user.firstName} ${_user.lastName} | email: ${_user.email} | phone: ${_user.phone == 0 ? 'N/A' : _user.phone}',
+                            'username: ${_user.firstName} ${_user.lastName} | email: ${_user.email} | phone: ${_user.phone == '0' ? 'N/A' : _user.phone}',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
