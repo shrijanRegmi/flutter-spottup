@@ -34,10 +34,8 @@ class NotificationsListItem extends StatelessWidget {
         _notifWidget = _vehicleNotifBuilder(_appUser);
         break;
       default:
-        _notifWidget = _hotelNotifBuilder(_appUser);
+        _notifWidget = _withDrawNotifBuilder(_appUser);
     }
-
-    _notifWidget = _hotelNotifBuilder(_appUser);
 
     return GestureDetector(
       onTap: () {
@@ -90,6 +88,81 @@ class NotificationsListItem extends StatelessWidget {
           width: 10.0,
         ),
         _detailsBuilder(notification.service, _appUser, notification.user),
+      ],
+    );
+  }
+
+  Widget _withDrawNotifBuilder(final AppUser _appUser) {
+    return Row(
+      children: [
+        notification.user.photoUrl == null
+            ? Container(
+                width: 55.0,
+                height: 55.0,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                ),
+                child: SvgPicture.asset(
+                  'assets/svgs/upload_img.svg',
+                  fit: BoxFit.cover,
+                ),
+              )
+            : Container(
+                width: 55.0,
+                height: 55.0,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: CachedNetworkImageProvider(
+                      notification.user.photoUrl,
+                    ),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+        SizedBox(
+          width: 10.0,
+        ),
+        Expanded(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Earnings Withdraw',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14.0,
+                      ),
+                    ),
+                    Text(
+                      '${notification.user.firstName} ${notification.user.lastName} wants to withdraw his Rs ${notification.amount}.',
+                      style: TextStyle(
+                        fontSize: 12.0,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: 20.0,
+              ),
+              notification.admin
+                  ? Icon(
+                      Icons.star,
+                      size: 20.0,
+                    )
+                  : Icon(
+                      Icons.arrow_forward_ios,
+                      size: 20.0,
+                    ),
+            ],
+          ),
+        ),
       ],
     );
   }

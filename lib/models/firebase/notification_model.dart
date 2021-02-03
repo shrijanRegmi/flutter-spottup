@@ -15,6 +15,9 @@ class AppNotification {
   final int lastUpdated;
   final String bookingId;
   final bool admin;
+  final String amount;
+  final String easyPaisaNum;
+  final String bankAccountNum;
 
   AppNotification({
     this.id,
@@ -26,12 +29,15 @@ class AppNotification {
     this.lastUpdated,
     this.bookingId,
     this.admin,
+    this.amount,
+    this.easyPaisaNum,
+    this.bankAccountNum,
   });
 
   static AppNotification fromJson(final Map<String, dynamic> data) {
     return AppNotification(
       id: data['id'],
-      service: _getService(data['booking_for'] ?? 0, data),
+      service: _getService(data['booking_for'], data),
       user: AppUser.fromJson(data['user_data']),
       isRead: data['is_read'] ?? false,
       lastUpdated:
@@ -39,7 +45,10 @@ class AppNotification {
       type: _gettype(data['type'] ?? 0),
       bookingId: data['booking_id'] ?? '',
       admin: data['admin'] ?? false,
-      bookingFor: _getBookingFortype(data['booking_for'] ?? 0),
+      amount: data['amount'],
+      easyPaisaNum: data['easy_paisa'],
+      bankAccountNum: data['bank_account_num'],
+      bookingFor: _getBookingFortype(data['booking_for']),
     );
   }
 }
@@ -57,6 +66,9 @@ NotificationType _gettype(final type) {
       break;
     case 3:
       return NotificationType.paymentReceived;
+      break;
+    case 4:
+      return NotificationType.withdraw;
       break;
     default:
       return NotificationType.accepted;
@@ -76,7 +88,7 @@ BookingForType _getBookingFortype(final type) {
       return BookingForType.vehicle;
       break;
     default:
-      return BookingForType.hotel;
+      return BookingForType.none;
       break;
   }
 }
@@ -93,7 +105,7 @@ _getService(final type, final data) {
       return Vehicle.fromJson(data['vehicle_data']);
       break;
     default:
-      return Hotel.fromJson(data['hotel_data']);
+      return null;
       break;
   }
 }

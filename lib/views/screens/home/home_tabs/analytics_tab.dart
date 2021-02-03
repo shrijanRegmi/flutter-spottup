@@ -4,6 +4,7 @@ import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/viewmodels/analytics_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/widgets/analytics_widgets/analytics_users_list.dart';
+import 'package:motel/views/widgets/analytics_widgets/withdraw_earnings_screen.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 import 'package:provider/provider.dart';
 
@@ -31,7 +32,7 @@ class AnalyticsTab extends StatelessWidget {
                           SizedBox(
                             height: 20.0,
                           ),
-                          _titleBuilder(),
+                          _titleBuilder(context, appUser),
                           SizedBox(
                             height: 20.0,
                           ),
@@ -75,15 +76,38 @@ class AnalyticsTab extends StatelessWidget {
     );
   }
 
-  Widget _titleBuilder() {
+  Widget _titleBuilder(final BuildContext context, final AppUser appUser) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Text(
-        'Invite Friends',
-        style: TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 22.0,
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Invite Friends',
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 22.0,
+            ),
+          ),
+          if (appUser.earnings > 0)
+            TextButton(
+              child: Text(
+                'Withdraw',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => WithdrawEarningScreen(),
+                  ),
+                );
+              },
+            ),
+        ],
       ),
     );
   }

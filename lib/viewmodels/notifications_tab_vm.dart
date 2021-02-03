@@ -17,6 +17,7 @@ import 'package:motel/views/screens/home/open_vehicle_booking_item_screen.dart';
 import 'package:motel/views/screens/home/payment_screenshot_screen.dart';
 import 'package:motel/views/screens/home/tour_payment_screenshot_screen.dart';
 import 'package:motel/views/screens/home/vehicle_payment_screenshot_screen.dart';
+import 'package:motel/views/widgets/notifications_tab_widgets/view_withdraw_screen.dart';
 import 'package:provider/provider.dart';
 
 class NotificationTabVm extends ChangeNotifier {
@@ -50,6 +51,9 @@ class NotificationTabVm extends ChangeNotifier {
         break;
       case NotificationType.paymentReceived:
         navigateToPaymentScreenshotScreen(notification, bookingsList);
+        break;
+      case NotificationType.withdraw:
+        navigateToViewWithdraw(notification);
         break;
       default:
     }
@@ -399,6 +403,16 @@ class NotificationTabVm extends ChangeNotifier {
     }
 
     updateLoadingVal(false);
+  }
+
+  // goto view withdraw screen
+  navigateToViewWithdraw(final AppNotification notification) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ViewWithdrawRequestScreen(notification),
+      ),
+    );
   }
 
   // update value of loading

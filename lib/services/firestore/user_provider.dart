@@ -125,6 +125,7 @@ class UserProvider {
     }
   }
 
+  // confirm tour booking
   Future confirmTourBooking(final ConfirmTourBooking booking) async {
     try {
       final _bookingRef = _ref.collection('bookings').doc();
@@ -140,6 +141,7 @@ class UserProvider {
     }
   }
 
+  // confirm vehicle booking
   Future confirmVehicleBooking(final ConfirmVehicleBooking booking) async {
     try {
       final _bookingRef = _ref.collection('bookings').doc();
@@ -190,6 +192,32 @@ class UserProvider {
       print('Error!!!: Paying to user $uid');
       print(e);
       return null;
+    }
+  }
+
+  // withdraw payment
+  Future withdrawPayment(final String amount, final String easyPaisa,
+      final String bankAccountNum) async {
+    try {
+      final _paymentWithdrawRef = _ref.collection('withdraws');
+
+      await _paymentWithdrawRef.add({
+        'amount': amount,
+        'uid': uid,
+        'easy_paisa': easyPaisa,
+        'bank_account_num': bankAccountNum,
+        'updated_at': DateTime.now().millisecondsSinceEpoch,
+      });
+
+      await updateUserData({
+        'earnings': FieldValue.increment(-int.parse(amount)),
+      });
+
+      print('Success: Withdrawing amount of user $uid');
+      return 'Success';
+    } catch (e) {
+      print(e);
+      print('Error!!!: Withdrawing amount of user $uid');
     }
   }
 
@@ -266,7 +294,10 @@ class UserProvider {
   // notifications from firebase
   List<AppNotification> _notificationFromFirebase(QuerySnapshot colSnap) {
     return colSnap.docs
-        .map((doc) => AppNotification.fromJson(doc.data()))
+        .map((doc) {
+          print(doc.data());
+          return AppNotification.fromJson(doc.data());
+        })
         .toList();
   }
 

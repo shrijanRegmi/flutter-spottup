@@ -3,4 +3,5 @@ enum NotificationType {
   declined,
   bookingReceived,
   paymentReceived,
+  withdraw,
 }
