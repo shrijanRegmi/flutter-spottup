@@ -25,40 +25,42 @@ class HotelRoomItem extends StatelessWidget {
           onPressed(room);
         }
       },
-      child: Padding(
-        padding: const EdgeInsets.only(right: 20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Container(
-                width: smallImg ? 100.0 : 150.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  image: DecorationImage(
-                    image: CachedNetworkImageProvider(room.dp),
-                    fit: BoxFit.cover,
+      child: Container(
+        width: smallImg ? 100.0 : 200.0,
+        child: Padding(
+          padding: const EdgeInsets.only(right: 20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    image: DecorationImage(
+                      image: CachedNetworkImageProvider(room.dp),
+                      fit: BoxFit.cover,
+                    ),
+                    color: Colors.green[100],
                   ),
-                  color: Colors.green[100],
                 ),
               ),
-            ),
-            SizedBox(
-              height: 5.0,
-            ),
-            Text(
-              room.name,
-              style: TextStyle(
-                fontSize: smallImg ? 12.0 : 14.0,
+              SizedBox(
+                height: 5.0,
               ),
-            ),
-            Text(
-              'Rs ${room.price}',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
+              Text(
+                room.name,
+                style: TextStyle(
+                  fontSize: smallImg ? 12.0 : 14.0,
+                ),
               ),
-            ),
-          ],
+              Text(
+                'Rs ${room.price}',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

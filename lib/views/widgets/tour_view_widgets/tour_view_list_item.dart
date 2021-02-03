@@ -30,7 +30,7 @@ class TourViewListItem extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(bottom: 20.0, left: 20.0, right: 20.0),
         child: Container(
-          height: 120.0,
+          height: 140.0,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
@@ -88,82 +88,94 @@ class TourViewListItem extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  tour.name,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14.0,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    tour.name,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14.0,
+                    ),
                   ),
-                ),
-                Text(
-                  '${tour.days} days, ${tour.nights} nights',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black26,
-                    fontSize: 12.0,
+                  Text(
+                    '${tour.days} days, ${tour.nights} nights',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black26,
+                      fontSize: 12.0,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              '${DateHelper().getFormattedDate(tour.start)} - ${DateHelper().getFormattedDate(tour.end)}',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 12.0,
-                                color: Colors.black26,
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                '${DateHelper().getFormattedDate(tour.start)} - ${DateHelper().getFormattedDate(tour.end)}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 12.0,
+                                  color: Colors.black26,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 5.0,
-                      ),
-                      Container(
-                        width: 100.0,
-                        child: StarRatings(
-                          ratings: 3.0,
+                          ],
                         ),
-                      ),
-                    ],
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Container(
+                          width: 100.0,
+                          child: StarRatings(
+                            ratings: 3.0,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    Text(
-                      'Rs ${tour.price}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16.0,
-                      ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Text(
+                          'Rs ${tour.price}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                        Text(
+                          '/per person',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black26,
+                            fontSize: 12.0,
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      '/per person',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black26,
-                        fontSize: 12.0,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),
