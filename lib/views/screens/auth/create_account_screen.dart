@@ -145,7 +145,7 @@ class CreateAccountScreen extends StatelessWidget {
             height: 20.0,
           ),
           AuthField(
-            hintText: 'Phone eg: 1234567890',
+            hintText: 'Phone eg: +921234567890',
             type: TextInputType.phone,
             controller: vm.phoneController,
           ),
