@@ -21,8 +21,6 @@ class AuthProvider {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final _ref = FirebaseFirestore.instance;
 
-  final _phoneCode = '+977';
-
   // sign in with phone
   Future signUpWithPhone(final String phoneNum, final AppUser appUser) async {
     try {
@@ -34,7 +32,7 @@ class AuthProvider {
 
       if (_userSnap.docs.isEmpty) {
         await _auth.verifyPhoneNumber(
-          phoneNumber: _phoneCode + phoneNum,
+          phoneNumber: phoneNum,
           verificationCompleted: (cred) async {
             final _result = await _auth.signInWithCredential(cred);
             final _user = _result.user;
@@ -84,7 +82,7 @@ class AuthProvider {
 
       if (_userSnap.docs.isNotEmpty) {
         await _auth.verifyPhoneNumber(
-          phoneNumber: _phoneCode + phoneNum,
+          phoneNumber: phoneNum,
           verificationCompleted: (cred) async {
             final _result = await _auth.signInWithCredential(cred);
             final _user = _result.user;

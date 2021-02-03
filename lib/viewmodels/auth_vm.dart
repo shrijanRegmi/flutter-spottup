@@ -111,25 +111,33 @@ class AuthVm extends ChangeNotifier {
   Future logInWithPhone(
     final AccountType accountType,
   ) async {
-    _updateProgressBar(true);
-
     final _phone = _phoneController.text.trim();
 
     var _result;
 
     if (_phone != '') {
-      final _appUser = AppUser(
-        phone: _phone,
-        accountType: accountType,
-      );
+      if (_phone.contains('+')) {
+        _updateProgressBar(true);
 
-      _result = await AuthProvider(
-        scaffoldKey: _scaffoldKey,
-        context: context,
-      ).logInWithPhone('$_phone', _appUser);
+        final _appUser = AppUser(
+          phone: _phone,
+          accountType: accountType,
+        );
 
-      if (_result != null) {
-        _showErrorMessage(_result);
+        _result = await AuthProvider(
+          scaffoldKey: _scaffoldKey,
+          context: context,
+        ).logInWithPhone('$_phone', _appUser);
+
+        if (_result != null) {
+          _showErrorMessage(_result);
+        }
+      } else {
+        _scaffoldKey.currentState.showSnackBar(SnackBar(
+          content: Text(
+            'Your phone number is missing "+" sign. Please provide a valid phone number along with proper country code.',
+          ),
+        ));
       }
     } else {
       _scaffoldKey.currentState.showSnackBar(SnackBar(
@@ -148,8 +156,6 @@ class AuthVm extends ChangeNotifier {
   Future signUpWithPhone(
     final AccountType accountType,
   ) async {
-    _updateProgressBar(true);
-
     final _firstName = _firstNameController.text.trim();
     final _lastName = _lastNameController.text.trim();
     final _phone = _phoneController.text.trim();
@@ -157,20 +163,30 @@ class AuthVm extends ChangeNotifier {
     var _result;
 
     if (_firstName != '' && _lastName != '' && _phone != '') {
-      final _appUser = AppUser(
-        firstName: _firstName,
-        lastName: _lastName,
-        phone: _phone,
-        accountType: accountType,
-      );
+      if (_phone.contains('+')) {
+        _updateProgressBar(true);
 
-      _result = await AuthProvider(
-        scaffoldKey: _scaffoldKey,
-        context: context,
-      ).signUpWithPhone('$_phone', _appUser);
+        final _appUser = AppUser(
+          firstName: _firstName,
+          lastName: _lastName,
+          phone: _phone,
+          accountType: accountType,
+        );
 
-      if (_result != null) {
-        _showErrorMessage(_result);
+        _result = await AuthProvider(
+          scaffoldKey: _scaffoldKey,
+          context: context,
+        ).signUpWithPhone('$_phone', _appUser);
+
+        if (_result != null) {
+          _showErrorMessage(_result);
+        }
+      } else {
+        _scaffoldKey.currentState.showSnackBar(SnackBar(
+          content: Text(
+            'Your phone number is missing "+" sign. Please provide a valid phone number along with proper country code.',
+          ),
+        ));
       }
     } else {
       _scaffoldKey.currentState.showSnackBar(SnackBar(

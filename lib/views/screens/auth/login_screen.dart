@@ -127,34 +127,34 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _forgotPasswordTextBuilder(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: <Widget>[
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => ForgotPasswordScreen(),
-              ),
-            );
-          },
-          child: Container(
-            color: Colors.transparent,
-            child: Text(
-              'Forgot Password ?',
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 14.0,
-                color: Colors.black38,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+  // Widget _forgotPasswordTextBuilder(BuildContext context) {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.end,
+  //     children: <Widget>[
+  //       GestureDetector(
+  //         onTap: () {
+  //           Navigator.push(
+  //             context,
+  //             MaterialPageRoute(
+  //               builder: (_) => ForgotPasswordScreen(),
+  //             ),
+  //           );
+  //         },
+  //         child: Container(
+  //           color: Colors.transparent,
+  //           child: Text(
+  //             'Forgot Password ?',
+  //             style: TextStyle(
+  //               fontWeight: FontWeight.w600,
+  //               fontSize: 14.0,
+  //               color: Colors.black38,
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget _signUpTextBuilder(BuildContext context) {
     return GestureDetector(
@@ -193,7 +193,7 @@ class LoginScreen extends StatelessWidget {
       child: Column(
         children: <Widget>[
           AuthField(
-            hintText: 'Phone eg: 1234567890',
+            hintText: 'Phone eg: +921234567890',
             type: TextInputType.phone,
             controller: _phoneController,
           ),
