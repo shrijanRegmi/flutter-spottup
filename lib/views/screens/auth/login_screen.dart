@@ -4,7 +4,6 @@ import 'package:motel/enums/account_type.dart';
 import 'package:motel/viewmodels/auth_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
 import 'package:motel/views/screens/auth/create_account_screen.dart';
-import 'package:motel/views/screens/auth/forget_password_screen.dart';
 import 'package:motel/views/widgets/auth_widgets/auth_field.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 
