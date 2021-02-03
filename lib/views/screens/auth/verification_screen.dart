@@ -9,7 +9,8 @@ import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 class PhoneVerificationScreen extends StatelessWidget {
   final String verificationId;
   final AppUser user;
-  PhoneVerificationScreen(this.verificationId, this.user);
+  final bool isSignUp;
+  PhoneVerificationScreen(this.verificationId, this.user, this.isSignUp);
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +64,7 @@ class PhoneVerificationScreen extends StatelessWidget {
                             onPressed: () => vm.submitVerificationCode(
                               verificationId,
                               user,
+                              isSignUp,
                             ),
                           ),
                         ],
