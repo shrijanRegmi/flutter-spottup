@@ -15,7 +15,13 @@ class PaymentScreenshotScreen extends StatelessWidget {
   final ConfirmHotelBooking booking;
   final Hotel hotel;
   final AppUser user;
-  PaymentScreenshotScreen(this.booking, this.hotel, this.user);
+  final bool admin;
+  PaymentScreenshotScreen(
+    this.booking,
+    this.hotel,
+    this.user,
+    this.admin,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -65,11 +71,13 @@ class PaymentScreenshotScreen extends StatelessWidget {
                                     ),
                                     if (user.invitationFrom != null &&
                                         user.invitationFrom.bookingId ==
-                                            booking.bookingId)
+                                            booking.bookingId &&
+                                        admin)
                                       _invitationFromBuilder(context, vm),
                                     if (user.invitationFrom != null &&
                                         user.invitationFrom.bookingId ==
-                                            booking.bookingId)
+                                            booking.bookingId &&
+                                        admin)
                                       SizedBox(
                                         height: 20.0,
                                       ),

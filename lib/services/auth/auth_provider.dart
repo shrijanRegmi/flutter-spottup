@@ -39,7 +39,6 @@ class AuthProvider {
 
             appUser.uid = _user.uid;
             await UserProvider().sendUserToFirestore(appUser, _result.user.uid);
-            await DynamicLinkProvider(_user.uid).handleDynamicLinks();
             _userFromFirebase(_user);
             print('Success: Signing up user with name ${appUser.firstName}');
           },
@@ -53,7 +52,7 @@ class AuthProvider {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => PhoneVerificationScreen(id, appUser),
+                builder: (_) => PhoneVerificationScreen(id, appUser, true),
               ),
             );
           },
@@ -107,7 +106,7 @@ class AuthProvider {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => PhoneVerificationScreen(id, appUser),
+                builder: (_) => PhoneVerificationScreen(id, appUser, false),
               ),
             );
           },
@@ -149,7 +148,6 @@ class AuthProvider {
 
         appUser.uid = _user.uid;
         await UserProvider().sendUserToFirestore(appUser, _result.user.uid);
-        await DynamicLinkProvider(_user.uid).handleDynamicLinks();
         _userFromFirebase(_user);
         print('Success: Signing up user with name ${appUser.firstName}');
       } else {

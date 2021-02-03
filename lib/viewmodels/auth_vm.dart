@@ -329,8 +329,8 @@ class AuthVm extends ChangeNotifier {
   }
 
   // submit verification code
-  submitVerificationCode(
-      final String verificationId, final AppUser appUser) async {
+  submitVerificationCode(final String verificationId, final AppUser appUser,
+      final bool isSignUp) async {
     if (_otpController.text.trim() != '') {
       _updateProgressBar(true);
       final _result = await AuthProvider(context: context)
@@ -347,6 +347,10 @@ class AuthVm extends ChangeNotifier {
                 : '$_result'),
           ),
         );
+      } else {
+        if (isSignUp) {
+          await DynamicLinkProvider(appUser.uid).handleDynamicLinks();
+        }
       }
     }
   }

@@ -250,6 +250,7 @@ class FirebaseMessagingProvider {
                 _booking,
                 _hotel,
                 _appUser,
+                false,
               ),
             ),
           );

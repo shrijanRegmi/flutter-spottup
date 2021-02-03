@@ -357,6 +357,7 @@ class NotificationTabVm extends ChangeNotifier {
                 _booking,
                 _hotel,
                 _appUser,
+                notification.admin,
               ),
             ),
           );
