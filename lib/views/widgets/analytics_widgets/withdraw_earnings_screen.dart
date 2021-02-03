@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:motel/models/firebase/user_model.dart';
-import 'package:motel/viewmodels/auth_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
+import 'package:motel/models/firebase/user_model.dart';
+import 'package:motel/viewmodels/withdraw_vm.dart';
 import 'package:motel/views/widgets/auth_widgets/auth_field.dart';
 import 'package:motel/views/widgets/common_widgets/rounded_btn.dart';
 
-class PhoneVerificationScreen extends StatelessWidget {
-  final String verificationId;
-  final AppUser user;
-  PhoneVerificationScreen(this.verificationId, this.user);
-
+class WithdrawEarningScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return VmProvider<AuthVm>(
-      vm: AuthVm(context),
+    return VmProvider<WithdrawVm>(
+      vm: WithdrawVm(context),
       builder: (context, vm, appUser) {
         return Scaffold(
-          key: vm.scaffoldKey,
+          key: vm.scaffoldState,
           body: SafeArea(
             child: vm.showingProgressBar
                 ? Center(
@@ -43,13 +39,30 @@ class PhoneVerificationScreen extends StatelessWidget {
                                 SizedBox(
                                   height: 10.0,
                                 ),
-                                _detailsBuilder(vm),
+                                _detailsBuilder(appUser),
                                 SizedBox(
                                   height: 30.0,
                                 ),
                                 AuthField(
-                                  hintText: 'Your OTP code',
-                                  controller: vm.otpController,
+                                  hintText: 'Easy Paisa Number',
+                                  controller: vm.easyPaisa,
+                                  type: TextInputType.number,
+                                ),
+                                SizedBox(
+                                  height: 20.0,
+                                ),
+                                AuthField(
+                                  hintText: 'Bank Account Number',
+                                  controller: vm.bankAccountNum,
+                                  type: TextInputType.number,
+                                ),
+                                SizedBox(
+                                  height: 20.0,
+                                ),
+                                AuthField(
+                                  hintText:
+                                      'Your amount (max Rs ${appUser.earnings})',
+                                  controller: vm.amountController,
                                   type: TextInputType.number,
                                 ),
                                 SizedBox(
@@ -59,11 +72,8 @@ class PhoneVerificationScreen extends StatelessWidget {
                             ),
                           ),
                           RoundedBtn(
-                            title: 'Done',
-                            onPressed: () => vm.submitVerificationCode(
-                              verificationId,
-                              user,
-                            ),
+                            title: 'Withdraw',
+                            onPressed: () => vm.withdrawAmount(appUser),
                           ),
                         ],
                       ),
@@ -78,16 +88,13 @@ class PhoneVerificationScreen extends StatelessWidget {
   Widget _appbarBuilder(BuildContext context) {
     return IconButton(
       icon: Icon(Icons.arrow_back),
-      onPressed: () {
-        Navigator.pop(context);
-        Navigator.pop(context);
-      },
+      onPressed: () => Navigator.pop(context),
     );
   }
 
   Widget _verificationTextBuilder() {
     return Text(
-      'Phone Verification',
+      'Withdraw Earnings',
       style: TextStyle(
         fontWeight: FontWeight.w600,
         fontSize: 22.0,
@@ -95,9 +102,9 @@ class PhoneVerificationScreen extends StatelessWidget {
     );
   }
 
-  Widget _detailsBuilder(final AuthVm vm) {
+  Widget _detailsBuilder(final AppUser appUser) {
     return Text(
-      'Please enter your OTP code sent on number ${user.phone}',
+      'Please enter the amount you want to withdraw along with your easy paisa number OR bank account number. Your payment will be processed after Spott Up team reviews it.',
       style: TextStyle(
         fontWeight: FontWeight.w600,
         fontSize: 14.0,
