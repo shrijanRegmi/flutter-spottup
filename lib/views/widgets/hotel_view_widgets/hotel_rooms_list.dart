@@ -46,7 +46,7 @@ class HotelRoomsList extends StatelessWidget {
 
   Widget _roomsList(context, data) {
     return Container(
-      height: smallImg ? 120.0 : 180.0,
+      height: smallImg ? 160.0 : 230,
       width: MediaQuery.of(context).size.width,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
