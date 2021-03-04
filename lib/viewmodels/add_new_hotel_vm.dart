@@ -7,7 +7,6 @@ import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/services/firestore/hotel_provider.dart';
 import 'package:motel/services/storage/hotel_storage_service.dart';
 import 'package:motel/models/app/hotel_features.dart';
-import 'package:motel/views/widgets/hotels_tab_widgets/add_new_room.dart';
 
 class AddNewHotelVm extends ChangeNotifier {
   bool _isNextPressed = false;
@@ -33,6 +32,7 @@ class AddNewHotelVm extends ChangeNotifier {
   List<HotelFeatures> _selectedFeatures = [];
   bool _isEditing = false;
   ScrollController _scrollController = ScrollController();
+  List<Hotel> _deletedRooms = [];
 
   TextEditingController get nameController => _nameController;
   TextEditingController get cityController => _cityController;
@@ -57,6 +57,7 @@ class AddNewHotelVm extends ChangeNotifier {
   List<HotelFeatures> get selectedFeatures => _selectedFeatures;
   bool get isEditing => _isEditing;
   ScrollController get scrollController => _scrollController;
+  List<Hotel> get deletedRooms => _deletedRooms;
 
   // next btn pressed
   onNextPressed(bool newVal) {
@@ -208,7 +209,7 @@ class AddNewHotelVm extends ChangeNotifier {
           ownerId: hotel.ownerId,
           kids: hotel.kids,
           adults: hotel.adults,
-          rooms: hotel.rooms,
+          rooms: _rooms.length,
           features: _existingFeatures,
           searchKey: hotel.searchKey,
           name: _nameController.text.trim(),
@@ -220,29 +221,14 @@ class AddNewHotelVm extends ChangeNotifier {
 
         final _data = _updatedHotel.toJson();
 
-        _data.removeWhere((key, value) =>
-            value == hotel.searchKey ||
-            value == hotel.id ||
-            value == hotel.dp ||
-            value == hotel.photos ||
-            value == hotel.ownerId ||
-            value == hotel.kids ||
-            value == hotel.adults ||
-            value == hotel.rooms ||
-            value == hotel.photos ||
-            value == hotel.features ||
-            value == hotel.name ||
-            value == hotel.city ||
-            value == hotel.country ||
-            value == hotel.price ||
-            value == hotel.summary);
-
         var _result =
             await HotelProvider(hotelId: hotel.id).updateHotelData(_data);
 
         if (_rooms.isNotEmpty) {
           _result = await _updateRooms(_result);
         }
+
+        await _deleteRooms(hotel);
 
         if (_result == null) {
           _updateLoaderValue(false);
@@ -382,12 +368,12 @@ class AddNewHotelVm extends ChangeNotifier {
         _rooms.add(_room);
         Navigator.pop(context);
         vm.clearControllers();
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => AddNewRoom(vm, null, 0),
-          ),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (_) => AddNewRoom(vm, null, 0),
+        //   ),
+        // );
         _scrollController.animateTo(0,
             duration: Duration(milliseconds: 500), curve: Curves.ease);
       } else {
@@ -482,6 +468,11 @@ class AddNewHotelVm extends ChangeNotifier {
   removeRoom(final Hotel room) {
     _rooms.remove(room);
     notifyListeners();
+
+    if (_isEditing) {
+      final _rooms = [..._deletedRooms, room];
+      updateDeletedRooms(_rooms);
+    }
   }
 
   // add features
@@ -578,5 +569,21 @@ class AddNewHotelVm extends ChangeNotifier {
       _list.add(element.path);
     });
     return _list;
+  }
+
+  // update value of deleted rooms
+  updateDeletedRooms(final List<Hotel> newVal) {
+    _deletedRooms = newVal;
+
+    notifyListeners();
+  }
+
+  // delete room
+  _deleteRooms(final Hotel hotel) async {
+    for (var room in _deletedRooms) {
+      if (room.id != null) {
+        await HotelProvider().deleteRoom(hotel.id, room.id);
+      }
+    }
   }
 }

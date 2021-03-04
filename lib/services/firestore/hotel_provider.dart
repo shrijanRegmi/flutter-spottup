@@ -67,6 +67,22 @@ class HotelProvider {
     }
   }
 
+  // delele room
+  Future deleteRoom(final String _hotelId, final String _roomId) async {
+    try {
+      final _hotelRef = _ref.collection('hotels').doc(_hotelId);
+      final _roomRef = _hotelRef.collection('rooms').doc(_roomId);
+
+      await _roomRef.delete();
+      print('Success: Deleting room with id $_roomId');
+      return 'Success';
+    } catch (e) {
+      print(e);
+      print('Error!!!: Deleting room with id $_roomId');
+      return null;
+    }
+  }
+
   // update booking data
   Future updateBookingData(
       final Map<String, dynamic> data, final String id) async {
