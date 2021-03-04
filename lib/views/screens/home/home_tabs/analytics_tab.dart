@@ -165,9 +165,31 @@ class AnalyticsTab extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Invite friends to join you on Spott Up. When they book something for the first time, you will be prized.',
+            "Invite friends and your contacts and become 50% life time partner. Whenever your friends book any service, you will always get 50% of that net revenue. Be clear it's 50% of the revenue coming to the company through your shared link, not the percentage of the booking amount.",
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
+          Text(
+            "1. After login, Share the link to all your contacts from the earning screen.",
+          ),
+          Text(
+            "2. You can see who installed the App and who booked the service. We handle the rest.",
+          ),
+          Text(
+            "3. You get earning statistics in earning screen when any of your friend book any service.",
+          ),
+          Text(
+            "4. Withdraw through Easy Paisa or Bank Account.",
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
+          Text(
+            "Share more to earn more.",
           ),
           SizedBox(
             height: 10.0,

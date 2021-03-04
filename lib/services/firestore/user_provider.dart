@@ -7,6 +7,7 @@ import 'package:motel/models/firebase/notification_model.dart';
 import 'package:motel/models/firebase/payment_model.dart';
 import 'package:motel/models/firebase/upcomming_bookings_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
+import 'package:motel/services/dynamic_link_provider.dart';
 
 class UserProvider {
   final String uid;
@@ -21,7 +22,8 @@ class UserProvider {
       final _userRef = _ref.collection('users').doc(uid);
 
       print('Success: Sending user data to firestore');
-      return await _userRef.set(appUser.toJson());
+      await _userRef.set(appUser.toJson());
+      await DynamicLinkProvider(uid).handleDynamicLinks();
     } catch (e) {
       print(e);
       print('Error!!!: Sending user data to firestore');

@@ -7,8 +7,6 @@ import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/services/firestore/user_provider.dart';
 import 'package:motel/views/screens/auth/verification_screen.dart';
 
-import '../dynamic_link_provider.dart';
-
 class AuthProvider {
   final GlobalKey<ScaffoldState> scaffoldKey;
   final BuildContext context;
@@ -252,7 +250,6 @@ class AuthProvider {
 
       if (_userSnap.data() == null) {
         await UserProvider().sendUserToFirestore(_appUser, _result.user.uid);
-        await DynamicLinkProvider(_appUser.uid).handleDynamicLinks();
         _userFromFirebase(_user);
         print('Success: Signing up user with name ${_user.displayName}');
       } else {
