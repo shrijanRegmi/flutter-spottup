@@ -53,7 +53,7 @@ class HotelRoomItem extends StatelessWidget {
                 ),
               ),
               Text(
-                'Rs ${room.price}',
+                'Rs ${room.getPrice()}',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),

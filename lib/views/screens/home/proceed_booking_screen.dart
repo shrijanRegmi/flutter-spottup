@@ -82,15 +82,16 @@ class ProceedBookingScreen extends StatelessWidget {
                                       RoundedBtn(
                                         title: 'Confirm Booking',
                                         onPressed: () {
-                                          int _total = 0;
-
+                                          int _price = 0;
                                           if (rooms.isNotEmpty) {
                                             for (final room in rooms) {
-                                              _total += room.price;
+                                              _price += room.price;
                                             }
                                           } else {
-                                            _total = hotel.price * days;
+                                            _price =
+                                                int.parse(hotel.getPrice());
                                           }
+                                          final _total = _price * days;
 
                                           final _booking = ConfirmHotelBooking(
                                             hotelRef: hotel.toRef(),
@@ -130,7 +131,8 @@ class ProceedBookingScreen extends StatelessWidget {
     List<Widget> _list = [];
     for (final room in rooms) {
       _list.add(
-        Text('${room.roomName}: ${room.adult} Adults, ${room.kid} Kids - ${room.rooms} ${room.rooms != 1 ? 'Rooms' : 'Room'}'),
+        Text(
+            '${room.roomName}: ${room.adult} Adults, ${room.kid} Kids - ${room.rooms} ${room.rooms != 1 ? 'Rooms' : 'Room'}'),
       );
     }
     return _list;
@@ -265,7 +267,7 @@ class ProceedBookingScreen extends StatelessWidget {
         _price += room.price;
       }
     } else {
-      _price = hotel.price;
+      _price = int.parse(hotel.getPrice());
     }
     final _total = _price * days;
     return Row(

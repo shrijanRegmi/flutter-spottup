@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:motel/helpers/date_helper.dart';
+import 'package:motel/models/app/tour_types.dart';
 import 'package:motel/viewmodels/add_new_tour_vm.dart';
 import 'package:motel/views/widgets/hotels_tab_widgets/new_hotel_field.dart';
 
@@ -52,146 +53,207 @@ class AddTourDetails extends StatelessWidget {
         SizedBox(
           height: 30.0,
         ),
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: Text(
-                'Tour start date: ',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 10.0,
-            ),
-            vm.start == null
-                ? MaterialButton(
-                    child: Text('Select start date'),
-                    color: Color(0xff45ad90),
-                    minWidth: 180.0,
-                    textColor: Colors.white,
-                    onPressed: vm.showStartTourDialog,
-                  )
-                : GestureDetector(
-                    onTap: vm.showStartTourDialog,
-                    child: Text(
-                      DateHelper()
-                          .getFormattedDate(vm.start.millisecondsSinceEpoch),
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+        vm.selectedTourType == TourType.date
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          'Tour start date: ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-          ],
-        ),
-        SizedBox(
-          height: 30.0,
-        ),
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: Text(
-                'Tour end date: ',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 10.0,
-            ),
-            vm.end == null
-                ? MaterialButton(
-                    child: Text('Select end date'),
-                    color: Color(0xff45ad90),
-                    minWidth: 180.0,
-                    textColor: Colors.white,
-                    onPressed: vm.showEndTourDialog,
-                  )
-                : GestureDetector(
-                    onTap: vm.showEndTourDialog,
-                    child: Text(
-                      DateHelper()
-                          .getFormattedDate(vm.end.millisecondsSinceEpoch),
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                      SizedBox(
+                        width: 10.0,
                       ),
-                    ),
+                      vm.start == null
+                          ? MaterialButton(
+                              child: Text('Select start date'),
+                              color: Color(0xff45ad90),
+                              minWidth: 180.0,
+                              textColor: Colors.white,
+                              onPressed: vm.showStartTourDialog,
+                            )
+                          : GestureDetector(
+                              onTap: vm.showStartTourDialog,
+                              child: Text(
+                                DateHelper().getFormattedDate(
+                                    vm.start.millisecondsSinceEpoch),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                    ],
                   ),
-          ],
-        ),
-        SizedBox(
-          height: 30.0,
-        ),
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: Text(
-                'Pick up date: ',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 10.0,
-            ),
-            vm.pickUpDate == null
-                ? MaterialButton(
-                    child: Text('Select pick up date'),
-                    color: Color(0xff45ad90),
-                    minWidth: 180.0,
-                    textColor: Colors.white,
-                    onPressed: vm.showPickUpDateDialog,
-                  )
-                : GestureDetector(
-                    onTap: vm.showPickUpDateDialog,
-                    child: Text(
-                      DateHelper().getFormattedDate(
-                          vm.pickUpDate.millisecondsSinceEpoch),
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                  SizedBox(
+                    height: 30.0,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          'Tour end date: ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-          ],
-        ),
-        SizedBox(
-          height: 30.0,
-        ),
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: Text(
-                'Pick up time: ',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 10.0,
-            ),
-            vm.pickUpTime == null
-                ? MaterialButton(
-                    child: Text('Select pick up time'),
-                    color: Color(0xff45ad90),
-                    minWidth: 180.0,
-                    textColor: Colors.white,
-                    onPressed: vm.showPickUpTimeDialog,
-                  )
-                : GestureDetector(
-                    onTap: vm.showPickUpTimeDialog,
-                    child: Text(
-                      '${vm.pickUpTime.format(context)}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                      SizedBox(
+                        width: 10.0,
                       ),
-                    ),
+                      vm.end == null
+                          ? MaterialButton(
+                              child: Text('Select end date'),
+                              color: Color(0xff45ad90),
+                              minWidth: 180.0,
+                              textColor: Colors.white,
+                              onPressed: vm.showEndTourDialog,
+                            )
+                          : GestureDetector(
+                              onTap: vm.showEndTourDialog,
+                              child: Text(
+                                DateHelper().getFormattedDate(
+                                    vm.end.millisecondsSinceEpoch),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                    ],
                   ),
-          ],
-        ),
+                  SizedBox(
+                    height: 30.0,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          'Pick up date: ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10.0,
+                      ),
+                      vm.pickUpDate == null
+                          ? MaterialButton(
+                              child: Text('Select pick up date'),
+                              color: Color(0xff45ad90),
+                              minWidth: 180.0,
+                              textColor: Colors.white,
+                              onPressed: vm.showPickUpDateDialog,
+                            )
+                          : GestureDetector(
+                              onTap: vm.showPickUpDateDialog,
+                              child: Text(
+                                DateHelper().getFormattedDate(
+                                    vm.pickUpDate.millisecondsSinceEpoch),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 30.0,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          'Pick up time: ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10.0,
+                      ),
+                      vm.pickUpTime == null
+                          ? MaterialButton(
+                              child: Text('Select pick up time'),
+                              color: Color(0xff45ad90),
+                              minWidth: 180.0,
+                              textColor: Colors.white,
+                              onPressed: vm.showPickUpTimeDialog,
+                            )
+                          : GestureDetector(
+                              onTap: vm.showPickUpTimeDialog,
+                              child: Text(
+                                '${vm.pickUpTime.format(context)}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                    ],
+                  ),
+                ],
+              )
+            : Column(
+                children: [
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          'Select day of week: ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10.0,
+                      ),
+                      _daySelectBuilder(vm),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          'Pick up time: ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10.0,
+                      ),
+                      vm.pickUpTime == null
+                          ? MaterialButton(
+                              child: Text('Select pick up time'),
+                              color: Color(0xff45ad90),
+                              minWidth: 180.0,
+                              textColor: Colors.white,
+                              onPressed: vm.showPickUpTimeDialog,
+                            )
+                          : GestureDetector(
+                              onTap: vm.showPickUpTimeDialog,
+                              child: Text(
+                                '${vm.pickUpTime.format(context)}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                    ],
+                  ),
+                ],
+              ),
         SizedBox(
           height: 30.0,
         ),
@@ -269,6 +331,38 @@ class AddTourDetails extends StatelessWidget {
           requiredCapitalization: false,
         ),
       ],
+    );
+  }
+
+  Widget _daySelectBuilder(final AddNewTourVm vm) {
+    final _items = <String>[
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+    ];
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: DropdownButton(
+        items: _items
+            .map(
+              (e) => DropdownMenuItem(
+                value: e,
+                child: Text(
+                  'Every $e',
+                ),
+              ),
+            )
+            .toList(),
+        underline: Container(),
+        value: vm.selectedDayOfWeek,
+        onChanged: (val) {
+          vm.updateSelectedDayOfWeek(val);
+        },
+      ),
     );
   }
 }

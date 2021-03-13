@@ -33,6 +33,7 @@ class _AddNewHotelState extends State<AddNewHotel> {
       },
       vm: AddNewHotelVm(),
       builder: (context, vm, appUser) {
+        print(vm.rooms);
         return Scaffold(
           key: vm.hotelScaffoldKey,
           body: SafeArea(

@@ -134,7 +134,7 @@ class BestDealItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
                     Text(
-                      'Rs ${bestDeal.price}',
+                      'Rs ${bestDeal.getPrice()}',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 16.0,

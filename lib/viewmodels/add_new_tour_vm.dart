@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:motel/models/app/tour_types.dart';
 import 'package:motel/models/firebase/tour_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/services/firestore/tour_provider.dart';
@@ -28,6 +29,8 @@ class AddNewTourVm extends ChangeNotifier {
   DateTime _end;
   DateTime _pickUpDate;
   TimeOfDay _pickUpTime;
+  TourType _selectedTourType = TourType.date;
+  String _selectedDayOfWeek = 'Sunday';
 
   TextEditingController get nameController => _nameController;
   TextEditingController get daysController => _daysController;
@@ -46,6 +49,8 @@ class AddNewTourVm extends ChangeNotifier {
   DateTime get end => _end;
   DateTime get pickUpDate => _pickUpDate;
   TimeOfDay get pickUpTime => _pickUpTime;
+  TourType get selectedTourType => _selectedTourType;
+  String get selectedDayOfWeek => _selectedDayOfWeek;
 
   // show start tour dialog
   Future showStartTourDialog() async {
@@ -127,10 +132,12 @@ class AddNewTourVm extends ChangeNotifier {
         _nightsController.text.trim() != '' &&
         _priceController.text.trim() != '' &&
         _personController.text.trim() != '' &&
-        _start != null &&
-        _end != null &&
-        _pickUpDate != null &&
         _pickUpTime != null &&
+        ((_selectedTourType == TourType.date &&
+                _start != null &&
+                _end != null &&
+                _pickUpDate != null) ||
+            _selectedTourType == TourType.weekly) &&
         _summaryController.text.trim() != '' &&
         _inclusionsController.text.trim() != '' &&
         _exclusionsController.text.trim() != '' &&
@@ -150,8 +157,8 @@ class AddNewTourVm extends ChangeNotifier {
           nights: int.parse(_nightsController.text.trim()),
           price: int.parse(_priceController.text.trim()),
           person: int.parse(_personController.text.trim()),
-          start: _start.millisecondsSinceEpoch,
-          end: _end.millisecondsSinceEpoch,
+          start: _start?.millisecondsSinceEpoch,
+          end: _end?.millisecondsSinceEpoch,
           summary: _summaryController.text.trim(),
           inclusions: _inclusionsController.text.trim(),
           exclusions: _exclusionsController.text.trim(),
@@ -160,8 +167,10 @@ class AddNewTourVm extends ChangeNotifier {
           photos: _mPhotos,
           updatedAt: DateTime.now().millisecondsSinceEpoch,
           paymentAndCancellationPolicy: _paymentPolicyController.text.trim(),
-          pickUpDate: _pickUpDate.millisecondsSinceEpoch,
-          pickUpTime: _pickUpTime.format(context),
+          pickUpDate: _pickUpDate?.millisecondsSinceEpoch,
+          pickUpTime: _pickUpTime?.format(context),
+          type: _selectedTourType,
+          day: _selectedDayOfWeek,
         );
 
         final _result = await TourProvider(tour: _tour).publishTour();
@@ -191,10 +200,12 @@ class AddNewTourVm extends ChangeNotifier {
         _nightsController.text.trim() != '' &&
         _priceController.text.trim() != '' &&
         _personController.text.trim() != '' &&
-        _start != null &&
-        _end != null &&
-        _pickUpDate != null &&
         _pickUpTime != null &&
+        ((_selectedTourType == TourType.date &&
+                _start != null &&
+                _end != null &&
+                _pickUpDate != null) ||
+            _selectedTourType == TourType.weekly) &&
         _summaryController.text.trim() != '' &&
         _inclusionsController.text.trim() != '' &&
         _exclusionsController.text.trim() != '' &&
@@ -229,8 +240,8 @@ class AddNewTourVm extends ChangeNotifier {
           nights: int.parse(_nightsController.text.trim()),
           price: int.parse(_priceController.text.replaceAll(',', '').trim()),
           person: int.parse(_personController.text.trim()),
-          start: _start.millisecondsSinceEpoch,
-          end: _end.millisecondsSinceEpoch,
+          start: _start?.millisecondsSinceEpoch,
+          end: _end?.millisecondsSinceEpoch,
           summary: _summaryController.text.trim(),
           inclusions: _inclusionsController.text.trim(),
           exclusions: _exclusionsController.text.trim(),
@@ -239,9 +250,11 @@ class AddNewTourVm extends ChangeNotifier {
           photos: [..._newStringPhotos, ..._mPhotos],
           updatedAt: DateTime.now().millisecondsSinceEpoch,
           paymentAndCancellationPolicy: _paymentPolicyController.text.trim(),
-          pickUpDate: _pickUpDate.millisecondsSinceEpoch,
-          pickUpTime: _pickUpTime.format(context),
+          pickUpDate: _pickUpDate?.millisecondsSinceEpoch,
+          pickUpTime: _pickUpTime?.format(context),
           id: existingTourId,
+          type: _selectedTourType,
+          day: _selectedDayOfWeek,
         );
 
         final _result = await TourProvider(tour: _tour).updateTour();
@@ -282,6 +295,7 @@ class AddNewTourVm extends ChangeNotifier {
     _inclusionsController.text = tour.inclusions;
     _exclusionsController.text = tour.exclusions;
     _paymentPolicyController.text = tour.paymentAndCancellationPolicy;
+    _selectedTourType = tour.type;
     _dp = File(tour.dp);
 
     List<File> _filePhotos = [];
@@ -291,9 +305,13 @@ class AddNewTourVm extends ChangeNotifier {
     });
     _photos = _filePhotos;
 
-    _start = DateTime.fromMillisecondsSinceEpoch(tour.start);
-    _end = DateTime.fromMillisecondsSinceEpoch(tour.end);
-    _pickUpDate = DateTime.fromMillisecondsSinceEpoch(tour.pickUpDate);
+    if (tour.type == TourType.date) {
+      _start = DateTime.fromMillisecondsSinceEpoch(tour.start);
+      _end = DateTime.fromMillisecondsSinceEpoch(tour.end);
+      _pickUpDate = DateTime.fromMillisecondsSinceEpoch(tour.pickUpDate);
+    } else {
+      _selectedDayOfWeek = tour.day;
+    }
 
     final _newTime =
         tour.pickUpTime.toLowerCase().replaceAll('pm', '').replaceAll('am', '');
@@ -314,6 +332,18 @@ class AddNewTourVm extends ChangeNotifier {
   // remove photos
   removeTourPhotos(final File tourPhoto) {
     _photos.remove(tourPhoto);
+    notifyListeners();
+  }
+
+  // update value of selected tour type
+  updateSelectedTourType(final TourType newVal) {
+    _selectedTourType = newVal;
+    notifyListeners();
+  }
+
+  // update value of selected day of week
+  updateSelectedDayOfWeek(final String newVal) {
+    _selectedDayOfWeek = newVal;
     notifyListeners();
   }
 }

@@ -109,13 +109,13 @@ class AddHotelRoom extends StatelessWidget {
       final BuildContext context, final Hotel room, final int index) {
     return GestureDetector(
       onTap: () {
-        vm.clearControllers();
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => AddNewRoom(vm, room, index),
-          ),
-        );
+        // vm.clearControllers();
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (_) => AddNewRoom(vm, room, index),
+        //   ),
+        // );
       },
       child: Padding(
         padding: const EdgeInsets.only(top: 20.0),

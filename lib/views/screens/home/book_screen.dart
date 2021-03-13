@@ -280,7 +280,7 @@ class _BookScreenState extends State<BookScreen> {
                   Text(
                     widget.room != null
                         ? 'Rs ${widget.room.price}'
-                        : 'Rs ${widget.hotel.price}',
+                        : 'Rs ${widget.hotel.getPrice()}',
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 22.0,
@@ -310,7 +310,7 @@ class _BookScreenState extends State<BookScreen> {
         _price += room.price;
       }
     } else {
-      _price = widget.hotel.price;
+      _price = int.parse(widget.hotel.getPrice());
     }
 
     final _totalPrice = _price;

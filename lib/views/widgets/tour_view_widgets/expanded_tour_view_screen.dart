@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:motel/enums/account_type.dart';
 import 'package:motel/helpers/date_helper.dart';
+import 'package:motel/models/app/tour_types.dart';
 import 'package:motel/models/firebase/tour_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/viewmodels/hotel_view_vm.dart';
@@ -286,7 +287,9 @@ class _ExpandedTourViewScreenState extends State<ExpandedTourViewScreen> {
                     Column(
                       children: <Widget>[
                         Text(
-                          '${DateHelper().getFormattedDate(widget.tour.start)} - ${DateHelper().getFormattedDate(widget.tour.end)}',
+                          widget.tour.type == TourType.weekly
+                              ? 'Every ${widget.tour.day}'
+                              : '${DateHelper().getFormattedDate(widget.tour.start)} - ${DateHelper().getFormattedDate(widget.tour.end)}',
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 12.0,
@@ -358,7 +361,9 @@ class _ExpandedTourViewScreenState extends State<ExpandedTourViewScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            'Pick up date and time',
+            widget.tour.type == TourType.date
+                ? 'Pick up date and time'
+                : 'Pick up time',
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 16.0,
@@ -368,7 +373,9 @@ class _ExpandedTourViewScreenState extends State<ExpandedTourViewScreen> {
             height: 10.0,
           ),
           Text(
-            '${DateHelper().getFormattedDate(widget.tour.pickUpDate).trim()}, At ${widget.tour.pickUpTime}',
+            widget.tour.type == TourType.date
+                ? '${DateHelper().getFormattedDate(widget.tour.pickUpDate)}, At ${widget.tour.pickUpTime}'
+                : 'At ${widget.tour.pickUpTime}',
             style: TextStyle(
               color: Colors.black38,
             ),

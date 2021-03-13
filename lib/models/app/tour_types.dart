@@ -1,0 +1,4 @@
+enum TourType {
+  weekly,
+  date,
+}

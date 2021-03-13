@@ -49,8 +49,7 @@ class _AddNewRoomState extends State<AddNewRoom> {
                     onPressed: () => widget.vm.isEditing && widget.room != null
                         ? widget.vm
                             .updateRoomsList(context, widget.pos, widget.room)
-                        : widget.vm
-                            .addRoomList(context, _appUser.uid, widget.vm),
+                        : widget.vm.addRoomList(context, _appUser.uid),
                   ),
                   SizedBox(
                     height: 30.0,

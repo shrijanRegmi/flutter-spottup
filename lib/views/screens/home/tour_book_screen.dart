@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:motel/helpers/date_helper.dart';
+import 'package:motel/models/app/tour_types.dart';
 import 'package:motel/models/firebase/tour_model.dart';
 import 'package:motel/viewmodels/tour_book_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
@@ -211,7 +212,9 @@ class _TourBookScreenState extends State<TourBookScreen> {
                         Column(
                           children: <Widget>[
                             Text(
-                              '${DateHelper().getFormattedDate(widget.tour.start)} - ${DateHelper().getFormattedDate(widget.tour.end)}',
+                              widget.tour.type == TourType.weekly
+                                  ? 'Every ${widget.tour.day}'
+                                  : '${DateHelper().getFormattedDate(widget.tour.start)} - ${DateHelper().getFormattedDate(widget.tour.end)}',
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 color: Colors.black26,

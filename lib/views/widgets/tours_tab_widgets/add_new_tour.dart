@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:motel/models/app/hotel_features.dart';
+import 'package:motel/models/app/tour_types.dart';
 import 'package:motel/models/firebase/tour_model.dart';
 import 'package:motel/viewmodels/add_new_tour_vm.dart';
 import 'package:motel/viewmodels/vm_provider.dart';
@@ -73,6 +74,10 @@ class _AddNewHotelState extends State<AddNewTour> {
                             SizedBox(
                               height: 20.0,
                             ),
+                            _tourTypeBuilder(vm),
+                            SizedBox(
+                              height: 20.0,
+                            ),
                             AddTourDetails(vm),
                             AddTourPhotos(vm, widget.tour),
                             vm.isLoading
@@ -122,6 +127,45 @@ class _AddNewHotelState extends State<AddNewTour> {
           fontWeight: FontWeight.w600,
           fontSize: 22.0,
         ),
+      ),
+    );
+  }
+
+  Widget _tourTypeBuilder(final AddNewTourVm vm) {
+    final _items = <TourType>[TourType.date, TourType.weekly];
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Add tour type',
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 14.0,
+            ),
+          ),
+          SizedBox(
+            height: 8.0,
+          ),
+          DropdownButton(
+            items: _items
+                .map(
+                  (e) => DropdownMenuItem(
+                    value: e,
+                    child: Text(
+                      '${Tour().getTourTypeTitle(e)}',
+                    ),
+                  ),
+                )
+                .toList(),
+            underline: Container(),
+            value: vm.selectedTourType,
+            onChanged: (val) {
+              vm.updateSelectedTourType(val);
+            },
+          ),
+        ],
       ),
     );
   }

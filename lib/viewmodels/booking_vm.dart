@@ -367,7 +367,7 @@ class BookVm extends ChangeNotifier {
                         rooms: _roomController.text.trim() != ''
                             ? int.parse(_roomController.text.trim())
                             : 1,
-                        price: room.price,
+                        price: int.parse(room.getPrice()),
                       ),
                     );
                   }

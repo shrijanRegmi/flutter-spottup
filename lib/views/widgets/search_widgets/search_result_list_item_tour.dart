@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:motel/helpers/date_helper.dart';
+import 'package:motel/models/app/tour_types.dart';
 import 'package:motel/models/firebase/last_search_model.dart';
 import 'package:motel/models/firebase/tour_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
@@ -83,7 +84,9 @@ class SearchResultListItemTour extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '${DateHelper().getFormattedDate(tour.start)} - ${DateHelper().getFormattedDate(tour.end)}',
+                            tour.type == TourType.weekly
+                                ? 'Every ${tour.day}'
+                                : '${DateHelper().getFormattedDate(tour.start)} - ${DateHelper().getFormattedDate(tour.end)}',
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
                               color: Colors.black26,

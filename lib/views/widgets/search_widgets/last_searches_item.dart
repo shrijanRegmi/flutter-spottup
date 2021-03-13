@@ -92,7 +92,7 @@ class LastSearchesItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         Text(
-                          'Rs ${hotel.price}',
+                          'Rs ${hotel.getPrice()}',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           ),

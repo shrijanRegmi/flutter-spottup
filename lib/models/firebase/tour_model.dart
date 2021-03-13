@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:motel/models/app/tour_types.dart';
 
 class Tour {
   String id;
@@ -20,6 +21,8 @@ class Tour {
   final String paymentAndCancellationPolicy;
   final int pickUpDate;
   final String pickUpTime;
+  final TourType type;
+  final String day;
 
   Tour({
     this.id,
@@ -41,6 +44,8 @@ class Tour {
     this.paymentAndCancellationPolicy,
     this.pickUpDate,
     this.pickUpTime,
+    this.type,
+    this.day,
   });
 
   Map<String, dynamic> toJson() {
@@ -64,6 +69,8 @@ class Tour {
       'payment_policy': paymentAndCancellationPolicy,
       'pick_up_date': pickUpDate,
       'pick_up_time': pickUpTime,
+      'type': type.index,
+      'day': day,
     };
   }
 
@@ -88,11 +95,26 @@ class Tour {
       paymentAndCancellationPolicy: data['payment_policy'] ?? '',
       pickUpDate: data['pick_up_date'],
       pickUpTime: data['pick_up_time'],
+      type: TourType.values[data['type'] ?? 1],
+      day: data['day'] ?? '',
     );
   }
 
   DocumentReference toRef() {
     final _ref = FirebaseFirestore.instance;
     return _ref.collection('tours').doc(id);
+  }
+
+  String getTourTypeTitle(final TourType type) {
+    switch (type) {
+      case TourType.date:
+        return 'Date wise';
+        break;
+      case TourType.weekly:
+        return 'Weekly basis';
+        break;
+      default:
+        return 'Date';
+    }
   }
 }

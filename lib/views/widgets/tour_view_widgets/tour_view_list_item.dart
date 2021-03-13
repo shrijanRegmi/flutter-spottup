@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:motel/helpers/date_helper.dart';
+import 'package:motel/models/app/tour_types.dart';
 import 'package:motel/models/firebase/tour_model.dart';
 import 'package:motel/views/screens/home/tour_view_screen.dart';
 import 'package:motel/views/widgets/common_widgets/star_ratings.dart';
@@ -120,13 +121,15 @@ class TourViewListItem extends StatelessWidget {
                     flex: 2,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         Row(
                           children: [
                             Expanded(
                               child: Text(
-                                '${DateHelper().getFormattedDate(tour.start)} - ${DateHelper().getFormattedDate(tour.end)}',
+                                tour.type == TourType.weekly
+                                    ? 'Every ${tour.day}'
+                                    : '${DateHelper().getFormattedDate(tour.start)} - ${DateHelper().getFormattedDate(tour.end)}',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 12.0,

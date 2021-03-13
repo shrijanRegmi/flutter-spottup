@@ -163,7 +163,7 @@ class ShortenedHotelViewScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
                       Text(
-                        'Rs ${hotel.price}',
+                        'Rs ${hotel.getPrice()}',
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 20.0,

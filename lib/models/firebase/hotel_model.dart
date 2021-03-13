@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:motel/enums/hotel_types.dart';
 import 'package:motel/models/app/hotel_features.dart';
+import 'package:motel/models/app/room_price_model.dart';
 
 class Hotel {
   String id;
@@ -10,6 +11,7 @@ class Hotel {
   final String country;
   final double stars;
   final int price;
+  final List<RoomPrice> roomPrices;
   final String summary;
   final List<dynamic> photos;
   final int reviews;
@@ -32,6 +34,7 @@ class Hotel {
     this.country,
     this.stars,
     this.price,
+    this.roomPrices,
     this.summary,
     this.photos,
     this.reviews,
@@ -57,6 +60,13 @@ class Hotel {
         country: data['country'] ?? '',
         stars: (data['stars'] ?? 3.0).toDouble(),
         price: data['price'] ?? 0,
+        roomPrices: data['room_prices'] != null
+            ? List<RoomPrice>.from(
+                data['room_prices'].map(
+                  (e) => RoomPrice.fromJson(e),
+                ),
+              )
+            : [],
         summary: data['summary'] ?? '',
         photos: data['photos'] ?? [],
         reviews: data['reviews'] ?? 0,
@@ -79,6 +89,13 @@ class Hotel {
         country: data['country'] ?? '',
         stars: (data['stars'] ?? 3.0).toDouble(),
         price: data['price'] ?? 0,
+        roomPrices: data['room_prices'] != null
+            ? List<RoomPrice>.from(
+                data['room_prices'].map(
+                  (e) => RoomPrice.fromJson(e),
+                ),
+              )
+            : [],
         summary: data['summary'] ?? '',
         photos: data['photos'] ?? [],
         reviews: data['reviews'] ?? 0,
@@ -101,6 +118,13 @@ class Hotel {
         country: data['country'] ?? '',
         stars: (data['stars'] ?? 3.0).toDouble(),
         price: data['price'] ?? 0,
+        roomPrices: data['room_prices'] != null
+            ? List<RoomPrice>.from(
+                data['room_prices'].map(
+                  (e) => RoomPrice.fromJson(e),
+                ),
+              )
+            : [],
         summary: data['summary'] ?? '',
         photos: data['photos'] ?? [],
         reviews: data['reviews'] ?? 0,
@@ -123,6 +147,13 @@ class Hotel {
         country: data['country'] ?? '',
         stars: (data['stars'] ?? 3.0).toDouble(),
         price: data['price'] ?? 0,
+        roomPrices: data['room_prices'] != null
+            ? List<RoomPrice>.from(
+                data['room_prices'].map(
+                  (e) => RoomPrice.fromJson(e),
+                ),
+              )
+            : [],
         summary: data['summary'] ?? '',
         photos: data['photos'] ?? [],
         reviews: data['reviews'] ?? 0,
@@ -145,6 +176,13 @@ class Hotel {
       country: data['country'] ?? '',
       stars: (data['stars'] ?? 3.0).toDouble(),
       price: data['price'] ?? 0,
+      roomPrices: data['room_prices'] != null
+          ? List<RoomPrice>.from(
+              data['room_prices'].map(
+                (e) => RoomPrice.fromJson(e),
+              ),
+            )
+          : [],
       summary: data['summary'] ?? '',
       photos: data['photos'] ?? [],
       reviews: data['reviews'] ?? 0,
@@ -173,6 +211,9 @@ class Hotel {
       'city': city,
       'country': country,
       'price': price,
+      'room_prices': roomPrices != null
+          ? roomPrices.map((e) => e.toJson()).toList()
+          : null,
       'summary': summary,
       'photos': photos,
       'owner_id': ownerId,
@@ -183,5 +224,28 @@ class Hotel {
       'updated_at': DateTime.now().millisecondsSinceEpoch,
       'features': HotelFeatures().listToJson(features)
     };
+  }
+
+  String getPrice() {
+    String _price = '$price';
+    if (roomPrices != null) {
+      roomPrices.sort((a, b) => a.price.compareTo(b.price));
+      roomPrices.forEach((element) {
+        final _currentDate = DateTime(
+            DateTime.now().year, DateTime.now().month, DateTime.now().day);
+        final _c1 = _currentDate.isAfter(
+                DateTime.fromMillisecondsSinceEpoch(element.fromDate)) ||
+            _currentDate.isAtSameMomentAs(
+                DateTime.fromMillisecondsSinceEpoch(element.fromDate));
+        final _c2 = _currentDate.isBefore(
+                DateTime.fromMillisecondsSinceEpoch(element.toDate)) ||
+            _currentDate.isAtSameMomentAs(
+                DateTime.fromMillisecondsSinceEpoch(element.toDate));
+        if (_c1 && _c2) {
+          _price = element.price;
+        }
+      });
+    }
+    return _price;
   }
 }

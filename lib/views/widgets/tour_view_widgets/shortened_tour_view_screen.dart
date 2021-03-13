@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:motel/enums/account_type.dart';
 import 'package:motel/helpers/date_helper.dart';
+import 'package:motel/models/app/tour_types.dart';
 import 'package:motel/models/firebase/tour_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/viewmodels/hotel_view_vm.dart';
@@ -146,7 +147,9 @@ class ShortenedTourViewScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        '${DateHelper().getFormattedDate(tour.start)} - ${DateHelper().getFormattedDate(tour.end)}',
+                        tour.type == TourType.weekly
+                            ? 'Every ${tour.day}'
+                            : '${DateHelper().getFormattedDate(tour.start)} - ${DateHelper().getFormattedDate(tour.end)}',
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 12.0,

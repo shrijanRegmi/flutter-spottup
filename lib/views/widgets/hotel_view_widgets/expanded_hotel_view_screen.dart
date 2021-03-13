@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
 import 'package:motel/viewmodels/hotel_view_vm.dart';
@@ -37,11 +36,6 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
   @override
   void initState() {
     super.initState();
-    KeyboardVisibility.onChange.listen((visibility) {
-      setState(() {
-        _isKeyboardVisible = visibility;
-      });
-    });
   }
 
   @override
@@ -293,7 +287,7 @@ class _ExpandedHotelViewScreenState extends State<ExpandedHotelViewScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Text(
-                'Rs ${widget.hotel.price}',
+                'Rs ${widget.hotel.getPrice()}',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 22.0,

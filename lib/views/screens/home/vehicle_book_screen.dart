@@ -326,7 +326,7 @@ class _VehicleBookScreenState extends State<VehicleBookScreen> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
                   Text(
-                    'Rs ${widget.hotel.price}',
+                    'Rs ${widget.hotel}',
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 22.0,

@@ -3,10 +3,13 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:motel/helpers/date_helper.dart';
+import 'package:motel/models/app/room_price_model.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/services/firestore/hotel_provider.dart';
 import 'package:motel/services/storage/hotel_storage_service.dart';
 import 'package:motel/models/app/hotel_features.dart';
+import 'package:motel/views/widgets/hotels_tab_widgets/new_hotel_field.dart';
 
 class AddNewHotelVm extends ChangeNotifier {
   bool _isNextPressed = false;
@@ -33,6 +36,10 @@ class AddNewHotelVm extends ChangeNotifier {
   bool _isEditing = false;
   ScrollController _scrollController = ScrollController();
   List<Hotel> _deletedRooms = [];
+  List<RoomPrice> _roomPrices = [];
+  TextEditingController _datePriceController = TextEditingController();
+  DateTime _fromDate;
+  DateTime _toDate;
 
   TextEditingController get nameController => _nameController;
   TextEditingController get cityController => _cityController;
@@ -58,6 +65,7 @@ class AddNewHotelVm extends ChangeNotifier {
   bool get isEditing => _isEditing;
   ScrollController get scrollController => _scrollController;
   List<Hotel> get deletedRooms => _deletedRooms;
+  List<RoomPrice> get roomPrices => _roomPrices;
 
   // next btn pressed
   onNextPressed(bool newVal) {
@@ -97,58 +105,70 @@ class AddNewHotelVm extends ChangeNotifier {
     if (_nameController.text.trim() != '' &&
         _cityController.text.trim() != '' &&
         _countryController.text.trim() != '' &&
-        _priceController.text.trim() != '' &&
         _summaryController.text.trim() != '') {
       if (_dp != null) {
-        _updateLoaderValue(true);
-        _updateProgressVal('Publishing Hotel Started');
-        String _mDp = '';
-        List<String> _mPhotos = [];
-        int _adults = 0;
-        int _kids = 0;
+        if (_rooms.isNotEmpty) {
+          _updateLoaderValue(true);
+          _updateProgressVal('Publishing Hotel Started');
+          String _mDp = '';
+          List<String> _mPhotos = [];
+          int _adults = 0;
+          int _kids = 0;
 
-        for (final _room in _rooms) {
-          _adults = _adults < _room.adults ? _room.adults : _adults;
-          _kids = _kids < _room.kids ? _room.kids : _kids;
-        }
-
-        var _result;
-
-        _updateProgressVal('Uploading Hotel Display Picture');
-        _mDp = await HotelStorage().uploadHotelDp(dp);
-        _updateProgressVal('Uploading Hotel Photos');
-        _mPhotos = await HotelStorage().uploadHotelPhotos(photos);
-
-        if (_mDp != null) {
-          final _hotel = Hotel(
-            name: _nameController.text.trim(),
-            city: _cityController.text.trim(),
-            country: _countryController.text.trim(),
-            price: int.parse(_priceController.text.replaceAll(',', '').trim()),
-            summary: _summaryController.text.trim(),
-            dp: _mDp,
-            photos: _mPhotos ?? [],
-            ownerId: appUserId,
-            rooms: _rooms.length,
-            adults: _adults,
-            kids: _kids,
-            features: _selectedFeatures,
-          );
-          _updateProgressVal('Uploading Hotel Data');
-          _result = await HotelProvider().uploadNewHotel(_hotel);
-
-          if (_rooms.isNotEmpty) {
-            _updateProgressVal('Publishing Room Started');
-            _result = await _uploadRooms(_result);
+          for (final _room in _rooms) {
+            _adults = _adults < _room.adults ? _room.adults : _adults;
+            _kids = _kids < _room.kids ? _room.kids : _kids;
           }
-        }
 
-        if (_result == null) {
-          _updateLoaderValue(false);
+          var _result;
+
+          _updateProgressVal('Uploading Hotel Display Picture');
+          _mDp = await HotelStorage().uploadHotelDp(dp);
+          _updateProgressVal('Uploading Hotel Photos');
+          _mPhotos = await HotelStorage().uploadHotelPhotos(photos);
+
+          _rooms.sort((a, b) => a.price.compareTo(b.price));
+          List<RoomPrice> _allRoomPrices = [];
+          _rooms.forEach((element) {
+            _allRoomPrices += element.roomPrices;
+          });
+
+          if (_mDp != null) {
+            final _hotel = Hotel(
+              name: _nameController.text.trim(),
+              city: _cityController.text.trim(),
+              country: _countryController.text.trim(),
+              price: int.parse('${_rooms.first.price}'),
+              roomPrices: _allRoomPrices,
+              summary: _summaryController.text.trim(),
+              dp: _mDp,
+              photos: _mPhotos ?? [],
+              ownerId: appUserId,
+              rooms: _rooms.length,
+              adults: _adults,
+              kids: _kids,
+              features: _selectedFeatures,
+            );
+            _updateProgressVal('Uploading Hotel Data');
+            _result = await HotelProvider().uploadNewHotel(_hotel);
+
+            if (_rooms.isNotEmpty) {
+              _updateProgressVal('Publishing Room Started');
+              _result = await _uploadRooms(_result);
+            }
+          }
+
+          if (_result == null) {
+            _updateLoaderValue(false);
+          } else {
+            Navigator.pop(context);
+          }
+          return _result;
         } else {
-          Navigator.pop(context);
+          _hotelScaffoldKey.currentState.showSnackBar(SnackBar(
+            content: Text('Please add at least 1 room.'),
+          ));
         }
-        return _result;
       } else {
         _hotelScaffoldKey.currentState.showSnackBar(SnackBar(
           content: Text('Please upload display picture.'),
@@ -170,71 +190,83 @@ class AddNewHotelVm extends ChangeNotifier {
     if (_nameController.text.trim() != '' &&
         _cityController.text.trim() != '' &&
         _countryController.text.trim() != '' &&
-        _priceController.text.trim() != '' &&
         _summaryController.text.trim() != '') {
       if (_dp != null) {
-        _updateLoaderValue(true);
-        String _mDp = hotel.dp;
-        List<dynamic> _mPhotos = [];
-        List<File> _newFilePhotos = [];
-        List<String> _newStringPhotos = [];
-        List<HotelFeatures> _existingFeatures = [];
-
-        featuresList.forEach((element) {
-          if (element.isSelected) {
-            _existingFeatures.add(element);
-          }
-        });
-
-        if (!_dp.path.contains('.com') && hotel.dp != _dp.path) {
-          _mDp = await HotelStorage().uploadHotelDp(_dp);
-        }
-
-        _photos.forEach((photo) {
-          if (!photo.path.contains('.com')) {
-            _newFilePhotos.add(photo);
-          } else {
-            _newStringPhotos.add(photo.path);
-          }
-        });
-
-        if (_newFilePhotos.isNotEmpty) {
-          _mPhotos = await HotelStorage().uploadHotelPhotos(_newFilePhotos);
-        }
-
-        final _updatedHotel = Hotel(
-          id: hotel.id,
-          dp: _mDp,
-          photos: [..._newStringPhotos, ..._mPhotos],
-          ownerId: hotel.ownerId,
-          kids: hotel.kids,
-          adults: hotel.adults,
-          rooms: _rooms.length,
-          features: _existingFeatures,
-          searchKey: hotel.searchKey,
-          name: _nameController.text.trim(),
-          city: _cityController.text.trim(),
-          country: _countryController.text.trim(),
-          price: int.parse(_priceController.text.trim()),
-          summary: _summaryController.text.trim(),
-        );
-
-        final _data = _updatedHotel.toJson();
-
-        var _result =
-            await HotelProvider(hotelId: hotel.id).updateHotelData(_data);
-
         if (_rooms.isNotEmpty) {
-          _result = await _updateRooms(_result);
-        }
+          _updateLoaderValue(true);
+          String _mDp = hotel.dp;
+          List<dynamic> _mPhotos = [];
+          List<File> _newFilePhotos = [];
+          List<String> _newStringPhotos = [];
+          List<HotelFeatures> _existingFeatures = [];
 
-        await _deleteRooms(hotel);
+          featuresList.forEach((element) {
+            if (element.isSelected) {
+              _existingFeatures.add(element);
+            }
+          });
 
-        if (_result == null) {
-          _updateLoaderValue(false);
+          if (!_dp.path.contains('.com') && hotel.dp != _dp.path) {
+            _mDp = await HotelStorage().uploadHotelDp(_dp);
+          }
+
+          _photos.forEach((photo) {
+            if (!photo.path.contains('.com')) {
+              _newFilePhotos.add(photo);
+            } else {
+              _newStringPhotos.add(photo.path);
+            }
+          });
+
+          if (_newFilePhotos.isNotEmpty) {
+            _mPhotos = await HotelStorage().uploadHotelPhotos(_newFilePhotos);
+          }
+
+          _rooms.sort((a, b) => a.price.compareTo(b.price));
+          List<RoomPrice> _allRoomPrices = [];
+          _rooms.forEach((element) {
+            _allRoomPrices += element.roomPrices;
+          });
+
+          final _updatedHotel = Hotel(
+            id: hotel.id,
+            dp: _mDp,
+            photos: [..._newStringPhotos, ..._mPhotos],
+            ownerId: hotel.ownerId,
+            kids: hotel.kids,
+            adults: hotel.adults,
+            rooms: _rooms.length,
+            features: _existingFeatures,
+            searchKey: hotel.searchKey,
+            name: _nameController.text.trim(),
+            city: _cityController.text.trim(),
+            country: _countryController.text.trim(),
+            price: int.parse('${_rooms.first.price}'),
+            roomPrices: _allRoomPrices,
+            summary: _summaryController.text.trim(),
+          );
+
+          final _data = _updatedHotel.toJson();
+
+          var _result =
+              await HotelProvider(hotelId: hotel.id).updateHotelData(_data);
+
+          if (_rooms.isNotEmpty) {
+            _result = await _updateRooms(_result);
+          }
+
+          await _deleteRooms(hotel);
+
+          if (_result == null) {
+            _updateLoaderValue(false);
+          } else {
+            Navigator.pop(context);
+            Navigator.pop(context);
+          }
         } else {
-          Navigator.pop(context);
-          Navigator.pop(context);
+          _hotelScaffoldKey.currentState.showSnackBar(SnackBar(
+            content: Text('Please add at least 1 room.'),
+          ));
         }
       } else {
         _hotelScaffoldKey.currentState.showSnackBar(SnackBar(
@@ -297,6 +329,7 @@ class AddNewHotelVm extends ChangeNotifier {
         price: _room.price,
         summary: _room.summary,
         features: [],
+        roomPrices: _room.roomPrices,
       );
 
       final _data = _resultedRoom.toJson();
@@ -333,6 +366,7 @@ class AddNewHotelVm extends ChangeNotifier {
         price: _room.price,
         summary: _room.summary,
         features: [],
+        roomPrices: _room.roomPrices,
       );
       _updateProgressVal('Uploading Room Data');
       final _result =
@@ -344,8 +378,7 @@ class AddNewHotelVm extends ChangeNotifier {
   }
 
   // add rooms list
-  addRoomList(final BuildContext context, final String appUserId,
-      final AddNewHotelVm vm) async {
+  addRoomList(final BuildContext context, final String appUserId) async {
     if (_roomNameController.text.trim() != '' &&
         _roomAdultController.text.trim() != '' &&
         _roomKidController.text.trim() != '' &&
@@ -363,17 +396,13 @@ class AddNewHotelVm extends ChangeNotifier {
           adults: int.parse(_roomAdultController.text.trim()),
           city: _cityController.text.trim(),
           country: _countryController.text.trim(),
+          roomPrices: _roomPrices,
         );
 
         _rooms.add(_room);
+        updateRooms(_rooms);
+        clearControllers();
         Navigator.pop(context);
-        vm.clearControllers();
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (_) => AddNewRoom(vm, null, 0),
-        //   ),
-        // );
         _scrollController.animateTo(0,
             duration: Duration(milliseconds: 500), curve: Curves.ease);
       } else {
@@ -410,6 +439,7 @@ class AddNewHotelVm extends ChangeNotifier {
           adults: int.parse(_roomAdultController.text.trim()),
           city: _cityController.text.trim(),
           country: _countryController.text.trim(),
+          roomPrices: _roomPrices,
         );
 
         _rooms.insert(_pos, _room);
@@ -436,7 +466,8 @@ class AddNewHotelVm extends ChangeNotifier {
     _roomKidController.clear();
     _roomSummaryController.clear();
     _roomDp = null;
-    _roomPhotos.clear();
+    _roomPhotos = [];
+    _roomPrices = [];
     notifyListeners();
   }
 
@@ -481,6 +512,12 @@ class AddNewHotelVm extends ChangeNotifier {
     notifyListeners();
   }
 
+  // update value of rooms
+  updateRooms(final List<Hotel> newVal) {
+    _rooms = newVal;
+    notifyListeners();
+  }
+
   // remove feature
   removeFeature(final HotelFeatures feature) {
     _selectedFeatures.remove(feature);
@@ -495,7 +532,7 @@ class AddNewHotelVm extends ChangeNotifier {
     _nameController.text = hotel.name;
     _cityController.text = hotel.city;
     _countryController.text = hotel.country;
-    _priceController.text = hotel.price.toString();
+    _priceController.text = hotel.getPrice();
     _summaryController.text = hotel.summary;
 
     // hotel features
@@ -539,18 +576,20 @@ class AddNewHotelVm extends ChangeNotifier {
 
   // initialize all the room values
   initializeRoomValues(final Hotel room) async {
-    _isEditing = true;
+    // _isEditing = false;
 
-    // general details
-    _roomNameController.text = room.name;
-    _roomAdultController.text = room.adults.toString();
-    _roomKidController.text = room.kids.toString();
-    _roomPriceController.text = room.price.toString();
-    _roomSummaryController.text = room.summary;
+    // // general details
+    // _roomNameController.text = room.name;
+    // _roomAdultController.text = room.adults.toString();
+    // _roomKidController.text = room.kids.toString();
+    // _roomPriceController.text = room.price.toString();
+    // _roomSummaryController.text = room.summary;
 
-    // images
-    _roomDp = File(room.dp);
-    _roomPhotos = _getFileFromString(List<String>.from(room.photos));
+    // // images
+    // _roomDp = File(room.dp);
+    // _roomPhotos = _getFileFromString(List<String>.from(room.photos));
+    _roomPhotos.clear();
+    _roomPrices.clear();
 
     notifyListeners();
   }
@@ -584,6 +623,185 @@ class AddNewHotelVm extends ChangeNotifier {
       if (room.id != null) {
         await HotelProvider().deleteRoom(hotel.id, room.id);
       }
+    }
+  }
+
+  // update value of room prices
+  updateRoomPrices(final List<RoomPrice> newRoomPrices) {
+    _roomPrices = newRoomPrices;
+    notifyListeners();
+  }
+
+  // show add room price dialog
+  showAddRoomPriceDialog(final BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        child: StatefulBuilder(
+          builder: (context, setState) {
+            return Padding(
+              padding: const EdgeInsets.only(
+                top: 40.0,
+                left: 40.0,
+                right: 40.0,
+                bottom: 10.0,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: MaterialButton(
+                          child: Text(_fromDate == null
+                              ? 'Select from'
+                              : '${DateHelper().getFormattedDate(_fromDate.millisecondsSinceEpoch)}'),
+                          color: Color(0xff45ad90),
+                          minWidth: 180.0,
+                          textColor: Colors.white,
+                          onPressed: () async {
+                            await showFromDatePicker(context);
+                            setState(() {});
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10.0,
+                      ),
+                      Expanded(
+                        child: MaterialButton(
+                          child: Text(_toDate == null
+                              ? 'Select to'
+                              : '${DateHelper().getFormattedDate(_toDate.millisecondsSinceEpoch)}'),
+                          color: Color(0xff45ad90),
+                          minWidth: 180.0,
+                          textColor: Colors.white,
+                          onPressed: () async {
+                            await showToDatePicker(context);
+                            setState(() {});
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  NewHotelField(
+                    hintText: 'Price',
+                    textInputType: TextInputType.number,
+                    controller: _datePriceController,
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          _toDate = null;
+                          _fromDate = null;
+                          _datePriceController.clear();
+                          notifyListeners();
+                        },
+                        child: Text(
+                          'Cancel',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10.0,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          if (_fromDate != null &&
+                              _toDate != null &&
+                              _datePriceController.text.trim() != '') {
+                            Navigator.pop(context);
+
+                            final _roomPrice = RoomPrice(
+                              toDate: _toDate.millisecondsSinceEpoch,
+                              fromDate: _fromDate.millisecondsSinceEpoch,
+                              price: _datePriceController.text.trim(),
+                            );
+                            _toDate = null;
+                            _fromDate = null;
+                            _datePriceController.clear();
+                            final _newRoomPrices = _roomPrices;
+                            _newRoomPrices.add(_roomPrice);
+                            updateRoomPrices(_newRoomPrices);
+                            setState(() {});
+                          }
+                        },
+                        child: Text(
+                          'Add',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff45ad90),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  // show date picker for from date
+  showFromDatePicker(final BuildContext context) async {
+    final _pickedTime = await showDatePicker(
+      context: context,
+      initialDate: _roomPrices.isEmpty
+          ? DateTime.now()
+          : DateTime.fromMillisecondsSinceEpoch(_roomPrices.last.toDate)
+              .add(Duration(days: 1)),
+      firstDate: _roomPrices.isEmpty
+          ? DateTime.now()
+          : DateTime.fromMillisecondsSinceEpoch(_roomPrices.last.toDate)
+              .add(Duration(days: 1)),
+      lastDate: DateTime(
+        DateTime.now().year + 5,
+        DateTime.now().month,
+        DateTime.now().day,
+      ),
+    );
+    if (_pickedTime != null) {
+      _fromDate = _pickedTime;
+      notifyListeners();
+    }
+  }
+
+  // show date picker for to date
+  showToDatePicker(final BuildContext context) async {
+    final _pickedTime = await showDatePicker(
+      context: context,
+      initialDate: _roomPrices.isEmpty
+          ? DateTime.now()
+          : DateTime.fromMillisecondsSinceEpoch(_roomPrices.last.toDate)
+              .add(Duration(days: 1)),
+      firstDate: _roomPrices.isEmpty
+          ? DateTime.now()
+          : DateTime.fromMillisecondsSinceEpoch(_roomPrices.last.toDate)
+              .add(Duration(days: 1)),
+      lastDate: DateTime(
+        DateTime.now().year + 5,
+        DateTime.now().month,
+        DateTime.now().day,
+      ),
+    );
+    if (_pickedTime != null) {
+      _toDate = _pickedTime;
+      notifyListeners();
     }
   }
 }
