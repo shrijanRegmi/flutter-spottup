@@ -140,6 +140,7 @@ class ConfirmTourBooking extends ConfirmBooking {
   final String declineText;
   final List<dynamic> screenshots;
   final BookingForType type;
+  final int tourDate;
 
   ConfirmTourBooking({
     this.bookingId,
@@ -156,6 +157,7 @@ class ConfirmTourBooking extends ConfirmBooking {
     this.declineText,
     this.screenshots,
     this.type,
+    this.tourDate,
   });
 
   Map<String, dynamic> toJson() {
@@ -172,6 +174,7 @@ class ConfirmTourBooking extends ConfirmBooking {
       'is_seen': isAccepted,
       'is_contacted': isDeclined,
       'type': 1,
+      'tour_date': tourDate,
     };
   }
 
@@ -191,6 +194,7 @@ class ConfirmTourBooking extends ConfirmBooking {
       declineText: data['decline_text'] ?? '',
       screenshots: data['screenshots'] ?? [],
       type: BookingForType.tour,
+      tourDate: data['tour_date'],
     );
   }
 }

@@ -18,6 +18,7 @@ class TourBookVm extends ChangeNotifier {
   bool _isPersonConfirmed = false;
   bool _isDetailsConfirmed = false;
   bool _isProcessing = false;
+  DateTime _tourDate;
 
   ScrollController get scrollController => _scrollController;
   TextEditingController get maleController => _maleController;
@@ -29,6 +30,7 @@ class TourBookVm extends ChangeNotifier {
   bool get isPersonConfirmed => _isPersonConfirmed;
   GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
   bool get isProcessing => _isProcessing;
+  DateTime get tourDate => _tourDate;
 
   // update value of is details confirmed
   updateIsDetailsConfirmed(final _newVal) {
@@ -229,5 +231,36 @@ class TourBookVm extends ChangeNotifier {
         ],
       ),
     );
+  }
+
+  // select tour date
+  selectTourDate(final int tourDay) async {
+    final _now = DateTime.now();
+    final _tourDay = tourDay;
+
+    final _pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _now.weekday == _tourDay
+          ? _now
+          : DateTime(DateTime.now().year, DateTime.now().month, _tourDay),
+      selectableDayPredicate: (DateTime val) =>
+          val.weekday == _tourDay ? true : false,
+      firstDate: DateTime(2015, 8),
+      lastDate: DateTime(2100),
+    );
+    if (_pickedDate != null) {
+      _tourDate = _pickedDate;
+      notifyListeners();
+    }
+  }
+
+  bool defineSelectable(DateTime val) {
+    switch (val.weekday) {
+      case DateTime.sunday:
+        return true;
+        break;
+      default:
+        return false;
+    }
   }
 }

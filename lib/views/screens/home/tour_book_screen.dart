@@ -88,6 +88,7 @@ class _TourBookScreenState extends State<TourBookScreen> {
                                 females:
                                     int.parse(vm.femaleController.text.trim()),
                                 kids: int.parse(vm.kidController.text.trim()),
+                                tourDate: vm.tourDate.millisecondsSinceEpoch,
                               ),
                             ),
                           );
@@ -368,6 +369,44 @@ class _TourBookScreenState extends State<TourBookScreen> {
                   vm.updateIsPersonConfirmed(false);
                 },
               ),
+              SizedBox(
+                height: vm.tourDate == null ? 10.0 : 20.0,
+              ),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      'Tour date: ',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  vm.tourDate == null
+                      ? MaterialButton(
+                          child: Text('Select tour date'),
+                          color: Color(0xff45ad90),
+                          minWidth: 180.0,
+                          textColor: Colors.white,
+                          onPressed: () => vm.selectTourDate(
+                              DateHelper().weekDayToInt(widget.tour.day)),
+                        )
+                      : GestureDetector(
+                          onTap: () => vm.selectTourDate(
+                              DateHelper().weekDayToInt(widget.tour.day)),
+                          child: Text(
+                            DateHelper().getFormattedDate(
+                                vm.tourDate.millisecondsSinceEpoch),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                ],
+              ),
             ],
           ),
         ),
@@ -389,7 +428,8 @@ class _TourBookScreenState extends State<TourBookScreen> {
             minWidth: 180.0,
             onPressed: vm.maleController.text.trim() != '' &&
                     vm.femaleController.text.trim() != '' &&
-                    vm.kidController.text.trim() != ''
+                    vm.kidController.text.trim() != '' &&
+                    vm.tourDate != null
                 ? () => vm.updateIsPersonConfirmed(true)
                 : null,
           ),

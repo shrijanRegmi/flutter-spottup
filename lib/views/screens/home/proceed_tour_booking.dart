@@ -15,6 +15,7 @@ class ProceedTourBookingScreen extends StatelessWidget {
   final int males;
   final int females;
   final int kids;
+  final int tourDate;
   ProceedTourBookingScreen({
     this.tour,
     this.name,
@@ -22,6 +23,7 @@ class ProceedTourBookingScreen extends StatelessWidget {
     this.males,
     this.females,
     this.kids,
+    this.tourDate,
   });
 
   @override
@@ -97,6 +99,7 @@ class ProceedTourBookingScreen extends StatelessWidget {
                                             kids: kids,
                                             isAccepted: false,
                                             isDeclined: false,
+                                            tourDate: tourDate,
                                           );
 
                                           vm.confirmBooking(_booking, appUser);
@@ -192,6 +195,25 @@ class ProceedTourBookingScreen extends StatelessWidget {
         SizedBox(
           height: 20.0,
         ),
+        if (tourDate != null)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Tour Date: ',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16.0,
+                ),
+              ),
+              Text(
+                '${DateHelper().getFormattedDate(tourDate)}',
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+            ],
+          ),
         Text(
           'Number of males: ',
           style: TextStyle(

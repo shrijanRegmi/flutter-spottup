@@ -28,7 +28,9 @@ class OpenTourBookingItemScreen extends StatelessWidget {
       onInit: (vm) {
         final _newVal = booking.isAccepted && !booking.isDeclined
             ? 'Accepted'
-            : booking.isDeclined && !booking.isAccepted ? 'Declined' : '';
+            : booking.isDeclined && !booking.isAccepted
+                ? 'Declined'
+                : '';
         vm.updateAcceptDeclineText(_newVal);
       },
       builder: (context, vm, appUser) {
@@ -86,7 +88,7 @@ class OpenTourBookingItemScreen extends StatelessWidget {
       },
     );
   }
-  
+
   Widget _appbarBuilder(BuildContext context, BookingTabVm vm) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -215,6 +217,25 @@ class OpenTourBookingItemScreen extends StatelessWidget {
         SizedBox(
           height: 20.0,
         ),
+        if (booking.tourDate != null)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Tour Date: ',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16.0,
+                ),
+              ),
+              Text(
+                '${DateHelper().getFormattedDate(booking.tourDate)}',
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+            ],
+          ),
         Text(
           'Number of males: ',
           style: TextStyle(
@@ -270,7 +291,8 @@ class OpenTourBookingItemScreen extends StatelessWidget {
   }
 
   Widget _totalPriceBuilder() {
-    final _total = tour.price * (booking.males + booking.females + booking.kids);
+    final _total =
+        tour.price * (booking.males + booking.females + booking.kids);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
