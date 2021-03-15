@@ -2,7 +2,7 @@ class DateHelper {
   String getFormattedDate(int milliseconds) {
     final _date = DateTime.fromMillisecondsSinceEpoch(milliseconds);
 
-    final _result = '${_getMonth(_date.month)} ${_date.day}, 2020 ';
+    final _result = '${_getMonth(_date.month)} ${_date.day}, ${_date.year} ';
     return _result;
   }
 
