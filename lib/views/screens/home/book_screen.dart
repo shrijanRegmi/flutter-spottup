@@ -307,10 +307,11 @@ class _BookScreenState extends State<BookScreen> {
 
     if (vm.selectedRoom.isNotEmpty) {
       for (final room in vm.selectedRoom) {
-        _price += room.price;
+        final _room = Hotel(price: room.price, roomPrices: room.roomPrices);
+        _price += int.parse(_room.getPrice(checkIn: vm.checkInDate));
       }
     } else {
-      _price = int.parse(widget.hotel.getPrice());
+      _price = int.parse(widget.hotel.getPrice(checkIn: vm.checkInDate));
     }
 
     final _totalPrice = _price;

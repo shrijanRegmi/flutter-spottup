@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:motel/helpers/date_helper.dart';
+import 'package:motel/models/app/room_price_model.dart';
 import 'package:motel/models/firebase/confirm_booking_model.dart';
 import 'package:motel/models/firebase/hotel_model.dart';
 import 'package:motel/models/firebase/user_model.dart';
@@ -367,7 +368,8 @@ class BookVm extends ChangeNotifier {
                         rooms: _roomController.text.trim() != ''
                             ? int.parse(_roomController.text.trim())
                             : 1,
-                        price: int.parse(room.getPrice()),
+                        price: room.price,
+                        roomPrices: room.roomPrices,
                       ),
                     );
                   }
@@ -476,7 +478,15 @@ class SelectedRoom {
   final String roomName;
   final int adult;
   final int kid;
-  final int price;
+  int price;
   final int rooms;
-  SelectedRoom({this.roomName, this.adult, this.kid, this.price, this.rooms});
+  final List<RoomPrice> roomPrices;
+  SelectedRoom({
+    this.roomName,
+    this.adult,
+    this.kid,
+    this.price,
+    this.rooms,
+    this.roomPrices,
+  });
 }

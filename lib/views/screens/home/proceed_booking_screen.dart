@@ -85,7 +85,13 @@ class ProceedBookingScreen extends StatelessWidget {
                                           int _price = 0;
                                           if (rooms.isNotEmpty) {
                                             for (final room in rooms) {
-                                              _price += room.price;
+                                              final _room = Hotel(
+                                                  price: room.price,
+                                                  roomPrices: room.roomPrices);
+                                              _price += int.parse(_room.getPrice(
+                                                  checkIn: DateTime
+                                                      .fromMillisecondsSinceEpoch(
+                                                          checkIn)));
                                             }
                                           } else {
                                             _price =
@@ -264,7 +270,9 @@ class ProceedBookingScreen extends StatelessWidget {
     int _price = 0;
     if (rooms.isNotEmpty) {
       for (final room in rooms) {
-        _price += room.price;
+        final _room = Hotel(price: room.price, roomPrices: room.roomPrices);
+        _price += int.parse(_room.getPrice(
+            checkIn: DateTime.fromMillisecondsSinceEpoch(checkIn)));
       }
     } else {
       _price = int.parse(hotel.getPrice());

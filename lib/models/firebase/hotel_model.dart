@@ -226,20 +226,23 @@ class Hotel {
     };
   }
 
-  String getPrice() {
+  String getPrice({final DateTime checkIn}) {
+    final _currentDate =
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+        
+    final _dateToCompare = checkIn ?? _currentDate;
+
     String _price = '$price';
     if (roomPrices != null) {
       roomPrices.sort((a, b) => a.price.compareTo(b.price));
       roomPrices.forEach((element) {
-        final _currentDate = DateTime(
-            DateTime.now().year, DateTime.now().month, DateTime.now().day);
-        final _c1 = _currentDate.isAfter(
+        final _c1 = _dateToCompare.isAfter(
                 DateTime.fromMillisecondsSinceEpoch(element.fromDate)) ||
-            _currentDate.isAtSameMomentAs(
+            _dateToCompare.isAtSameMomentAs(
                 DateTime.fromMillisecondsSinceEpoch(element.fromDate));
-        final _c2 = _currentDate.isBefore(
+        final _c2 = _dateToCompare.isBefore(
                 DateTime.fromMillisecondsSinceEpoch(element.toDate)) ||
-            _currentDate.isAtSameMomentAs(
+            _dateToCompare.isAtSameMomentAs(
                 DateTime.fromMillisecondsSinceEpoch(element.toDate));
         if (_c1 && _c2) {
           _price = element.price;
