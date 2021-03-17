@@ -47,5 +47,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data 
+            android:name="com.facebook.sdk.ApplicationId" 
+            android:value="465741244552640" />
     </application>
 </manifest>
