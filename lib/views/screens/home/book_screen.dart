@@ -303,25 +303,13 @@ class _BookScreenState extends State<BookScreen> {
   }
 
   Widget _grandTotalPriceBuilder(BookVm vm) {
-    int _price = 0;
-
-    if (vm.selectedRoom.isNotEmpty) {
-      for (final room in vm.selectedRoom) {
-        final _room = Hotel(price: room.price, roomPrices: room.roomPrices);
-        _price += int.parse(_room.getPrice(checkIn: vm.checkInDate));
-      }
-    } else {
-      _price = int.parse(widget.hotel.getPrice(checkIn: vm.checkInDate));
-    }
-
-    final _totalPrice = _price;
-
     int _days;
     if (vm.checkInDate != null && vm.checkOutDate != null) {
       _days = vm.checkOutDate.difference(vm.checkInDate).inDays;
     }
 
-    final _grandTotalPrice = _days == null ? 0 : _totalPrice * _days;
+    final _grandTotalPrice =
+        Hotel().getGrandPrice(vm.selectedRoom, vm.checkInDate, vm.checkOutDate);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -344,13 +332,13 @@ class _BookScreenState extends State<BookScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
-              Text(
-                'Rs $_totalPrice x $_days',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16.0,
-                ),
-              ),
+              // Text(
+              //   'Rs $_totalPrice x $_days',
+              //   style: TextStyle(
+              //     fontWeight: FontWeight.w600,
+              //     fontSize: 16.0,
+              //   ),
+              // ),
               Text(
                 '= Rs $_grandTotalPrice',
                 style: TextStyle(
@@ -553,7 +541,10 @@ class _BookScreenState extends State<BookScreen> {
                       color: Color(0xff45ad90),
                       textColor: Colors.white,
                       minWidth: 180.0,
-                      onPressed: vm.showCheckOutDialog,
+                      disabledColor: Colors.grey.withOpacity(0.3),
+                      // disabledTextColor: Colors.white,
+                      onPressed:
+                          vm.checkInDate == null ? null : vm.showCheckOutDialog,
                     )
                   : GestureDetector(
                       onTap: vm.showCheckOutDialog,

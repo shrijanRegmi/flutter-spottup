@@ -82,22 +82,15 @@ class ProceedBookingScreen extends StatelessWidget {
                                       RoundedBtn(
                                         title: 'Confirm Booking',
                                         onPressed: () {
-                                          int _price = 0;
-                                          if (rooms.isNotEmpty) {
-                                            for (final room in rooms) {
-                                              final _room = Hotel(
-                                                  price: room.price,
-                                                  roomPrices: room.roomPrices);
-                                              _price += int.parse(_room.getPrice(
-                                                  checkIn: DateTime
-                                                      .fromMillisecondsSinceEpoch(
-                                                          checkIn)));
-                                            }
-                                          } else {
-                                            _price =
-                                                int.parse(hotel.getPrice());
-                                          }
-                                          final _total = _price * days;
+                                          final _total = Hotel().getGrandPrice(
+                                            rooms,
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                              checkIn,
+                                            ),
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                              checkOut,
+                                            ),
+                                          );
 
                                           final _booking = ConfirmHotelBooking(
                                             hotelRef: hotel.toRef(),
@@ -107,7 +100,7 @@ class ProceedBookingScreen extends StatelessWidget {
                                             rooms: _getListString(),
                                             issueDate: DateTime.now()
                                                 .millisecondsSinceEpoch,
-                                            total: _total,
+                                            total: int.parse(_total),
                                             nights: days,
                                             ownerId: hotel.ownerId,
                                             isAccepted: false,
@@ -267,17 +260,16 @@ class ProceedBookingScreen extends StatelessWidget {
   }
 
   Widget _totalPriceBuilder() {
-    int _price = 0;
-    if (rooms.isNotEmpty) {
-      for (final room in rooms) {
-        final _room = Hotel(price: room.price, roomPrices: room.roomPrices);
-        _price += int.parse(_room.getPrice(
-            checkIn: DateTime.fromMillisecondsSinceEpoch(checkIn)));
-      }
-    } else {
-      _price = int.parse(hotel.getPrice());
-    }
-    final _total = _price * days;
+    final _total = Hotel().getGrandPrice(
+      rooms,
+      DateTime.fromMillisecondsSinceEpoch(
+        checkIn,
+      ),
+      DateTime.fromMillisecondsSinceEpoch(
+        checkOut,
+      ),
+    );
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -58,8 +58,8 @@ class BookVm extends ChangeNotifier {
     _isBookingAvailable = false;
     final _pickedDate = await showDatePicker(
       context: context,
-      initialDate: _checkOutDate ?? DateTime.now(),
-      firstDate: DateTime(2015, 8),
+      initialDate: _checkOutDate ?? _checkInDate.add(Duration(days: 1)),
+      firstDate: _checkInDate.add(Duration(days: 1)),
       lastDate: DateTime(2100),
     );
     if (_pickedDate != null) {

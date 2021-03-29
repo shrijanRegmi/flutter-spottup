@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:motel/enums/hotel_types.dart';
 import 'package:motel/models/app/hotel_features.dart';
 import 'package:motel/models/app/room_price_model.dart';
+import 'package:motel/viewmodels/booking_vm.dart';
 
 class Hotel {
   String id;
@@ -229,7 +230,7 @@ class Hotel {
   String getPrice({final DateTime checkIn}) {
     final _currentDate =
         DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-        
+
     final _dateToCompare = checkIn ?? _currentDate;
 
     String _price = '$price';
@@ -250,5 +251,23 @@ class Hotel {
       });
     }
     return _price;
+  }
+
+  String getGrandPrice(List<SelectedRoom> selectedRooms, final DateTime checkIn,
+      final DateTime checkOut) {
+    int _price = 0;
+
+    selectedRooms.forEach((room) {
+      final _room = Hotel(price: room.price, roomPrices: room.roomPrices);
+
+      final _diff = checkOut.difference(checkIn);
+
+      for (int i = 0; i < _diff.inDays; i++) {
+        _price +=
+            int.parse(_room.getPrice(checkIn: checkIn.add(Duration(days: i))));
+      }
+    });
+
+    return '$_price';
   }
 }
