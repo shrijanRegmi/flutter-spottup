@@ -19,6 +19,12 @@ class AddNewRoom extends StatefulWidget {
 
 class _AddNewRoomState extends State<AddNewRoom> {
   @override
+  void initState() {
+    super.initState();
+    widget.vm.onInitRoom(widget.room);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final _appUser = Provider.of<AppUser>(context);
     return Scaffold(

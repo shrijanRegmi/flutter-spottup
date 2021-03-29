@@ -67,6 +67,13 @@ class AddNewHotelVm extends ChangeNotifier {
   List<Hotel> get deletedRooms => _deletedRooms;
   List<RoomPrice> get roomPrices => _roomPrices;
 
+  // init room function
+  onInitRoom(final Hotel room) {
+    if (room != null) {
+      initializeRoomValues(room);
+    }
+  }
+
   // next btn pressed
   onNextPressed(bool newVal) {
     _isNextPressed = newVal;
@@ -576,22 +583,19 @@ class AddNewHotelVm extends ChangeNotifier {
 
   // initialize all the room values
   initializeRoomValues(final Hotel room) async {
-    // _isEditing = false;
+    _isEditing = true;
 
-    // // general details
-    // _roomNameController.text = room.name;
-    // _roomAdultController.text = room.adults.toString();
-    // _roomKidController.text = room.kids.toString();
-    // _roomPriceController.text = room.price.toString();
-    // _roomSummaryController.text = room.summary;
+    // general details
+    _roomNameController.text = room.name;
+    _roomAdultController.text = room.adults.toString();
+    _roomKidController.text = room.kids.toString();
+    _roomPriceController.text = room.price.toString();
+    _roomSummaryController.text = room.summary;
+    _roomPrices = room.roomPrices;
 
-    // // images
-    // _roomDp = File(room.dp);
-    // _roomPhotos = _getFileFromString(List<String>.from(room.photos));
-    _roomPhotos.clear();
-    _roomPrices.clear();
-
-    notifyListeners();
+    // images
+    _roomDp = File(room.dp);
+    _roomPhotos = _getFileFromString(List<String>.from(room.photos));
   }
 
   _getFileFromString(final List<String> hotelPhotos) {

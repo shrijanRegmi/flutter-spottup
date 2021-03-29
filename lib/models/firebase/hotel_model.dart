@@ -235,8 +235,11 @@ class Hotel {
 
     String _price = '$price';
     if (roomPrices != null) {
-      roomPrices.sort((a, b) => a.price.compareTo(b.price));
-      roomPrices.forEach((element) {
+      roomPrices
+          .sort((a, b) => int.parse(a.price).compareTo(int.parse(b.price)));
+
+      for (int i = 0; i < roomPrices.length; i++) {
+        final element = roomPrices[i];
         final _c1 = _dateToCompare.isAfter(
                 DateTime.fromMillisecondsSinceEpoch(element.fromDate)) ||
             _dateToCompare.isAtSameMomentAs(
@@ -247,8 +250,9 @@ class Hotel {
                 DateTime.fromMillisecondsSinceEpoch(element.toDate));
         if (_c1 && _c2) {
           _price = element.price;
+          break;
         }
-      });
+      }
     }
     return _price;
   }
