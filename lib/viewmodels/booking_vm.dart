@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:motel/helpers/date_helper.dart';
 import 'package:motel/models/app/room_price_model.dart';
@@ -416,6 +417,121 @@ class BookVm extends ChangeNotifier {
       );
     }
     notifyListeners();
+  }
+
+  // show full price details builder
+  showFullPriceDetails() async {
+    final _grandTotalPrice =
+        Hotel().getGrandPrice(_selectedRooms, _checkInDate, _checkOutDate);
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: Container(
+            padding: const EdgeInsets.only(
+              top: 20.0,
+              bottom: 20.0,
+              left: 20.0,
+              right: 20.0,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Room prices on different dates',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                  ),
+                ),
+                SizedBox(
+                  height: 30.0,
+                ),
+                Container(
+                  height: _fullPriceItem().length > 2 ? 200.0 : 100.0,
+                  child: ListView(
+                    children: _fullPriceItem(),
+                  ),
+                ),
+                if (_fullPriceItem().length > 4)
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                if (_fullPriceItem().length > 4)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Scroll to see more'.toUpperCase(),
+                        style: TextStyle(
+                          color: Color(0xff45ad90),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                SizedBox(
+                  height: 30.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Total : Rs $_grandTotalPrice',
+                      style: TextStyle(
+                        color: Color(0xff45ad90),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text(
+                        'OK, Got it !',
+                        style: TextStyle(
+                          color: Color(0xff45ad90),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  List<Widget> _fullPriceItem() {
+    final _list = <Widget>[];
+    _selectedRooms.forEach((room) {
+      final _room = Hotel(
+        price: room.price,
+        roomPrices: room.roomPrices,
+        name: room.roomName,
+      );
+
+      final _diff = _checkOutDate.difference(_checkInDate);
+
+      for (int i = 0; i < _diff.inDays; i++) {
+        final _price = int.parse(
+            _room.getPrice(checkIn: _checkInDate.add(Duration(days: i))));
+        _list.add(
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10.0),
+            child: Text(
+              'On ${DateHelper().getFormattedDate(_checkInDate.add(Duration(days: i)).millisecondsSinceEpoch)} -\nRoom ${_room.name} @ Rs $_price',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        );
+      }
+    });
+    return _list;
   }
 
   // dialog when booking is done

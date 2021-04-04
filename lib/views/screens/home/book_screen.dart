@@ -100,6 +100,10 @@ class _BookScreenState extends State<BookScreen> {
                           Divider(),
                         ],
                       ),
+                    if (vm.isEmailPhoneConfirmed &&
+                        vm.isBookingAvailable &&
+                        vm.isRoomSelected)
+                      _knowAboutPrice(vm),
                     SizedBox(
                       height: vm.isEmailPhoneConfirmed &&
                               vm.isBookingAvailable &&
@@ -583,6 +587,24 @@ class _BookScreenState extends State<BookScreen> {
           )
         ],
       ),
+    );
+  }
+
+  Widget _knowAboutPrice(final BookVm vm) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        TextButton(
+          onPressed: vm.showFullPriceDetails,
+          child: Text(
+            'Know more about price ?',
+            style: TextStyle(
+              color: Color(0xff45ad90),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
